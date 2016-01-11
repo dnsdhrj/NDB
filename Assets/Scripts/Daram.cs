@@ -17,9 +17,12 @@ public class Daram : MonoBehaviour {
         get { return _HP; }
         set { _HP = value; if (value <= 0) Die(); }
     }
-    
+
+    protected int move_stat; // 상하좌우중 어디로 움직이는지 
+
     private int _HP = 0;
     private Vector2 dir;
+
 
     // *중요*
     // Daram 하위 클래스의 Start()에 "base.Start();" 를 넣어주세요.
@@ -49,7 +52,7 @@ public class Daram : MonoBehaviour {
     {
         if (NextMove <= Time.time)
         {
-            switch (Random.Range(0, 4))
+            switch (move_stat=Random.Range(0, 4))
             {
                 case 0:
                     dir = Vector2.up;
