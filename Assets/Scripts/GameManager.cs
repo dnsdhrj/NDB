@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
 
+    public float FieldWidth = 2f;
+    public float FieldHeight = 2f;
+
     public delegate void DaramDeathEvent();
     public event DaramDeathEvent DaramDeath;
     public delegate void FameChangeEvent();

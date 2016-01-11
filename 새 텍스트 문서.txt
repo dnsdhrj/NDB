@@ -1,0 +1,15 @@
+cd 작업할 경로
+
+git init
+
+git remote add origin git@git.upnl.org:dnsdhrj/NDB.git
+
+git fetch origin
+
+git pull origin master
+
+git checkout Development
+
+git branch 작업할 브랜치
+
+git checkout 작업할 브랜치

@@ -71,7 +71,19 @@ public class Daram : MonoBehaviour {
             NextMove = Time.time + Random.Range(1.0f, 3.0f);    //방향전환 시간
         }
 
+        CheckIfCantMove();
+
         transform.position += (Vector3) dir * (Speed * 0.001f);
+    }
+
+    void CheckIfCantMove() {
+        float xPos = gameObject.transform.position.x;
+        float yPos = gameObject.transform.position.y;
+        if (Mathf.Abs(xPos) >= GameManager.gm.FieldWidth && dir.x != 0)
+            dir.x = (dir.x == xPos / Mathf.Abs(xPos)) ? 0 : dir.x;
+
+        if (Mathf.Abs(yPos) >= GameManager.gm.FieldHeight && dir.y != 0)
+            dir.y = (dir.y == yPos / Mathf.Abs(yPos)) ? 0 : dir.y;
     }
 
     //All.Remove()를 쓰기 위해 비교연산자가 필요함.
