@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour {
         DaramDeath += DaramDeath_test;
         FameChange += FameChange_test;
 
+        FameChange += CheckZero;
+
         Random.seed = (int)Time.time;
     }
 
@@ -75,6 +77,17 @@ public class GameManager : MonoBehaviour {
 
         // f(x) = 5 - | y - x |
         Fame += 5 - System.Math.Abs(Daram.All.Count - targetnumber);
+    }
+
+    void CheckZero()
+    {
+        if (Fame <= 0)
+        {
+
+            // 뭔가를 한다
+
+            Fame = 0;
+        }
     }
 }
 
