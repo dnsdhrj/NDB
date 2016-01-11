@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
 
+    public delegate void DaramDeathEvent();
+    public event DaramDeathEvent DaramDeath;
+    public delegate void FameChangeEvent();
+    public event FameChangeEvent FameChange;
+
 
     void Awake()
     {
@@ -18,12 +23,19 @@ public class GameManager : MonoBehaviour {
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
 
+        //테스트용이고 나중에 삭제바람
+        DaramDeath += DaramDeath_test;
+        FameChange += FameChange_test;
+
         Random.seed = (int)Time.time;
     }
 
     void Update()
     {
-        DaramDeath();
+        if(DaramDeath != null)
+            DaramDeath();
+        if(FameChange != null)
+            FameChange();
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
@@ -43,7 +55,7 @@ public class GameManager : MonoBehaviour {
         print("다람쥐 개수 : " + Daram.All.Count);
     }
 
-    void DaramDeath()
+    void DaramDeath_test()
     {
         int count = 0;
 
@@ -54,6 +66,15 @@ public class GameManager : MonoBehaviour {
         //다람쥐에게 피해를 입힌다
         for (int i = 0; i < count; i++)
             Daram.All[Random.Range(0, Daram.All.Count)].HP -= 1;
+    }
+
+    void FameChange_test()
+    {
+        //다람쥐의 적정 숫자
+        int targetnumber = 10;
+
+        // f(x) = 5 - | y - x |
+        Fame += 5 - System.Math.Abs(Daram.All.Count - targetnumber);
     }
 }
 
