@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
 
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
+
+        Random.seed = (int)Time.time;
     }
 
     void Update()
