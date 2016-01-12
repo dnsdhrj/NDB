@@ -16,12 +16,12 @@ public class GameManager : MonoBehaviour {
     public float FieldWidth = 12f;
     public float FieldHeight = 8.5f;
 
-    public delegate void DaramDeathEvent();
-    public event DaramDeathEvent DaramDeath;
-    public delegate void FameChangeEvent();
-    public event FameChangeEvent FameChange;
-    public delegate void UserChangeEvent();
-    public event UserChangeEvent UserChange;    //1초에 한번 호출됨
+    // 어떤 이벤트가 발생하여 지속 효과를 넣어줄 때 사용
+    // 항목에 맞게 분류해서 넣어주세요
+    public delegate void Simulation();
+    public event Simulation DaramDeath;     // 매 프레임마다 호출
+    public event Simulation FameChange;     // 매 프레임마다 호출
+    public event Simulation UserChange;     // 1초에 한번 호출
 
 
     void Awake()
@@ -49,11 +49,10 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        if(DaramDeath != null)
-            DaramDeath();
-        if(FameChange != null)
+        if (FameChange != null)
             FameChange();
-
+        if (DaramDeath != null)
+            DaramDeath();
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
