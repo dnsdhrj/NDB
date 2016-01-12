@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     public delegate void FameChangeEvent();
     public event FameChangeEvent FameChange;
     public delegate void UserChangeEvent();
-    public event UserChangeEvent UserChange;
+    public event UserChangeEvent UserChange;    //1초에 한번 호출됨
 
 
     void Awake()
@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour {
 
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
-        UserCount[User.level1] = 100;
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
@@ -38,9 +37,14 @@ public class GameManager : MonoBehaviour {
         UserChange += UserChange_test;
 
         FameChange += CheckFameZero;
-        UserChange += CheckUserZero;
+        
 
         Random.seed = (int)Time.time;
+    }
+
+    void Start()
+    {
+        StartCoroutine("UserChangeCall");
     }
 
     void Update()
@@ -77,42 +81,47 @@ public class GameManager : MonoBehaviour {
         return sum;
     }
 
+    IEnumerator UserChangeCall()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f);
+            if(UserChange != null)
+                UserChange();
+            CheckUserZero();    //항상 마지막에 호출되게 함
+        }
+    }
+
     void DaramDeath_test()
     {
         int count = 0;
 
         // 어떤 요인에 의해
-        if(Daram.All.Count != 0)
-            count = 1;
+        if (Daram.All.Count != 0)
+            count = (int)(UserCount[User.level1] / 1000.0f + UserCount[User.level2] / 100.0f + 1);
 
         //다람쥐에게 피해를 입힌다
         for (int i = 0; i < count; i++)
-            Daram.All[Random.Range(0, Daram.All.Count)].HP -= 1;
+        {
+            int all = Daram.All.Count;
+            if (all != 0)
+                Daram.All[Random.Range(0, all)].HP -= 1;
+        }
     }
 
     void FameChange_test()
     {
         //다람쥐의 적정 숫자
-        int targetnumber = 10;
+        int targetnumber = 10 + Fame / 1000;
 
         // f(x) = 5 - | y - x |
-        Fame += 5 - System.Math.Abs(Daram.All.Count - targetnumber);
+        Fame += 5 - Mathf.Abs(Daram.All.Count - targetnumber);
     }
 
-    private int PrevFame;
-    private bool init = false;
     void UserChange_test()
     {
-        if (!init)
-        {
-            init = true;
-            PrevFame = Fame;
-            return;
-        }
-        int delta = Fame - PrevFame;
-
-        UserCount[User.level1] += delta / 1000;
-        UserCount[User.level2] += delta / 3000;
+            UserCount[User.level1] = Mathf.Min(Fame / 2, UserCount[User.level1] + Fame / 50);
+            UserCount[User.level2] = Mathf.Min(Fame / 10, UserCount[User.level2] + Fame / 500);
     }
 
     void CheckFameZero()
