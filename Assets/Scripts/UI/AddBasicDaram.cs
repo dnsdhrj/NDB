@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class AddBasicDaram : MonoBehaviour {
 
@@ -18,4 +19,6 @@ public class AddBasicDaram : MonoBehaviour {
         Vector2 pos = RandomPosition();
         Instantiate(daram, pos, Quaternion.identity);
     }
+
+
 }
