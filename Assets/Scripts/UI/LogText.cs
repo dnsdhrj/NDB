@@ -6,13 +6,17 @@ public class LogText : MonoBehaviour {
     
     private Text logText;
 
+
     public GameObject scrollbar;
     private Scrollbar logScrollbar;
     public string initialText = "The Game Start";
-	
+    private static LogText _this;
+
     // Use this for initialization
-	void Awake () 
+    void Awake () 
     {
+        _this = this;
+
         logText = GetComponent<Text>();
         logText.text = initialText;
 
@@ -20,9 +24,9 @@ public class LogText : MonoBehaviour {
         logScrollbar.size = 0;
     }
 
-    public void WriteLog(string log)
+    public static void WriteLog(string log)
     {
-        logText.text += "\n" + log;
-        logScrollbar.value = 0;
+        _this.logText.text += "\n" + log;
+        _this.logScrollbar.value = 0;
     }
 }

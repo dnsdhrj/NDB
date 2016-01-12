@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class AddBasicDaram : MonoBehaviour {
 
     public GameObject daram;
+
+    void Start()
+    {
+        if (daram.GetComponent<Daram>().Level == 2) // 한번만 실행되게 하기 위함
+            GameManager.gm.EventCheck += UnlockUpBasic;
+    }
 
     private Vector2 RandomPosition()
     {
@@ -17,5 +24,16 @@ public class AddBasicDaram : MonoBehaviour {
     {
         Vector2 pos = RandomPosition();
         Instantiate(daram, pos, Quaternion.identity);
+    }
+
+    void UnlockUpBasic()
+    {
+        if (GameManager.gm.Fame >= 5000)
+        {
+            LogText.WriteLog("인기에 힘입어 LV.2 다람쥐를 개발했다!");
+            GetComponent<Button>().interactable = true;
+
+            GameManager.gm.EventCheck -= UnlockUpBasic;
+        }
     }
 }
