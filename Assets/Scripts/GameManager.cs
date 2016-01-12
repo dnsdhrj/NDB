@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int Money = 0;
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
+    //                public int UserAllCount();
 
     public float FieldCenterX=-2f;
     public float FieldCenterY=1.75f;
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour {
     public event DaramDeathEvent DaramDeath;
     public delegate void FameChangeEvent();
     public event FameChangeEvent FameChange;
+    public delegate void UserChangeEvent();
+    public event UserChangeEvent UserChange;
 
 
     void Awake()
@@ -27,12 +30,15 @@ public class GameManager : MonoBehaviour {
 
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
+        UserCount[User.level1] = 100;
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
         FameChange += FameChange_test;
+        UserChange += UserChange_test;
 
-        FameChange += CheckZero;
+        FameChange += CheckFameZero;
+        UserChange += CheckUserZero;
 
         Random.seed = (int)Time.time;
     }
@@ -43,6 +49,7 @@ public class GameManager : MonoBehaviour {
             DaramDeath();
         if(FameChange != null)
             FameChange();
+
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
@@ -60,6 +67,14 @@ public class GameManager : MonoBehaviour {
         print("Level 1 : " + UserCount[User.level1]);
         print("Level 2 : " + UserCount[User.level2]);
         print("다람쥐 개수 : " + Daram.All.Count);
+    }
+
+    public int UserAllCount()
+    {
+        int sum = 0;
+        foreach (int user in UserCount)
+            sum += user;
+        return sum;
     }
 
     void DaramDeath_test()
@@ -84,7 +99,23 @@ public class GameManager : MonoBehaviour {
         Fame += 5 - System.Math.Abs(Daram.All.Count - targetnumber);
     }
 
-    void CheckZero()
+    private int PrevFame;
+    private bool init = false;
+    void UserChange_test()
+    {
+        if (!init)
+        {
+            init = true;
+            PrevFame = Fame;
+            return;
+        }
+        int delta = Fame - PrevFame;
+
+        UserCount[User.level1] += delta / 1000;
+        UserCount[User.level2] += delta / 3000;
+    }
+
+    void CheckFameZero()
     {
         if (Fame <= 0)
         {
@@ -94,6 +125,14 @@ public class GameManager : MonoBehaviour {
             Fame = 0;
         }
     }
+
+    void CheckUserZero()
+    {
+        for(int i = 0; i < User.Count; i++)
+            if (UserCount[i] < 0)
+                UserCount[i] = 0;      
+    }
+
 }
 
 // C#의 enum은 array index로 못 쓴다고 합니다 ㅠㅠ
