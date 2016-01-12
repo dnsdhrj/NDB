@@ -21,8 +21,9 @@ public class GameManager : MonoBehaviour {
     public delegate void Simulation();
     public event Simulation DaramDeath;     // 매 프레임마다 호출
     public event Simulation FameChange;     // 매 프레임마다 호출
+    public event Simulation EventCheck;     // 매 프레임마다 호출
     public event Simulation UserChange;     // 1초에 한번 호출
-
+    
 
     void Awake()
     {
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
+        if (EventCheck != null)
+            EventCheck();
         if (FameChange != null)
             FameChange();
         if (DaramDeath != null)
