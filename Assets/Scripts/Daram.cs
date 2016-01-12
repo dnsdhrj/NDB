@@ -79,10 +79,10 @@ public class Daram : MonoBehaviour {
     void CheckIfCantMove() {
         float xPos = gameObject.transform.position.x;
         float yPos = gameObject.transform.position.y;
-        if (Mathf.Abs(xPos) >= GameManager.gm.FieldWidth && dir.x != 0)
+        if (Mathf.Abs(xPos-GameManager.gm.FieldCenterX) >= GameManager.gm.FieldWidth/2f && dir.x != 0)
             dir.x = (dir.x == xPos / Mathf.Abs(xPos)) ? 0 : dir.x;
 
-        if (Mathf.Abs(yPos) >= GameManager.gm.FieldHeight && dir.y != 0)
+        if (Mathf.Abs(yPos-GameManager.gm.FieldCenterY) >= GameManager.gm.FieldHeight/2f && dir.y != 0)
             dir.y = (dir.y == yPos / Mathf.Abs(yPos)) ? 0 : dir.y;
     }
 
