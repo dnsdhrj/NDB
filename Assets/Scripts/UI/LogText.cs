@@ -9,7 +9,7 @@ public class LogText : MonoBehaviour {
 
     public GameObject scrollbar;
     private Scrollbar logScrollbar;
-    public string initialText = "The Game Start";
+    public string initialText = "드디어 새 게임을 출시했다! 다람쥐를 뿌려 인기도를 높여보자.";
     private static LogText _this;
 
     // Use this for initialization
