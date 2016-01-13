@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager gm;
 
     [HideInInspector] public int Money = 0;
+    [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
     //                public int UserAllCount();
@@ -61,6 +62,8 @@ public class GameManager : MonoBehaviour {
             DebugFunc();
         if (Input.GetKeyDown("f3")) //각종 변수 상태 출력
             DebugStatFunc();
+
+        EarnedMoney += MoneyGainByFame();
     }
 
     void DebugFunc()
@@ -144,7 +147,46 @@ public class GameManager : MonoBehaviour {
                 UserCount[i] = 0;      
     }
 
+    /* Functions about Money */
+
+    //인기도에 의해 정기적으로 버는 소득
+    int MoneyGainByFame()
+    {
+        int RegularGain = 0;
+
+        // 인기도에 비례한 적절한 함수
+        RegularGain += Fame / 100;
+        //////////////////////////////
+
+        return RegularGain;
+    }
+
+    //현재 남은 돈
+
+
+    //다람쥐 생성에서 소모되는 비용
+    void DaramLoss(int DaramCost)
+    {
+        Money -= DaramCost;
+    }
+
+    //이벤트(홍보, 긴급점검 등)에 의해 발생하는 돈의 증감
+    //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
+    void MoneyGainByEvent(int EventGain, int EventCost)
+    {
+        EarnedMoney += EventGain;
+        Money += EventCost;
+    }
+
+    //스테이지가 끝날 때 GameManager에 결과 저장
+    void MoneyUpdate()
+    {
+        Money = (Money + EarnedMoney);
+        EarnedMoney = 0;
+    }
 }
+
+
 
 // C#의 enum은 array index로 못 쓴다고 합니다 ㅠㅠ
 // 이 방법 외에 좋은 방법 찾으면 수정좀
