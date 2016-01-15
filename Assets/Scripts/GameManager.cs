@@ -22,8 +22,12 @@ public class GameManager : MonoBehaviour {
     public event Simulation DaramDeath;     // 매 프레임마다 호출
     public event Simulation FameChange;     // 매 프레임마다 호출
     public event Simulation EventCheck;     // 매 프레임마다 호출
+    public event Simulation UserChat;
     public event Simulation UserChange;     // 1초에 한번 호출
-    
+
+    // public 함수들
+    //public Vector2 RandomPosition();
+
 
     void Awake()
     {
@@ -56,6 +60,8 @@ public class GameManager : MonoBehaviour {
             FameChange();
         if (DaramDeath != null)
             DaramDeath();
+        if (UserChat != null)
+            UserChat();
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
@@ -142,6 +148,14 @@ public class GameManager : MonoBehaviour {
         for(int i = 0; i < User.Count; i++)
             if (UserCount[i] < 0)
                 UserCount[i] = 0;      
+    }
+
+    public Vector2 RandomPosition()
+    {
+        Vector2 randompos;
+        randompos.x = Random.Range(FieldCenterX - FieldWidth / 2f, FieldCenterX + FieldWidth / 2f);
+        randompos.y = Random.Range(FieldCenterY - FieldHeight / 2f, FieldCenterY + FieldHeight / 2f);
+        return randompos;
     }
 
 }
