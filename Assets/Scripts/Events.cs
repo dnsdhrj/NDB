@@ -19,11 +19,11 @@ public class Events : MonoBehaviour {
     {
         if (GameManager.gm.Fame >= 5000)
         {
+            GameManager.gm.EventCheck -= UnlockUpBasic;
             LogText.WriteLog("인기에 힘입어 LV.2 다람쥐를 개발했다!");
             UnlockUpBasic_Button.GetComponent<Button>().interactable = true;
             UserChat.CreateChat("GM: 고레벨 다람쥐가 새롭게 등장합니다!!", 5);
 
-            GameManager.gm.EventCheck -= UnlockUpBasic;
         }
     }
 }
