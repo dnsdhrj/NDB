@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
+    [HideInInspector] public int StageLevel = 1;
+    [HideInInspector] public int TimeLeft;
     //                public int UserAllCount();
 
     public float FieldCenterX=-2f;
@@ -153,7 +155,6 @@ public class GameManager : MonoBehaviour {
                 UserCount[i] = 0;      
     }
 
-<<<<<<< HEAD
     /* Functions about Money */
 
     //인기도에 의해 정기적으로 버는 소득
@@ -191,7 +192,9 @@ public class GameManager : MonoBehaviour {
         Money = (Money + EarnedMoney);
         EarnedMoney = 0;
     }
-=======
+
+
+
     public Vector2 RandomPosition()
     {
         Vector2 randompos;
@@ -200,7 +203,16 @@ public class GameManager : MonoBehaviour {
         return randompos;
     }
 
->>>>>>> d6be5266c9c0aa5011057420850480d84508aa86
+    public void SetStageTime() {
+        int BasicTime = 60;
+        TimeLeft = BasicTime + StageLevel * 10;
+    }
+
+    void StageEndCheck() {
+        if (TimeLeft <= 0) {
+            //Stage End
+        }
+    }
 }
 
 
