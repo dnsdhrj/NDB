@@ -16,6 +16,7 @@ public class UserChat : MonoBehaviour {
         _canvas = canvas;
 
         gm.UserChat += NoDaram;
+        gm.UserChat += DaramNumber;
     }
 
     private static GameObject _canvas;
@@ -44,6 +45,44 @@ public class UserChat : MonoBehaviour {
                     CreateChat("넥슨은 다람쥐를 뿌려라!", 3);
                 NDCool = Time.time + Random.Range(2, 4);
             }
-            
+    }
+
+    private float DNCool = 0;
+    void DaramNumber()
+    {
+        if (DNCool < Time.time)
+        {
+            int targetnumber = 10 + gm.Fame / 1000;
+
+            // f(x) = 5 - | y - x |
+            int famediff = 5 - Mathf.Abs(Daram.All.Count - targetnumber);
+
+            if (famediff == 0)
+                return;
+            if (famediff > 0)
+                CreateChat("이 게임 할만하구만.", 3);
+            else if (Daram.All.Count < targetnumber)
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        CreateChat("사람이 다람쥐보다 많은듯..", 3);
+                        break;
+                    case 1:
+                        CreateChat("일해라 GM!!", 3);
+                        break;
+                }
+            else
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        CreateChat("다람쥐에 깔려죽겠다 ㅠㅠ", 3);
+                        break;
+                    case 1:
+                        CreateChat("뭉쳐다닐 파티 구합니다 (3/8)", 3);
+                        break;
+                }
+
+            DNCool = Time.time + Random.Range(5, 10);
+        }
     }
 }
