@@ -23,7 +23,7 @@ public class UserChat : MonoBehaviour {
     private static GameObject _ChatText;
     public static GameObject CreateChat(string text, float lifetime)
     {
-        Vector3 pos = new Vector3(Random.Range(0, 500), Random.Range(200, 500), 0);   //화면 해상도에 따라 바꿀 것
+        Vector3 pos = new Vector3(Random.Range(100, 600), Random.Range(200, 500), 0);   //화면 해상도에 따라 바꿀 것
 
         GameObject obj = (GameObject) Instantiate(_ChatText, Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(_canvas.transform);

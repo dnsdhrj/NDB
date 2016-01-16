@@ -12,15 +12,13 @@ public class Fame : MonoBehaviour {
     Color red = new Color(1f, 0f, 0f, 1f);
     Color orange = new Color(1f, 0.5f, 0f, 1f);
     Color yellow = new Color(1f, 1f, 0f, 1f);
-    Color lightGreen = new Color(0.5f, 1f, 0f, 1f);
-    Color green = new Color(0f, 1f, 0f, 1f);
-    Color emelald = new Color(0f, 1f, 0.5f, 1f);
-    Color cyan = new Color(0f, 1f, 1f, 1f);
-    Color skyBlue = new Color(0f, 0.5f, 1f, 1f);
-    Color blue = new Color(0f, 0f, 1f, 1f);
+    Color green = new Color(0.5f, 1f, 0f, 1f);
+    Color emerald = new Color(0f, 1f, 0.75f, 1f);
+    Color skyblue = new Color(0f, 0.75f, 1f, 1f);
+    Color blue = new Color(0f, 0.5f, 1f, 1f);
     Color violet = new Color(0.5f, 0f, 1f, 1f);
-    Color magenta = new Color(1f, 0f, 1f, 1f);
-    Color pink = new Color(1f, 0f, 0.5f, 1f);
+    Color purple = new Color(0.75f, 0f, 1f, 1f);
+    Color pink = new Color(1f, 0f, 0.75f, 1f);
     int maxValue;
 
 
@@ -39,59 +37,49 @@ public class Fame : MonoBehaviour {
             background.color = white;
             fill.color = red;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 1)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 1)
         {
             background.color = red;
             fill.color = orange;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 2)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 2)
         {
             background.color = orange;
             fill.color = yellow;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 3)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 3)
         {
             background.color = yellow;
-            fill.color = lightGreen;
-        }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 4)
-        {
-            background.color = lightGreen;
             fill.color = green;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 5)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 4)
         {
             background.color = green;
-            fill.color = emelald;
+            fill.color = emerald;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 6)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 5)
         {
-            background.color = emelald;
-            fill.color = cyan;
+            background.color = emerald;
+            fill.color = skyblue;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 7)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 6)
         {
-            background.color = cyan;
-            fill.color = skyBlue;
-        }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 8)
-        {
-            background.color = skyBlue;
+            background.color = skyblue;
             fill.color = blue;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 9)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 7)
         {
             background.color = blue;
             fill.color = violet;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 10)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 8)
         {
             background.color = violet;
-            fill.color = magenta;
+            fill.color = purple;
         }
-        else if ((GameManager.gm.Fame / maxValue) % 12 == 11)
+        else if ((GameManager.gm.Fame / maxValue) % 10 == 9)
         {
-            background.color = magenta;
+            background.color = purple;
             fill.color = pink;
         }
         else
