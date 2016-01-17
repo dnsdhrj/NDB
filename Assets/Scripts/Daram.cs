@@ -8,7 +8,9 @@ using System.Collections.Generic;
 public class Daram : MonoBehaviour {
 
     public static List<Daram> All = new List<Daram>();
-    
+    //public static int FindByType(string type, int level);
+
+    public string Type;
     public int Level;
     public int InitialHP;
     public int Speed;
@@ -84,6 +86,16 @@ public class Daram : MonoBehaviour {
 
         if (Mathf.Abs(yPos-GameManager.gm.FieldCenterY) >= GameManager.gm.FieldHeight/2f && dir.y != 0)
             dir.y = (dir.y == yPos / Mathf.Abs(yPos)) ? 0 : dir.y;
+    }
+
+    /// <param name="Level">0 = 레벨에 관계없이</param>
+    public static int FindByType(string Type, int Level)
+    {
+        int sum = 0;
+        foreach (Daram d in Daram.All)
+            if (d.Type == Type && (Level == 0 || d.Level == Level))
+                sum++;
+        return sum;
     }
 
     //All.Remove()를 쓰기 위해 비교연산자가 필요함.

@@ -6,11 +6,13 @@ public class UserChat : MonoBehaviour {
 
     private GameManager gm; //많이 쓸것같아서 만들어둠
 
+    public static UserChat uc;
     public GameObject canvas;
     public GameObject ChatText;
 
     void Start ()
     {
+        uc = this;
         gm = GameManager.gm;
         _ChatText = ChatText;
         _canvas = canvas;
@@ -52,16 +54,17 @@ public class UserChat : MonoBehaviour {
     {
         if (DNCool < Time.time)
         {
-            int targetnumber = 10 + gm.Fame / 1000;
+            int a = 10 + gm.Fame / 1000;   //다람쥐의 적정 숫자
+            int x = Daram.All.Count;
 
-            // f(x) = 5 - | y - x |
-            int famediff = 5 - Mathf.Abs(Daram.All.Count - targetnumber);
+            // y = k(x - a)^2 + max   (y >= min)
+            int famediff = (int)Mathf.Max(-5.0f, -0.2f * (x - a) * (x - a) + 5);
 
             if (famediff == 0)
                 return;
             if (famediff > 0)
                 CreateChat("이 게임 할만하구만.", 3);
-            else if (Daram.All.Count < targetnumber)
+            else if (Daram.All.Count < a)
                 switch (Random.Range(0, 2))
                 {
                     case 0:
@@ -83,6 +86,46 @@ public class UserChat : MonoBehaviour {
                 }
 
             DNCool = Time.time + Random.Range(5, 10);
+        }
+    }
+
+    private float DN2Cool = 0;
+    public void Daram2Number()
+    {
+        if (DN2Cool < Time.time)
+        {
+            int a = gm.UserCount[User.level2] / 100;   //다람쥐의 적정 숫자
+            int x = Daram.FindByType("Basic", 2);
+
+            // y = k(x - a)^2 + max   (y >= min)
+            int famediff = (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
+
+            if (famediff == 0)
+                return;
+            if (famediff > 0)
+                return;
+            else if (Daram.All.Count < a)
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        CreateChat("아직도 Lv1짜리 다람쥐뿐인가..", 3);
+                        break;
+                    case 1:
+                        CreateChat("일해라 GM!!", 3);
+                        break;
+                }
+            else
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        CreateChat("초보자 배려좀 ㅠㅠ", 3);
+                        break;
+                    case 1:
+                        CreateChat("뭉쳐다닐 파티 구합니다 (5/8)", 3);
+                        break;
+                }
+
+            DN2Cool = Time.time + Random.Range(3, 5);
         }
     }
 }

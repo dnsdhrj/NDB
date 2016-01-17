@@ -38,11 +38,12 @@ public class GameManager : MonoBehaviour {
 
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
+        UserCount[User.level1] = 1000;
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
-        FameChange += FameChange_test;
-        UserChange += UserChange_test;
+        FameChange += FameDaram1;
+        UserChange += UserLevel1;
 
         FameChange += CheckFameZero;
         
@@ -105,13 +106,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+#region 게임 시뮬레이션 관련 함수입니다
+
+    //                      //
+    //  다람쥐가 죽는 정도   //
+    //                      //
+
     void DaramDeath_test()
     {
         int count = 0;
 
         // 어떤 요인에 의해
         if (Daram.All.Count != 0)
-            count = (int)(UserCount[User.level1] / 1000.0f + UserCount[User.level2] / 100.0f + 1);
+            count = (int)(UserCount[User.level1] / 1000.0f + UserCount[User.level2] / 100.0f);
 
         //다람쥐에게 피해를 입힌다
         for (int i = 0; i < count; i++)
@@ -122,20 +129,57 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void FameChange_test()
-    {
-        //다람쥐의 적정 숫자
-        int targetnumber = 10 + Fame / 1000;
+    //                      //
+    //        인기도        //
+    //                      //
 
-        // f(x) = 5 - | y - x |
-        Fame += 5 - Mathf.Abs(Daram.All.Count - targetnumber);
+    void FameDaram1()
+    {
+        int a = 10 + Fame / 1000;   //다람쥐의 적정 숫자
+        int x = Daram.All.Count;
+
+        // y = k(x - a)^2 + max   (y >= min)
+        Fame += (int) Mathf.Max(-5.0f, -0.2f * (x - a) * (x - a) + 5); 
     }
 
-    void UserChange_test()
+    //lv2 다람쥐가 해금되면 실행됨
+    public void FameDaram2()
     {
-            UserCount[User.level1] = Mathf.Min(Fame / 2, UserCount[User.level1] + Fame / 50);
-            UserCount[User.level2] = Mathf.Min(Fame / 10, UserCount[User.level2] + Fame / 500);
+        int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
+        int x = Daram.FindByType("Basic", 2);
+
+        // y = k(x - a)^2 + max   (y >= min)
+        Fame += (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
     }
+
+    //                      //
+    //         유저         //
+    //                      //
+
+    private int PrevFame = 0;
+    void UserLevel1()
+    {
+        int FameDelta = Fame - PrevFame;
+
+        if(FameDelta > 0)
+            UserCount[User.level1] += (int) (10 * Mathf.Log(Fame + 1));     // y = k * log(x + 1)
+        else
+            UserCount[User.level1] -= (int) (10 * Mathf.Log((-1)*FameDelta + 1));   //인기도가 감소중이면 적당히 줄어들게 함
+
+        PrevFame = Fame;
+    }
+
+    //lv2 다람쥐가 해금되면 실행됨
+    public void UserLevel2()
+    {
+        int LevelUp = 10 + UserCount[User.level1] / 1000;
+        UserCount[User.level1] -= LevelUp;
+        UserCount[User.level2] += LevelUp;  // 일단 level2유저는 감소하지 않는걸로
+    }
+
+    //                      //
+    //       기타 함수      //
+    //                      //
 
     void CheckFameZero()
     {
@@ -154,6 +198,10 @@ public class GameManager : MonoBehaviour {
             if (UserCount[i] < 0)
                 UserCount[i] = 0;      
     }
+
+
+#endregion
+
 
     /* Functions about Money */
 
