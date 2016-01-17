@@ -6,7 +6,9 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager gm;
 
-    [HideInInspector] public int Money = 0;
+    public GameObject resultScene; 
+
+    public int Money = 0;
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
@@ -35,7 +37,8 @@ public class GameManager : MonoBehaviour {
     void Awake()
     {
         gm = this;
-
+        resultScene = GameObject.Find("ResultScene");
+        resultScene.SetActive(false);
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         StartCoroutine("UserChangeCall");
+        StartCoroutine("MoneyGainByFame");
     }
 
     void Update()
@@ -72,7 +76,7 @@ public class GameManager : MonoBehaviour {
         if (Input.GetKeyDown("f3")) //각종 변수 상태 출력
             DebugStatFunc();
 
-        EarnedMoney += MoneyGainByFame();
+        StageEndCheck();
     }
 
     void DebugFunc()
@@ -206,15 +210,12 @@ public class GameManager : MonoBehaviour {
     /* Functions about Money */
 
     //인기도에 의해 정기적으로 버는 소득
-    int MoneyGainByFame()
+    IEnumerator MoneyGainByFame()
     {
-        int RegularGain = 0;
-
-        // 인기도에 비례한 적절한 함수
-        RegularGain += Fame / 100;
-        //////////////////////////////
-
-        return RegularGain;
+        while (true) {
+            EarnedMoney += Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     //현재 남은 돈
@@ -252,13 +253,14 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetStageTime() {
-        int BasicTime = 60;
+        int BasicTime = 0;
         TimeLeft = BasicTime + StageLevel * 10;
     }
 
-    void StageEndCheck() {
+    private void StageEndCheck() {
         if (TimeLeft <= 0) {
-            //Stage End
+            //print("stageEnded");
+            resultScene.SetActive(true);
         }
     }
 }

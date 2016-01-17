@@ -14,6 +14,7 @@ public class Daram : MonoBehaviour {
     public int Level;
     public int InitialHP;
     public int Speed;
+    public int Cost;
 
     public int HP {
         get { return _HP; }
