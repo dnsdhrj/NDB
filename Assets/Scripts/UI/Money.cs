@@ -23,6 +23,6 @@ public class Money : MonoBehaviour {
     {
         /*실제*/ //MoneyText.text = "Money : " + InitialMoney;
                /*Debug용*/
-        MoneyText.text = "Money : " + InitialMoney + "\n" + "(DeBug) EarnedMoney : " + EarnedMoney;
+        MoneyText.text = "Money : " + InitialMoney + "\n" + "(Debug)\nEarnedMoney : " + EarnedMoney;
     }
 }

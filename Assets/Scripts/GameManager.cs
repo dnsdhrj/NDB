@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using System.Linq;
 
 public class GameManager : MonoBehaviour {
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int[] UserCount;
     [HideInInspector] public int StageLevel = 1;
     [HideInInspector] public int TimeLeft;
+    [HideInInspector] public bool IsPaused;
     //                public int UserAllCount();
 
     public float FieldCenterX=-2f;
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour {
     public event Simulation EventCheck;     // 매 프레임마다 호출
     public event Simulation UserChat;
     public event Simulation UserChange;     // 1초에 한번 호출
+    public event Simulation StageEnd;       // 매 프레임마다 호출
 
     // public 함수들
     //public Vector2 RandomPosition();
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour {
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
+        IsPaused = false;
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
@@ -50,6 +54,7 @@ public class GameManager : MonoBehaviour {
         FameChange += FameDaram1;
         UserChange += UserLevel1;
         FameChange += CheckFameZero;
+        StageEnd += StageEndCheck;      // 새 스테이지를 시작할 때마다 이것을 써 줘야 함.
         
 
         Random.seed = (int)Time.time;
@@ -71,13 +76,14 @@ public class GameManager : MonoBehaviour {
             DaramDeath();
         if (UserChat != null)
             UserChat();
+        if (StageEnd != null)
+            StageEnd();
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
         if (Input.GetKeyDown("f3")) //각종 변수 상태 출력
             DebugStatFunc();
 
-        StageEndCheck();
     }
 
     void DebugFunc()
@@ -119,6 +125,7 @@ public class GameManager : MonoBehaviour {
 
     void DaramDeath_test()
     {
+        if (IsPaused) return;
         int count = 0;
 
         // 어떤 요인에 의해
@@ -140,6 +147,7 @@ public class GameManager : MonoBehaviour {
 
     void FameDaram1()
     {
+        if (IsPaused) return;
         int a = 10 + Fame / 1000;   //다람쥐의 적정 숫자
         int x = Daram.All.Count;
 
@@ -150,6 +158,7 @@ public class GameManager : MonoBehaviour {
     //lv2 다람쥐가 해금되면 실행됨
     public void FameDaram2()
     {
+        if (IsPaused) return;
         int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
         int x = Daram.FindByType("Basic", 2);
         print(x);
@@ -165,6 +174,7 @@ public class GameManager : MonoBehaviour {
     private int PrevFame = 0;
     void UserLevel1()
     {
+        if (IsPaused) return;
         int FameDelta = Fame - PrevFame;
 
         if(FameDelta > 0)
@@ -178,6 +188,7 @@ public class GameManager : MonoBehaviour {
     //lv2 다람쥐가 해금되면 실행됨
     public void UserLevel2()
     {
+        if (IsPaused) return;
         int LevelUp = 10 + UserCount[User.level1] / 1000;
         UserCount[User.level1] -= LevelUp;
         UserCount[User.level2] += LevelUp;  // 일단 level2유저는 감소하지 않는걸로
@@ -215,7 +226,10 @@ public class GameManager : MonoBehaviour {
     IEnumerator MoneyGainByFame()
     {
         while (true) {
-            EarnedMoney += Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
+            if (!IsPaused)
+            {
+                EarnedMoney += Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
+            }
             yield return new WaitForSeconds(1f);
         }
     }
@@ -233,6 +247,7 @@ public class GameManager : MonoBehaviour {
     //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
     void MoneyGainByEvent(int EventGain, int EventCost)
     {
+        if (IsPaused) return;
         EarnedMoney += EventGain;
         Money += EventCost;
     }
@@ -261,9 +276,22 @@ public class GameManager : MonoBehaviour {
 
     private void StageEndCheck() {
         if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
+            StageEnd -= StageEndCheck;
             //print("stageEnded");
             resultScene.SetActive(true);
+            Pause();    // 결과창이 뜰 때 일시정지 실행
         }
+    }
+
+
+    // Pause();를 한 번 사용하면 게임 일시정지, 두 번 사용하면 일시정지 해제
+    // 일시정지 효과를 받아야 하는 void 함수의 맨 위에 "if (IsPaused) return;"을 추가하면 됨.
+    // 시간을 멈추는 방법 대신 함수를 멈추는 방법으로 구현
+    // 현재 인기도, 유저, 돈 관련 함수와 유저 채팅, 다람쥐 생성 버튼에 일시정지 효과 적용
+    public void Pause()
+    {
+//      Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        IsPaused = IsPaused == true ? false : true;
     }
 }
 
