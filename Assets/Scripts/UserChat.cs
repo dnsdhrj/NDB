@@ -25,7 +25,6 @@ public class UserChat : MonoBehaviour {
     private static GameObject _ChatText;
     public static GameObject CreateChat(string text, float lifetime)
     {
-        if (GameManager.gm.IsPaused) return null;
         Vector3 pos = new Vector3(Random.Range(100, 600), Random.Range(200, 500), 0);   //화면 해상도에 따라 바꿀 것
 
         GameObject obj = (GameObject) Instantiate(_ChatText, Vector3.zero, Quaternion.identity);
@@ -95,7 +94,7 @@ public class UserChat : MonoBehaviour {
     {
         if (DN2Cool < Time.time)
         {
-            int a = gm.UserCount[User.level2] / 100;   //다람쥐의 적정 숫자
+            int a = 5 + gm.UserCount[User.level2] / 100 + gm.UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
             int x = Daram.FindByType("Basic", 2);
 
             // y = k(x - a)^2 + max   (y >= min)

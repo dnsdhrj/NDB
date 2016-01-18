@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int[] UserCount;
     [HideInInspector] public int StageLevel = 1;
     [HideInInspector] public int TimeLeft;
-    [HideInInspector] public bool IsPaused;
+    [HideInInspector] public bool IsPaused = false;
     //                public int UserAllCount();
 
     public float FieldCenterX=-2f;
@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour {
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
-        IsPaused = false;
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
@@ -68,14 +67,17 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        if (EventCheck != null)
-            EventCheck();
-        if (FameChange != null)
-            FameChange();
-        if (DaramDeath != null)
-            DaramDeath();
-        if (UserChat != null)
-            UserChat();
+        if (!IsPaused)
+        {
+            if (EventCheck != null)
+                EventCheck();
+            if (FameChange != null)
+                FameChange();
+            if (DaramDeath != null)
+                DaramDeath();
+            if (UserChat != null)
+                UserChat();
+        }
         if (StageEnd != null)
             StageEnd();
 
@@ -111,6 +113,8 @@ public class GameManager : MonoBehaviour {
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
+            while (IsPaused)
+                yield return null;
             if(UserChange != null)
                 UserChange();
             CheckUserZero();    //항상 마지막에 호출되게 함
@@ -125,7 +129,6 @@ public class GameManager : MonoBehaviour {
 
     void DaramDeath_test()
     {
-        if (IsPaused) return;
         int count = 0;
 
         // 어떤 요인에 의해
@@ -147,7 +150,6 @@ public class GameManager : MonoBehaviour {
 
     void FameDaram1()
     {
-        if (IsPaused) return;
         int a = 10 + Fame / 1000;   //다람쥐의 적정 숫자
         int x = Daram.All.Count;
 
@@ -158,7 +160,6 @@ public class GameManager : MonoBehaviour {
     //lv2 다람쥐가 해금되면 실행됨
     public void FameDaram2()
     {
-        if (IsPaused) return;
         int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
         int x = Daram.FindByType("Basic", 2);
         print(x);
@@ -174,7 +175,6 @@ public class GameManager : MonoBehaviour {
     private int PrevFame = 0;
     void UserLevel1()
     {
-        if (IsPaused) return;
         int FameDelta = Fame - PrevFame;
 
         if(FameDelta > 0)
@@ -188,7 +188,6 @@ public class GameManager : MonoBehaviour {
     //lv2 다람쥐가 해금되면 실행됨
     public void UserLevel2()
     {
-        if (IsPaused) return;
         int LevelUp = 10 + UserCount[User.level1] / 1000;
         UserCount[User.level1] -= LevelUp;
         UserCount[User.level2] += LevelUp;  // 일단 level2유저는 감소하지 않는걸로
