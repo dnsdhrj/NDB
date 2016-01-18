@@ -26,6 +26,8 @@ public class Daram : MonoBehaviour {
     private int _HP = 0;
     private Vector2 dir;
 
+    protected Animator Anim;
+
 
     // *중요*
     // Daram 하위 클래스의 Start()에 "base.Start();" 를 넣어주세요.
@@ -41,8 +43,14 @@ public class Daram : MonoBehaviour {
     // Update()도 위와 동일
     protected void Update()
     {
-        if(!(GameManager.gm.IsPaused))
+        if (GameManager.gm.IsPaused)
+            Anim.speed = 0;
+        else
+        {
+            Anim.speed = 1;
             Move();
+        }
+            
     }
 
     public void Die()

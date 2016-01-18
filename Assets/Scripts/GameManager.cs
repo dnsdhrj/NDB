@@ -291,7 +291,7 @@ public class GameManager : MonoBehaviour {
     // 현재 인기도, 유저, 돈 관련 함수와 유저 채팅, 다람쥐 생성 버튼에 일시정지 효과 적용
     public void Pause()
     {
-        Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        //Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         IsPaused = IsPaused == true ? false : true;
     }
 }
