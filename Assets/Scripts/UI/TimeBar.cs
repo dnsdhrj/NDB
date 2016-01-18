@@ -23,7 +23,8 @@ public class TimeBar : MonoBehaviour {
         int min = TimeLeft / 60;
         int sec = Mathf.Max(0, (int)(TimeLeft % 60));
         Timetext.text = min + " : " + sec;
-        GameManager.gm.TimeLeft = --TimeLeft;
+        if(!(GameManager.gm.IsPaused))
+            GameManager.gm.TimeLeft = --TimeLeft;
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(ShowTime());
     }

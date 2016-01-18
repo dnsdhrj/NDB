@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     private GameObject resultScene; 
 
     public int Money = 0;
+    [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour {
     public event Simulation DaramDeath;     // 매 프레임마다 호출
     public event Simulation FameChange;     // 매 프레임마다 호출
     public event Simulation EventCheck;     // 매 프레임마다 호출
-    public event Simulation UserChat;
+    public event Simulation UserChat;       // 매 프레임마다 호출
     public event Simulation UserChange;     // 1초에 한번 호출
     public event Simulation StageEnd;       // 매 프레임마다 호출
 
@@ -69,6 +70,8 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
+        UpdateGameTime();
+
         if (!IsPaused)
         {
             if (EventCheck != null)
@@ -92,7 +95,9 @@ public class GameManager : MonoBehaviour {
 
     void DebugFunc()
     {
-        
+        print(Time.time);
+
+        print(time);
     }
 
     void DebugStatFunc()
@@ -164,7 +169,6 @@ public class GameManager : MonoBehaviour {
     {
         int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
         int x = Daram.FindByType("Basic", 2);
-        print(x);
 
         // y = k(x - a)^2 + max   (y >= min)
         Fame += (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
@@ -293,6 +297,32 @@ public class GameManager : MonoBehaviour {
     {
         //Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         IsPaused = IsPaused == true ? false : true;
+    }
+
+
+    // 일시정지 시간을 빼서 시간을 나타냄
+    private bool lasting = false;
+    private float PauseStart;
+    private float PausedTime = 0;
+    void UpdateGameTime()
+    {
+        if (gm.IsPaused)
+        {
+            if (!lasting)
+            {
+                lasting = true;
+                PauseStart = Time.time;
+            }
+        }
+        else
+        {
+            if (lasting)
+            {
+                lasting = false;
+                PausedTime += Time.time - PauseStart;
+            }
+            time = Time.time - PausedTime;
+        }
     }
 }
 

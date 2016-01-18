@@ -10,7 +10,6 @@ public class UserChat : MonoBehaviour {
     public GameObject canvas;
     public GameObject ChatText;
 
-    private float time; //일시정지를 보정한 수치
 
     void Start ()
     {
@@ -22,28 +21,6 @@ public class UserChat : MonoBehaviour {
         gm.UserChat += NoDaram;
         gm.UserChat += DaramNumber;
         gm.UserChat += UserCount;
-    }
-
-    // 일시정지 시간을 빼서 시간을 나타냄
-    private bool lasting = false;
-    private float PauseStart;
-    private float PausedTime = 0;
-    void Update()
-    {
-        if (gm.IsPaused && !lasting)
-        {
-            lasting = true;
-            PauseStart = Time.time;
-        }
-        else
-        {
-            if (lasting)
-            {
-                lasting = false;
-                PausedTime += Time.time - PauseStart;
-            }
-            time = Time.time - PausedTime;
-        }
     }
 
     private static GameObject _canvas;
@@ -63,21 +40,21 @@ public class UserChat : MonoBehaviour {
     private float NDCool = 0;
     void NoDaram()
     {
-        if (NDCool < time)
+        if (NDCool < gm.time)
             if (Daram.All.Count == 0)
             {
                 if (Random.Range(0, 2) == 0)
                     CreateChat("다람쥐가 하나도 없잖아!!", 4);
                 else
                     CreateChat("넥슨은 다람쥐를 뿌려라!", 2);
-                NDCool = time + Random.Range(2, 4);
+                NDCool = gm.time + Random.Range(2, 4);
             }
     }
 
     private float DNCool = 0;
     void DaramNumber()
     {
-        if (DNCool < time)
+        if (DNCool < gm.time)
         {
             int a = 10 + gm.Fame / 1000;   //다람쥐의 적정 숫자
             int x = Daram.All.Count;
@@ -97,7 +74,7 @@ public class UserChat : MonoBehaviour {
                         CreateChat("좋아 좋아.", 3);
                         break;
                     case 2:
-                        CreateChat("메이플2 GM보다도 열정적이군!", 3);
+                        CreateChat("열정적인 GM!", 3);
                         break;
                 }
             else if (x < a)
@@ -130,14 +107,14 @@ public class UserChat : MonoBehaviour {
                         break;
                 }
 
-            DNCool = time + Random.Range(5, 10);
+            DNCool = gm.time + Random.Range(5, 10);
         }
     }
 
     private float DN2Cool = 0;
     public void Daram2Number()
     {
-        if (DN2Cool < time)
+        if (DN2Cool < gm.time)
         {
             int a = 5 + gm.UserCount[User.level2] / 100 + gm.UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
             int x = Daram.FindByType("Basic", 2);
@@ -176,17 +153,17 @@ public class UserChat : MonoBehaviour {
                         break;
                 }
 
-            DN2Cool = time + Random.Range(3, 5);
+            DN2Cool = gm.time + Random.Range(3, 5);
         }
     }
 
     private float UCCool = 15;
     void UserCount()
     {
-        if (DN2Cool < time)
+        if (DN2Cool < gm.time)
         {
-            CreateChat("지금 유저 수가 " + ((gm.UserAllCount() + 500) / 1000) * 1000 + "명쯤은 되는듯.", 4);
-            DN2Cool = time + Random.Range(20, 40);
+            CreateChat("지금 유저 수가 " + ((gm.UserAllCount() + 500) / 1000) * 1000 + "명쯤은 되는듯.", 4);    //천명 단위로 끊음(1000, 2000...)
+            DN2Cool = gm.time + Random.Range(20, 40);
         }
     }
 }
