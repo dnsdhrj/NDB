@@ -6,7 +6,7 @@ public class Basic : Daram {
     private int past_move_stat = -1; // 현재 움직임 상태
     private int now_move_stat; //이전 움직임 상태
 
-    private Animator Anim;
+    
 
     void Start()
     {
