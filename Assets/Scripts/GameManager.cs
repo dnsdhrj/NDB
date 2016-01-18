@@ -152,6 +152,7 @@ public class GameManager : MonoBehaviour {
     {
         int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
         int x = Daram.FindByType("Basic", 2);
+        print(x);
 
         // y = k(x - a)^2 + max   (y >= min)
         Fame += (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
