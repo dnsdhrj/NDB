@@ -63,9 +63,17 @@ public class UserChat : MonoBehaviour {
             if (famediff == 0)
                 return;
             if (famediff > 0)
-                CreateChat("이 게임 할만하구만.", 3);
+                switch(Random.Range(0,2))
+                {
+                    case 0:
+                        CreateChat("이 게임 할만하구만.", 3);
+                        break;
+                    case 1:
+                        CreateChat("좋아 좋아.", 3);
+                        break;
+                }
             else if (x < a)
-                switch (Random.Range(0, 2))
+                switch (Random.Range(0, 3))
                 {
                     case 0:
                         CreateChat("사람이 다람쥐보다 많은듯..", 3);
@@ -73,15 +81,21 @@ public class UserChat : MonoBehaviour {
                     case 1:
                         CreateChat("일해라 GM!!", 3);
                         break;
+                    case 2:
+                        CreateChat("다람쥐 멸종위기....", 3);
+                        break;
                 }
             else
-                switch (Random.Range(0, 2))
+                switch (Random.Range(0, 3))
                 {
                     case 0:
                         CreateChat("다람쥐에 깔려죽겠다 ㅠㅠ", 3);
                         break;
                     case 1:
                         CreateChat("뭉쳐다닐 파티 구합니다 (3/8)", 3);
+                        break;
+                    case 2:
+                        CreateChat("공기반 다람쥐반이네..", 3);
                         break;
                 }
 
@@ -105,7 +119,7 @@ public class UserChat : MonoBehaviour {
             if (famediff > 0)
                 return;
             else if (x < a)
-                switch (Random.Range(0, 2))
+                switch (Random.Range(0, 3))
                 {
                     case 0:
                         CreateChat("아직도 Lv1짜리 다람쥐뿐인가..", 3);
@@ -113,15 +127,21 @@ public class UserChat : MonoBehaviour {
                     case 1:
                         CreateChat("일해라 GM!!", 3);
                         break;
+                    case 2:
+                        CreateChat("한방짜리 다람쥐는 너무 시시하다구!!", 3);
+                        break;
                 }
             else
-                switch (Random.Range(0, 2))
+                switch (Random.Range(0, 3))
                 {
                     case 0:
                         CreateChat("초보자 배려좀 ㅠㅠ", 3);
                         break;
                     case 1:
                         CreateChat("고렙 다람쥐 잡을 파티 구합니다 (5/8)", 3);
+                        break;
+                    case 2:
+                        CreateChat("여기 초보자 사냥터 아닌가여;;;;", 3);
                         break;
                 }
 
