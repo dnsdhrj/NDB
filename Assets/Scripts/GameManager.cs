@@ -39,15 +39,16 @@ public class GameManager : MonoBehaviour {
         gm = this;
         resultScene = GameObject.Find("ResultScene");
         resultScene.SetActive(false);
+
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
+
         FameChange += FameDaram1;
         UserChange += UserLevel1;
-
         FameChange += CheckFameZero;
         
 
@@ -274,6 +275,7 @@ public static class User
     // User의 변수 개수
     public static int Count = 2;
 
+    // 이 순서대로 게이지가 정렬됨
     public static int level1 = 0;
     public static int level2 = 1;
 }
