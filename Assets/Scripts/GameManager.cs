@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager gm;
 
-    public GameObject resultScene; 
+    private GameObject resultScene; 
 
     public int Money = 0;
     [HideInInspector] public int EarnedMoney = 0;
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
         gm = this;
         resultScene = GameObject.Find("ResultScene");
         resultScene.SetActive(false);
+
         //UserCount 모두 0으로 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
@@ -49,9 +50,9 @@ public class GameManager : MonoBehaviour {
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
+
         FameChange += FameDaram1;
         UserChange += UserLevel1;
-
         FameChange += CheckFameZero;
         StageEnd += StageEndCheck;      // 새 스테이지를 시작할 때마다 이것을 써 줘야 함.
         
@@ -160,6 +161,7 @@ public class GameManager : MonoBehaviour {
         if (IsPaused) return;
         int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
         int x = Daram.FindByType("Basic", 2);
+        print(x);
 
         // y = k(x - a)^2 + max   (y >= min)
         Fame += (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
@@ -268,14 +270,14 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetStageTime() {
-        int BasicTime = 50;
+        int BasicTime = 60;
         TimeLeft = BasicTime + StageLevel * 10;
     }
 
     private void StageEndCheck() {
-        if (TimeLeft <= 0) {
+        if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             StageEnd -= StageEndCheck;
-//          print("stageEnded");
+            //print("stageEnded");
             resultScene.SetActive(true);
             Pause();    // 결과창이 뜰 때 일시정지 실행
         }
@@ -302,6 +304,7 @@ public static class User
     // User의 변수 개수
     public static int Count = 2;
 
+    // 이 순서대로 게이지가 정렬됨
     public static int level1 = 0;
     public static int level2 = 1;
 }

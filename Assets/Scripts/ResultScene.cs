@@ -17,6 +17,8 @@ public class ResultScene : MonoBehaviour {
 
     IEnumerator ShowResult() {
 
+        GetComponent<Image>().enabled = true;
+
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
         resultText.text = "남은 돈 : " + GameManager.gm.Money;

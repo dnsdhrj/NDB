@@ -65,7 +65,7 @@ public class UserChat : MonoBehaviour {
                 return;
             if (famediff > 0)
                 CreateChat("이 게임 할만하구만.", 3);
-            else if (Daram.All.Count < a)
+            else if (x < a)
                 switch (Random.Range(0, 2))
                 {
                     case 0:
@@ -105,7 +105,7 @@ public class UserChat : MonoBehaviour {
                 return;
             if (famediff > 0)
                 return;
-            else if (Daram.All.Count < a)
+            else if (x < a)
                 switch (Random.Range(0, 2))
                 {
                     case 0:
@@ -122,7 +122,7 @@ public class UserChat : MonoBehaviour {
                         CreateChat("초보자 배려좀 ㅠㅠ", 3);
                         break;
                     case 1:
-                        CreateChat("뭉쳐다닐 파티 구합니다 (5/8)", 3);
+                        CreateChat("고렙 다람쥐 잡을 파티 구합니다 (5/8)", 3);
                         break;
                 }
 
