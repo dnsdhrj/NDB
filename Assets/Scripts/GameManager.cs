@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager gm;
 
-    public GameObject resultScene; 
+    private GameObject resultScene; 
 
     public int Money = 0;
     [HideInInspector] public int EarnedMoney = 0;
@@ -253,12 +253,12 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetStageTime() {
-        int BasicTime = 0;
+        int BasicTime = 60;
         TimeLeft = BasicTime + StageLevel * 10;
     }
 
     private void StageEndCheck() {
-        if (TimeLeft <= 0) {
+        if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             //print("stageEnded");
             resultScene.SetActive(true);
         }
