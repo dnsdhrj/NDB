@@ -41,7 +41,8 @@ public class Daram : MonoBehaviour {
     // Update()도 위와 동일
     protected void Update()
     {
-        Move();
+        if(!(GameManager.gm.IsPaused))
+            Move();
     }
 
     public void Die()
