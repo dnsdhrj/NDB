@@ -10,6 +10,7 @@ public class AddBasicDaram : MonoBehaviour {
 
     public void OnClick()
     {
+        if (GameManager.gm.IsPaused) return;
         Vector2 pos = GameManager.gm.RandomPosition();
         Instantiate(daram, pos, Quaternion.identity);
         DaramCost = daram.GetComponent<Daram>().Cost;
