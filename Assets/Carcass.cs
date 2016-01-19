@@ -5,10 +5,12 @@ public class Carcass : MonoBehaviour {
 
     public int Duration;
     private int hp;
+    SpriteRenderer fade;
 
 	// Use this for initialization
 	void Start () {
         hp = Duration;
+        fade = GetComponent("SpriteRenderer") as SpriteRenderer;
 	}
 	
     void Die()
@@ -19,6 +21,7 @@ public class Carcass : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         hp--;
+        fade.color = Color.Lerp(fade.color, Color.clear, (1f / (float)Duration) * 200f * Time.deltaTime);
         if (hp < 0) Die();
 	
 	}
