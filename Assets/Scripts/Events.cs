@@ -8,12 +8,16 @@ public class Events : MonoBehaviour {
 
     public GameObject UnlockUpBasic_Button;
     public GameObject UnlockUpBasic_Box;
+    public GameObject UserLimitExcess_Box;
+    public GameObject RivalGameRelease_Box;
 
     void Start ()
     {
         gm = GameManager.gm;
 
         gm.EventCheck += UnlockUpBasic;
+        gm.EventCheck += UserLimitExcess;
+        gm.EventCheck += RivalGameRelease;
     }
 
     void UnlockUpBasic()
@@ -30,6 +34,36 @@ public class Events : MonoBehaviour {
             gm.FameChange += gm.FameDaram2;
             gm.UserChange += gm.UserLevel2;
             gm.EventCheck += UserChat.uc.Daram2Number;
+        }
+    }
+
+    void UserLimitExcess() {
+        if (GameManager.gm.UserAllCount() > GameManager.gm.UserLimit) {
+
+            Instantiate(UserLimitExcess_Box);
+            LogText.WriteLog("서버가 충당 가능한 유저 수를 초과했습니다.");
+            LogText.WriteLog("유저들이 접속 불량을 호소합니다. (유저 수와 인기도가 감소합니다.)");
+            UserChat.CreateChat("헐 뭐임?", 5);
+            UserChat.CreateChat("팅김", 5);
+
+            GameManager.gm.UserCount[User.level1] -= (int)( GameManager.gm.UserCount[User.level1] * Random.Range(0.1f, 0.2f) );
+            GameManager.gm.UserCount[User.level2] -= (int)(GameManager.gm.UserCount[User.level2] * Random.Range(0.1f, 0.2f));
+            GameManager.gm.Fame -= (int)(GameManager.gm.Fame * 0.1);
+
+        }
+    }
+
+    void RivalGameRelease() {
+        if (Random.Range(0, 1000) == Random.Range(0, 1000)) {
+            Instantiate(RivalGameRelease_Box);
+            LogText.WriteLog("경쟁작 '전설의 어둠'이 베타 테스트를 시작했다!");
+            LogText.WriteLog("(유저 수가 감소합니다.)");
+            UserChat.CreateChat("전설의 어둠하러 갑시다.", 5);
+            UserChat.CreateChat("ㄱㄱㄱ", 5);
+
+            GameManager.gm.UserCount[User.level1] -= 500 + (int)(GameManager.gm.UserCount[User.level1] * 0.1f);
+
+            gm.EventCheck -= RivalGameRelease;
         }
     }
 }
