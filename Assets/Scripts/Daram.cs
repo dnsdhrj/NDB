@@ -15,6 +15,7 @@ public class Daram : MonoBehaviour {
     public int InitialHP;
     public int Speed;
     public int Cost;
+    public GameObject Carcass;
 
     public int HP {
         get { return _HP; }
@@ -55,6 +56,8 @@ public class Daram : MonoBehaviour {
 
     public void Die()
     {
+        Vector2 pos = transform.position;
+        Instantiate(Carcass, pos, Quaternion.identity);
         All.Remove(this);
         Destroy(gameObject);
     }
