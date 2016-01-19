@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     private GameObject resultScene; 
 
     public int Money = 0;
+    public int UserLimit = 5000;
     [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
