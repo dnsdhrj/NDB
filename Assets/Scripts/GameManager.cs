@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     private GameObject resultScene; 
 
     public int Money = 0;
-    public int UserLimit = 5000;
+    public int UserLimit;
     [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour {
 
     // public 함수들
     //public Vector2 RandomPosition();
-
+    //public void pause(bool pause);
 
     void Awake()
     {
@@ -283,19 +283,19 @@ public class GameManager : MonoBehaviour {
             StageEnd -= StageEndCheck;
             //print("stageEnded");
             resultScene.SetActive(true);
-            Pause();    // 결과창이 뜰 때 일시정지 실행
+            Pause(true);    // 결과창이 뜰 때 일시정지 실행
         }
     }
 
 
-    // Pause();를 한 번 사용하면 게임 일시정지, 두 번 사용하면 일시정지 해제
+    // Pause();를 한 번 사용하면 게임 일시정지, 두 번 사용하면 일시정지 해제 -> 간혹 충돌하는 경우가 있어서 인자 넘겨주는 것으로 변경
     // 일시정지 효과를 받아야 하는 void 함수의 맨 위에 "if (IsPaused) return;"을 추가하면 됨.
     // 시간을 멈추는 방법 대신 함수를 멈추는 방법으로 구현
     // 현재 인기도, 유저, 돈 관련 함수와 유저 채팅, 다람쥐 생성 버튼에 일시정지 효과 적용
-    public void Pause()
+    public void Pause(bool pause)
     {
         //Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-        IsPaused = IsPaused == true ? false : true;
+        IsPaused = pause;
     }
 
 

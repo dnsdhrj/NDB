@@ -65,7 +65,7 @@ public class UserChat : MonoBehaviour {
             if (famediff == 0)
                 return;
             if (famediff > 0)
-                switch(Random.Range(0,3))
+                switch(Random.Range(0,4))
                 {
                     case 0:
                         CreateChat("이 게임 할만하구만.", 3);
@@ -75,6 +75,9 @@ public class UserChat : MonoBehaviour {
                         break;
                     case 2:
                         CreateChat("열정적인 GM!", 3);
+                        break;
+                    case 3:
+                        CreateChat("이게 요즘 흥한다는 그 게임인가요?", 3);
                         break;
                 }
             else if (x < a)
@@ -160,10 +163,52 @@ public class UserChat : MonoBehaviour {
     private float UCCool = 15;
     void UserCount()
     {
-        if (DN2Cool < gm.time)
+        if (UCCool < gm.time)
         {
             CreateChat("지금 유저 수가 " + ((gm.UserAllCount() + 500) / 1000) * 1000 + "명쯤은 되는듯.", 4);    //천명 단위로 끊음(1000, 2000...)
-            DN2Cool = gm.time + Random.Range(20, 40);
+            UCCool = gm.time + Random.Range(15, 30);
         }
+    }
+
+    private float ULECool = 0;
+    private int ULECounter = 0;
+    public void UserLimitExcess()
+    {
+        if (ULECool == 0)
+        {
+            if (!(gm.IsPaused))
+            {
+                ULECool = gm.time + 3.0f;
+                CreateChat("헐 뭐임?", 5);
+                CreateChat("팅김", 5);
+            }
+        }
+        else if (ULECool < gm.time)
+        {
+            if (ULECounter < 6)
+            {
+                switch (Random.Range(0, 4))
+                {
+                    case 0:
+                        CreateChat("겨우겨우 접속했네 ㅠ", 3);
+                        break;
+                    case 1:
+                        CreateChat("또 긴급점검 할까봐 무섭..", 3);
+                        break;
+                    case 2:
+                        CreateChat("GM: 여러분의 쾌적한 플레이를\n        위해 최선을 다하겠습니다", 4);
+                        break;
+                    case 3:
+                        CreateChat("흥겜 서버증설좀 해주세요!!", 3);
+                        break;
+                }
+
+                ULECool = gm.time + Random.Range(1, 3);
+                ULECounter += Random.Range(2, 5);
+            }
+            else
+                gm.UserChat -= UserLimitExcess;
+        }
+
     }
 }
