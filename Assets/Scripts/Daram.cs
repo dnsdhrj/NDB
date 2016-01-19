@@ -62,7 +62,7 @@ public class Daram : MonoBehaviour {
     private float NextMove = 0;
     void Move()
     {
-        if (NextMove <= Time.time)
+        if (NextMove <= GameManager.gm.time)
         {
             switch (move_stat=Random.Range(0, 4))
             {
@@ -80,7 +80,7 @@ public class Daram : MonoBehaviour {
                     break;
             }
 
-            NextMove = Time.time + Random.Range(1.0f, 3.0f);    //방향전환 시간
+            NextMove = GameManager.gm.time + Random.Range(1.0f, 3.0f);    //방향전환 시간
         }
 
         CheckIfCantMove();

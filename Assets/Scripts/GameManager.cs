@@ -95,9 +95,7 @@ public class GameManager : MonoBehaviour {
 
     void DebugFunc()
     {
-        print(Time.time);
-
-        print(time);
+        
     }
 
     void DebugStatFunc()
