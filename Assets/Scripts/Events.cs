@@ -44,6 +44,7 @@ public class Events : MonoBehaviour {
             LogText.WriteLog("서버가 충당 가능한 유저 수를 초과했습니다.");
             LogText.WriteLog("유저들이 접속 불량을 호소합니다. (유저 수와 인기도가 감소합니다.)");
             
+            
             //유저채팅 추가
             gm.UserChat += UserChat.uc.UserLimitExcess;
 
@@ -61,6 +62,7 @@ public class Events : MonoBehaviour {
             LogText.WriteLog("(유저 수가 감소합니다.)");
             UserChat.CreateChat("전설의 어둠하러 갑시다.", 5);
             UserChat.CreateChat("ㄱㄱㄱ", 5);
+            UserChat.CreateChat("이 게임 접으려는데 아이디 사실 분?", 5);
 
             GameManager.gm.UserCount[User.level1] -= 500 + (int)(GameManager.gm.UserCount[User.level1] * 0.1f);
 

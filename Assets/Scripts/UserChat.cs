@@ -81,7 +81,7 @@ public class UserChat : MonoBehaviour {
                         break;
                 }
             else if (x < a)
-                switch (Random.Range(0, 4))
+                switch (Random.Range(0, 5))
                 {
                     case 0:
                         CreateChat("사람이 다람쥐보다 많은듯..", 3);
@@ -94,6 +94,9 @@ public class UserChat : MonoBehaviour {
                         break;
                     case 3:
                         CreateChat("넥슨은 다람쥐를 뿌려라!", 2);
+                        break;
+                    case 4:
+                        CreateChat("다람쥐가 있어야 퀘스트를 하지...", 3);
                         break;
                 }
             else
@@ -180,7 +183,8 @@ public class UserChat : MonoBehaviour {
             {
                 ULECool = gm.time + 3.0f;
                 CreateChat("헐 뭐임?", 5);
-                CreateChat("팅김", 5);
+                CreateChat("팅김 ㄷㄷ", 5);
+                CreateChat("뭐야, 또 터진거야?", 5);
             }
         }
         else if (ULECool < gm.time)
