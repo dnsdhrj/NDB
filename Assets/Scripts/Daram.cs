@@ -16,6 +16,7 @@ public class Daram : MonoBehaviour {
     public int Speed;
     public int Cost;
     public GameObject Carcass;
+    public string feature;
 
     public int HP {
         get { return _HP; }
