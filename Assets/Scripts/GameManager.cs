@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour {
 
     void Awake()
     {
+        Application.targetFrameRate = 60;
+
         gm = this;
         resultScene = GameObject.Find("ResultScene");
         resultScene.SetActive(false);
