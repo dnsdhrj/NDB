@@ -238,7 +238,7 @@ public class GameManager : MonoBehaviour {
         while (true) {
             if (!IsPaused)
             {
-                EarnedMoney += Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
+                EarnedMoney += 2 * Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
             }
             yield return new WaitForSeconds(1f);
         }
