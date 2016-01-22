@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour {
     public float FieldWidth = 12f;
     public float FieldHeight = 8.5f;
 
+    public GameObject StartScene;
+
     // 어떤 이벤트가 발생하여 지속 효과를 넣어줄 때 사용
     // 항목에 맞게 분류해서 넣어주세요
     public delegate void Simulation();
@@ -69,6 +71,8 @@ public class GameManager : MonoBehaviour {
         StartCoroutine("MoneyGainByFame");
 
         Random.seed = (int)Time.time;
+
+        Instantiate(StartScene);
     }
 
     void Update()
