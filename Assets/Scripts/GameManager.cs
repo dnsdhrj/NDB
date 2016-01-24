@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
+    [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
     [HideInInspector] public int StageLevel = 1;
     [HideInInspector] public int TimeLeft;
     [HideInInspector] public bool IsPaused = false;
@@ -49,9 +50,14 @@ public class GameManager : MonoBehaviour {
         resultScene = GameObject.Find("ResultScene");
         resultScene.SetActive(false);
 
-        //UserCount 모두 0으로 초기화
+        //UserCount 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
+
+        DaramFunction = new Quadric[User.Count];
+        for (int i = 0; i < User.Count; i++)
+            DaramFunction[i] = new Quadric();
+
 
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
@@ -102,7 +108,7 @@ public class GameManager : MonoBehaviour {
 
     void DebugFunc()
     {
-        
+        print(DaramFunction[0].solution);
     }
 
     void DebugStatFunc()
@@ -162,21 +168,27 @@ public class GameManager : MonoBehaviour {
 
     void FameDaram1()
     {
-        int a = 10 + Fame / 1000;   //다람쥐의 적정 숫자
-        int x = Daram.All.Count;
+        Quadric q = DaramFunction[User.level1];
+        q.k = 0.2f;
+        q.x = Daram.All.Count;
+        q.a = 10 + Fame / 1000;
+        q.max = 5;
+        q.min = -5;
 
-        // y = k(x - a)^2 + max   (y >= min)
-        Fame += (int) Mathf.Max(-5.0f, -0.2f * (x - a) * (x - a) + 5); 
+        Fame += (int) q.value;
     }
 
     //lv2 다람쥐가 해금되면 실행됨
     public void FameDaram2()
     {
-        int a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
-        int x = Daram.FindByType("Basic", 2);
+        Quadric q = DaramFunction[User.level2];
+        q.k = 0.2f;
+        q.x = Daram.FindByType("Basic", 2);
+        q.a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;
+        q.max = 2;
+        q.min = -3;
 
-        // y = k(x - a)^2 + max   (y >= min)
-        Fame += (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
+        Fame += (int) q.value;
     }
 
     //                      //

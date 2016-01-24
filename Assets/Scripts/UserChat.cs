@@ -56,15 +56,11 @@ public class UserChat : MonoBehaviour {
     {
         if (DNCool < gm.time)
         {
-            int a = 10 + gm.Fame / 1000;   //다람쥐의 적정 숫자
-            int x = Daram.All.Count;
+            Quadric q = gm.DaramFunction[User.level1];
 
-            // y = k(x - a)^2 + max   (y >= min)
-            int famediff = (int)Mathf.Max(-5.0f, -0.2f * (x - a) * (x - a) + 5);
-
-            if (famediff == 0)
+            if (q.value == 0)
                 return;
-            if (famediff > 0)
+            if (q.value > 0)
                 switch(Random.Range(0,4))
                 {
                     case 0:
@@ -80,7 +76,7 @@ public class UserChat : MonoBehaviour {
                         CreateChat("이게 요즘 흥한다는 그 게임인가요?", 3);
                         break;
                 }
-            else if (x < a)
+            else if (q.diff < 0)
                 switch (Random.Range(0, 5))
                 {
                     case 0:
@@ -122,17 +118,13 @@ public class UserChat : MonoBehaviour {
     {
         if (DN2Cool < gm.time)
         {
-            int a = 5 + gm.UserCount[User.level2] / 100 + gm.UserCount[User.level1] / 2000;   //다람쥐의 적정 숫자
-            int x = Daram.FindByType("Basic", 2);
+            Quadric q = gm.DaramFunction[User.level2];
 
-            // y = k(x - a)^2 + max   (y >= min)
-            int famediff = (int)Mathf.Max(-3.0f, -0.2f * (x - a) * (x - a) + 2);
-
-            if (famediff == 0)
+            if (q.value == 0)
                 return;
-            if (famediff > 0)
+            if (q.value > 0)
                 return;
-            else if (x < a)
+            else if (q.diff < 0)
                 switch (Random.Range(0, 3))
                 {
                     case 0:
