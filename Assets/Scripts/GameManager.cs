@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool IsPaused = false;
     //                public int UserAllCount();
 
-    public float FieldCenterX=-2f;
-    public float FieldCenterY=1.75f;
-    public float FieldWidth = 12f;
-    public float FieldHeight = 8.5f;
+    public float FieldCenterX;
+    public float FieldCenterY;
+    public float FieldWidth;
+    public float FieldHeight;
 
     public GameObject StartScene;
 
