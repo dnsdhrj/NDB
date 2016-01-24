@@ -116,7 +116,7 @@ public class Daram : MonoBehaviour {
     public override bool Equals(object obj)
     {
         if (obj == null)
-            return true;
+            return false;
         else if (((Daram)obj).GetInstanceID() == GetInstanceID())
             return true;
         else

@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour {
 
     void DebugFunc()
     {
-        print(DaramFunction[0].solution);
+       
     }
 
     void DebugStatFunc()
