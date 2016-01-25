@@ -324,7 +324,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetRoundTime() {
-        int BasicTime = 5;
+        int BasicTime = 30;
         TimeLeft = BasicTime; //+ StageLevel * 10;
     }
 

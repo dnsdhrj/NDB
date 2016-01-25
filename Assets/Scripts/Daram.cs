@@ -59,8 +59,12 @@ public class Daram : MonoBehaviour {
     {
         Vector2 pos = transform.position;
         Instantiate(Carcass, pos, Quaternion.identity);
-        All.Remove(this);
         Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        All.Remove(this);
     }
 
     private float NextMove = 0;

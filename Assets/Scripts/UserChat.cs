@@ -7,7 +7,6 @@ public class UserChat : MonoBehaviour {
     private GameManager gm; //많이 쓸것같아서 만들어둠
 
     public static UserChat uc;
-    public GameObject canvas;
     public GameObject ChatText;
 
 
@@ -16,21 +15,22 @@ public class UserChat : MonoBehaviour {
         uc = this;
         gm = GameManager.gm;
         _ChatText = ChatText;
-        _canvas = canvas;
 
         gm.UserChat += NoDaram;
         gm.UserChat += DaramNumber;
         gm.UserChat += UserCount;
     }
 
-    private static GameObject _canvas;
+    private static GameObject _Canvas = null;
     private static GameObject _ChatText;
     public static GameObject CreateChat(string text, float lifetime)
     {
         Vector3 pos = new Vector3(Random.Range(100, 500), Random.Range(300, 500), 0);   //화면 해상도에 따라 바꿀 것
 
+        if (_Canvas == null)
+            _Canvas = GameObject.Find("Canvas");
         GameObject obj = (GameObject) Instantiate(_ChatText, Vector3.zero, Quaternion.identity);
-        obj.transform.SetParent(_canvas.transform);
+        obj.transform.SetParent(_Canvas.transform);
         obj.GetComponent<RectTransform>().position = pos;
         obj.GetComponent<Text>().text = text;
         obj.GetComponent<SelfDestroyScript>().ChangeFate(lifetime);
