@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 using System.Linq;
@@ -18,8 +19,10 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
     [HideInInspector] public int StageLevel = 1;
     [HideInInspector] public int TimeLeft;
+    [HideInInspector] public string CurrentStageScene;
     [HideInInspector] public bool IsPaused = false;
-    //                public int UserAllCount();
+    //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음
+
 
     public float FieldCenterX;
     public float FieldCenterY;
@@ -36,19 +39,26 @@ public class GameManager : MonoBehaviour {
     public event Simulation EventCheck;     // 매 프레임마다 호출
     public event Simulation UserChat;       // 매 프레임마다 호출
     public event Simulation UserChange;     // 1초에 한번 호출
-    public event Simulation StageEnd;       // 매 프레임마다 호출
 
     // public 함수들
     //public Vector2 RandomPosition();
     //public void pause(bool pause);
+    //public int UserAllCount();
 
+    private static bool GMCreated = false;
     void Awake()
     {
+        if (GMCreated == true)  // GM 중복생성 방지
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Application.targetFrameRate = 60;
+        DontDestroyOnLoad(this);    // 씬이 넘어가도 파괴되지 않음
 
         gm = this;
-        resultScene = GameObject.Find("ResultScene");
-        resultScene.SetActive(false);
+        CurrentStageScene = SceneManager.GetActiveScene().name;
 
         //UserCount 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
@@ -59,13 +69,13 @@ public class GameManager : MonoBehaviour {
             DaramFunction[i] = new Quadric();
 
 
+
         //테스트용이고 나중에 삭제바람
         DaramDeath += DaramDeath_test;
 
         FameChange += FameDaram1;
         UserChange += UserLevel1;
         FameChange += CheckFameZero;
-        StageEnd += StageEndCheck;      // 새 스테이지를 시작할 때마다 이것을 써 줘야 함.
         
 
         Random.seed = (int)Time.time;
@@ -73,12 +83,31 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
-        StartCoroutine("UserChangeCall");
-        StartCoroutine("MoneyGainByFame");
+        if (GMCreated == true)  // GM 중복생성 방지
+            return;
+        GMCreated = true;
+
+        OnLevelWasLoaded(0);    // Start 대신 저 안에 써주세요
 
         Random.seed = (int)Time.time;
+    }
 
-        Instantiate(StartScene);
+    void OnLevelWasLoaded(int level)
+    {
+        // 라운드 시작시마다 실행
+        if (IsInterRound == false)
+        {
+            gm.time = Time.time;
+            SetRoundTime();
+
+            resultScene = GameObject.Find("ResultScene");
+
+            StartCoroutine("UserChangeCall");
+            StartCoroutine("MoneyGainByFame");
+
+            if (StartScene != null)
+                Instantiate(StartScene);
+        }
     }
 
     void Update()
@@ -96,8 +125,8 @@ public class GameManager : MonoBehaviour {
             if (UserChat != null)
                 UserChat();
         }
-        if (StageEnd != null)
-            StageEnd();
+        if(!IsInterRound)
+            RoundEndCheck();
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
@@ -117,6 +146,9 @@ public class GameManager : MonoBehaviour {
         print("Level 2 : " + UserCount[User.level2]);
         print("다람쥐 개수 : " + Daram.All.Count);
     }
+
+
+    
 
     public int UserAllCount()
     {
@@ -291,16 +323,16 @@ public class GameManager : MonoBehaviour {
         return randompos;
     }
 
-    public void SetStageTime() {
-        int BasicTime = 60;
-        TimeLeft = BasicTime + StageLevel * 10;
+    public void SetRoundTime() {
+        int BasicTime = 5;
+        TimeLeft = BasicTime; //+ StageLevel * 10;
     }
 
-    private void StageEndCheck() {
+    private void RoundEndCheck() {
         if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
-            StageEnd -= StageEndCheck;
             //print("stageEnded");
             resultScene.SetActive(true);
+            resultScene.GetComponent<ResultScene>().isEnabled = true;
             Pause(true);    // 결과창이 뜰 때 일시정지 실행
         }
     }
@@ -339,6 +371,14 @@ public class GameManager : MonoBehaviour {
                 PausedTime += Time.time - PauseStart;
             }
             time = Time.time - PausedTime;
+        }
+    }
+
+    public bool IsInterRound
+    {
+        get
+        {
+            return SceneManager.GetActiveScene().name == CurrentStageScene ? false : true;
         }
     }
 }

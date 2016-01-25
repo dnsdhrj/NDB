@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -6,18 +7,20 @@ public class ResultScene : MonoBehaviour {
 
     private Text resultText;
     private int Events = 0; //실제로는 GameManager에 값이 있고 가져와야 할 듯
+    public bool isEnabled = false;
 
 	void Awake () {
         resultText = GetComponentInChildren<Text>();
 	}
 
-    void OnEnable() {
-        StartCoroutine("ShowResult");
+    void Update() {
+        if(isEnabled)
+            StartCoroutine("ShowResult");
     }
 
     IEnumerator ShowResult() {
 
-        GetComponent<Image>().enabled = true;
+        GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
@@ -35,6 +38,14 @@ public class ResultScene : MonoBehaviour {
         }
 
 
+    }
+
+    public void OnButtonClick()
+    {
+        GameManager.gm.Pause(true);
+        GameManager.gm.CurrentStageScene = SceneManager.GetActiveScene().name;
+        StopAllCoroutines();
+        SceneManager.LoadScene("InterRound");
     }
 
     void StageEndEvent() {
