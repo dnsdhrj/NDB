@@ -390,9 +390,9 @@ public class GameManager : MonoBehaviour {
 public static class User
 {
     // User의 변수 개수
-    public static int Count = 2;
+    public const int Count = 2;
 
     // 이 순서대로 게이지가 정렬됨
-    public static int level1 = 0;
-    public static int level2 = 1;
+    public const int level1 = 0;
+    public const int level2 = 1;
 }

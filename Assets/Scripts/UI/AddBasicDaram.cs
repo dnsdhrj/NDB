@@ -27,6 +27,10 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void Update()
     {
+        // 해금되었는지 확인
+        string key = "UnlockDaram" + daram.GetComponent<Daram>().Level;
+        button.interactable = Unlockables.GetBool(key);
+
         if (GameManager.gm.IsPaused || !button.interactable) return;
 
         if (Input.GetMouseButtonDown(1) && pointerOn)

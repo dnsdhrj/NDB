@@ -6,9 +6,7 @@ public class Events : MonoBehaviour {
 
     private GameManager gm; //많이 쓸것같아서 만들어둠
 
-    public GameObject UnlockUpBasic_Button;
     public GameObject UnlockUpBasic_Box;
-    public GameObject UnlockUpBasic_Gauge;
     public GameObject UserLimitExcess_Box;
     public GameObject RivalGameRelease_Box;
 
@@ -27,8 +25,6 @@ public class Events : MonoBehaviour {
         {
             GameManager.gm.EventCheck -= UnlockUpBasic;
  
-            UnlockUpBasic_Button.GetComponent<Button>().interactable = true;
-            UnlockUpBasic_Gauge.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             Instantiate(UnlockUpBasic_Box);
             LogText.WriteLog("인기에 힘입어 LV.2 다람쥐를 개발했다!");
             UserChat.CreateChat("GM: 고레벨 다람쥐가 새롭게 등장합니다!!", 5);
@@ -36,6 +32,8 @@ public class Events : MonoBehaviour {
             gm.FameChange += gm.FameDaram2;
             gm.UserChange += gm.UserLevel2;
             gm.EventCheck += UserChat.uc.Daram2Number;
+            Unlockables.SetBool("UnlockDaram2", true);
+            
         }
     }
 

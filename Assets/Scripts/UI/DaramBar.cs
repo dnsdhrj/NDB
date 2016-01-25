@@ -14,6 +14,7 @@ public class DaramBar : MonoBehaviour {
     private RectTransform rect;
     private RectTransform arrowrect;
     private Quadric DaramFunc;
+    private string UnlockKey;
 
     void Start()
     {
@@ -21,6 +22,16 @@ public class DaramBar : MonoBehaviour {
         rect = PositiveArea.GetComponent<RectTransform>();
         arrowrect = Arrow.GetComponent<RectTransform>();
         DaramFunc = GameManager.gm.DaramFunction[UserLevel];
+
+        switch (UserLevel)
+        {
+            case User.level1:
+                UnlockKey = "UnlockDaram1";
+                break;
+            case User.level2:
+                UnlockKey = "UnlockDaram2";
+                break;
+        }
 
         // NaN exception이 뜨지 않게 대충 초기화
         DaramFunc.k = 1;
@@ -33,6 +44,11 @@ public class DaramBar : MonoBehaviour {
 
     void Update()
     {
+        if (Unlockables.GetBool(UnlockKey) == false)
+            transform.localScale = Vector3.zero;
+        else
+            transform.localScale = new Vector3(1, 1, 1);
+
         Vector3 v = rect.localScale;
         v.y = DaramFunc.solution / MaxDiff;
         rect.localScale = v;
