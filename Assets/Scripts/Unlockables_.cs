@@ -2,6 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// 예시
+// 기본 다람쥐 해금 : Unlockables.SetBool("UnlockDaram1", true);
+// 기본 다람쥐 해금 확인 : Unlockables.GetBool("UnlockDaram1");
+
+
+/// <summary>
+/// 다람쥐 해금이나 업그레이드 여부를 기록하는 클래스
+/// </summary>
 public static class Unlockables
 {
     private static Dictionary<string, bool> bools = new Dictionary<string, bool>();

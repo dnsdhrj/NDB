@@ -7,7 +7,6 @@ public class TimeBar : MonoBehaviour {
     private Text Timetext;
 
 	void Start () {
-        GameManager.gm.SetRoundTime();
         Timetext = GetComponent<Text>();
         StartCoroutine(ShowTime());
     }

@@ -17,11 +17,11 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int Fame = 0;
     [HideInInspector] public int[] UserCount;
     [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
-    [HideInInspector] public int StageLevel = 1;
-    [HideInInspector] public int TimeLeft;
+    [HideInInspector] public int RoundCount = 0;
+    [HideInInspector] public int TimeLeft = 1;
     [HideInInspector] public string CurrentStageScene;
     [HideInInspector] public bool IsPaused = false;
-    //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음
+    //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
 
 
     public float FieldCenterX;
@@ -107,6 +107,13 @@ public class GameManager : MonoBehaviour {
 
             if (StartScene != null)
                 Instantiate(StartScene);
+
+            if (RoundCount != 1)    // 시작시에는 점기점검이 없습니다
+            {
+                LogText.WriteLog("");
+                LogText.WriteLog( (RoundCount-1) + "번째 정기점검 끝.");
+            }
+            LogText.WriteLog("10초 후 유저 로그인이 활성화됩니다.");
         }
     }
 
@@ -114,7 +121,7 @@ public class GameManager : MonoBehaviour {
     {
         UpdateGameTime();
 
-        if (!IsPaused)
+        if (!IsPaused && !IsInterRound)
         {
             if (EventCheck != null)
                 EventCheck();
@@ -163,7 +170,7 @@ public class GameManager : MonoBehaviour {
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
-            while (IsPaused)
+            while (IsPaused || IsInterRound)
                 yield return null;
             if(UserChange != null)
                 UserChange();
@@ -306,12 +313,7 @@ public class GameManager : MonoBehaviour {
         Money += EventCost;
     }
 
-    //스테이지가 끝날 때 GameManager에 결과 저장
-    void MoneyUpdate()
-    {
-        Money = (Money + EarnedMoney);
-        EarnedMoney = 0;
-    }
+    
 
 
 
@@ -324,13 +326,15 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetRoundTime() {
-        int BasicTime = 30;
-        TimeLeft = BasicTime; //+ StageLevel * 10;
+        int BasicTime = 40;
+        TimeLeft = BasicTime; //+ RoundCount * 10;
+        RoundCount++;
     }
 
     private void RoundEndCheck() {
         if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             //print("stageEnded");
+            TimeLeft = 0;
             resultScene.SetActive(true);
             resultScene.GetComponent<ResultScene>().isEnabled = true;
             Pause(true);    // 결과창이 뜰 때 일시정지 실행
@@ -378,6 +382,7 @@ public class GameManager : MonoBehaviour {
     {
         get
         {
+            if (TimeLeft >= 30) return true;
             return SceneManager.GetActiveScene().name == CurrentStageScene ? false : true;
         }
     }

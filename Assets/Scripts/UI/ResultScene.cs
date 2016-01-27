@@ -14,8 +14,12 @@ public class ResultScene : MonoBehaviour {
 	}
 
     void Update() {
-        if(isEnabled)
+        if (isEnabled)
+        {
+            print("Aa");
             StartCoroutine("ShowResult");
+            isEnabled = false;
+        }
     }
 
     IEnumerator ShowResult() {
@@ -31,6 +35,8 @@ public class ResultScene : MonoBehaviour {
         resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.EarnedMoney + GameManager.gm.Money);
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n이벤트";
+
+        MoneyUpdate();
 
         for (int i = 0; i < Events; i++) {
             StageEndEvent();
@@ -50,5 +56,12 @@ public class ResultScene : MonoBehaviour {
 
     void StageEndEvent() {
             //뭔가 스테이지가 끝날 때 발생하는 이벤트
+    }
+
+    //스테이지가 끝날 때 GameManager에 결과 저장
+    void MoneyUpdate()
+    {
+        GameManager.gm.Money = (GameManager.gm.Money + GameManager.gm.EarnedMoney);
+        GameManager.gm.EarnedMoney = 0;
     }
 }
