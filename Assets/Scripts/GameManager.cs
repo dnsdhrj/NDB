@@ -334,7 +334,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator MoneyGainByFame()
     {
         while (true) {
-            if (!IsPaused)
+            if (!IsPaused && !IsInterRound)
             {
                 EarnedMoney += 2 * Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
             }
@@ -349,7 +349,6 @@ public class GameManager : MonoBehaviour {
     //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
     void MoneyGainByEvent(int EventGain, int EventCost)
     {
-        if (IsPaused) return;
         EarnedMoney += EventGain;
         Money += EventCost;
     }

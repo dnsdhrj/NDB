@@ -15,6 +15,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private bool pointerOn;
     private int DaramCost;
+    private float DeveloperTime = 0;
 
     void Start() {
         button = GetComponent<Button>();
@@ -43,6 +44,15 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             daramInfo.SetActive(false);
         }
+
+        // 개발자 한명당 3초에 한마리씩 뿌림
+        if(GameManager.gm.IsInterRound == false && daram.GetComponent<Daram>().Level == 1)
+            if (GameManager.gm.Developers != 0 && GameManager.gm.time >= DeveloperTime)
+            {
+                OnClick();
+                DeveloperTime = GameManager.gm.time + 3.0f / GameManager.gm.Developers;
+            }
+
     }
 
     public void OnClick()
