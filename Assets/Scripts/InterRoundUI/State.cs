@@ -12,7 +12,7 @@ public class State : MonoBehaviour {
 	void Start () {
         moneyText = GameObject.Find("MoneyState").GetComponent<Text>();
         developerText = GameObject.Find("DeveloperState").GetComponent<Text>();
-        itemText = GameObject.Find("itemText").GetComponent<Text>();
+        itemText = GameObject.Find("ItemState").GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
