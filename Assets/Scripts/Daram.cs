@@ -27,6 +27,7 @@ public class Daram : MonoBehaviour {
 
     private int _HP = 0;
     private Vector2 dir;
+    private bool DieFlag = false;
 
     protected Animator Anim;
 
@@ -59,12 +60,15 @@ public class Daram : MonoBehaviour {
     {
         Vector2 pos = transform.position;
         Instantiate(Carcass, pos, Quaternion.identity);
+        All.Remove(this);
+        DieFlag = true;
         Destroy(gameObject);
     }
 
     void OnDestroy()
     {
-        All.Remove(this);
+        if(!DieFlag)
+            All.Remove(this);
     }
 
     private float NextMove = 0;

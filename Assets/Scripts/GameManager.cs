@@ -71,8 +71,10 @@ public class GameManager : MonoBehaviour {
 
 
         //테스트용이고 나중에 삭제바람
-        DaramDeath += DaramDeath_test;
+        //DaramDeath += DaramDeath_test;
 
+        DaramDeath += DaramDeath1;
+        DaramDeath += DaramDeath2;
         FameChange += FameDaram1;
         UserChange += UserLevel1;
         FameChange += CheckFameZero;
@@ -184,21 +186,64 @@ public class GameManager : MonoBehaviour {
     //  다람쥐가 죽는 정도   //
     //                      //
 
-    void DaramDeath_test()
+    // 다람쥐 하나를 일점사해서 사실적인 시뮬레이션을 만듬
+    private Daram DaramBias = null;
+    Daram RandomDaram()
     {
-        int count = 0;
+        if (DaramBias == null || Random.value < 0.01)   // 낮은 확률로 타겟 변경
+            DaramBias = Daram.All[Random.Range(0, Daram.All.Count)];
 
-        // 어떤 요인에 의해
-        if (Daram.All.Count != 0)
-            count = (int)(UserCount[User.level1] / 1000.0f + UserCount[User.level2] / 100.0f);
+        return DaramBias;
+    }
 
-        //다람쥐에게 피해를 입힌다
-        for (int i = 0; i < count; i++)
+    void DaramDeath1()  // 초보에 의한 데미지
+    {
+        int TotalDamage = (int)(UserCount[User.level1] / 1000.0f);
+
+        while (Daram.All.Count != 0 && TotalDamage > 0)
         {
-            int all = Daram.All.Count;
-            if (all != 0)
-                Daram.All[Random.Range(0, all)].HP -= 1;
+            float DamageEff = 1.0f;    // 다람쥐 종류별 데미지계수
+            Daram d = RandomDaram();
+
+            switch (d.Level)
+            {
+                case 1:
+                    DamageEff = 1.0f;
+                    break;
+                case 2:
+                    DamageEff = 0.7f;   // 초보는 고렙몹을 잘 못잡습니다
+                    break;
+            }
+            float DamageDealt = Mathf.Max( Mathf.Min(TotalDamage * DamageEff, d.HP), 1);
+            d.HP -= (int)DamageDealt;
+            TotalDamage -= (int)(DamageDealt / DamageEff);
         }
+
+    }
+
+    void DaramDeath2()  // 중수에 의한 데미지
+    {
+        int TotalDamage = (int)(UserCount[User.level2] / 100.0f);
+
+        while (Daram.All.Count != 0 && TotalDamage > 0)
+        {
+            float DamageEff = 1.0f;    // 다람쥐 종류별 데미지계수
+            Daram d = RandomDaram();
+
+            switch (d.Level)
+            {
+                case 1:
+                    DamageEff = 0.5f;   // 흥미가 없어서 안잡습니다
+                    break;
+                case 2:
+                    DamageEff = 1.0f;
+                    break;
+            }
+            float DamageDealt = Mathf.Max( Mathf.Min(TotalDamage * DamageEff, d.HP), 1);
+            d.HP -= (int)DamageDealt;
+            TotalDamage -= (int)(DamageDealt / DamageEff);
+        }
+
     }
 
     //                      //
