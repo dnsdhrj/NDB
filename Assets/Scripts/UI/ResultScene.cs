@@ -14,12 +14,14 @@ public class ResultScene : MonoBehaviour {
 	}
 
     void Update() {
-        if(isEnabled)
+        if (isEnabled)
+        {
             StartCoroutine("ShowResult");
+            isEnabled = false;
+        }
     }
 
     IEnumerator ShowResult() {
-
         GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
         resultText.text = " ";

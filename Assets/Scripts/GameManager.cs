@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int TimeLeft;
     [HideInInspector] public string CurrentStageScene;
     [HideInInspector] public bool IsPaused = false;
+    [HideInInspector] public int Developers = 0;
     //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음
 
 
@@ -124,9 +125,10 @@ public class GameManager : MonoBehaviour {
                 DaramDeath();
             if (UserChat != null)
                 UserChat();
+            if (!IsInterRound)
+                RoundEndCheck();
         }
-        if(!IsInterRound)
-            RoundEndCheck();
+
 
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
@@ -291,12 +293,6 @@ public class GameManager : MonoBehaviour {
     //현재 남은 돈
 
 
-    //다람쥐 생성에서 소모되는 비용
-    void DaramLoss(int DaramCost)
-    {
-        Money -= DaramCost;
-    }
-
     //이벤트(홍보, 긴급점검 등)에 의해 발생하는 돈의 증감
     //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
     void MoneyGainByEvent(int EventGain, int EventCost)
@@ -331,7 +327,7 @@ public class GameManager : MonoBehaviour {
     private void RoundEndCheck() {
         if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             //print("stageEnded");
-            resultScene.SetActive(true);
+            //resultScene.SetActive(true);
             resultScene.GetComponent<ResultScene>().isEnabled = true;
             Pause(true);    // 결과창이 뜰 때 일시정지 실행
         }
