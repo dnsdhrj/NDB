@@ -36,7 +36,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (Input.GetMouseButtonDown(1) && pointerOn)
         {
-            Debug.Log("RightClicked");
+            //Debug.Log("RightClicked");
             daramInfo.SetActive(true);
         }
 
