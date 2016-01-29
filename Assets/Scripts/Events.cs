@@ -10,6 +10,7 @@ public class Events : MonoBehaviour {
     public GameObject UserLimitExcess_Box;
     public GameObject RivalGameRelease_Box;
     public GameObject MacroEvent_Box;
+    public GameObject TreeOfSavior_Box;
 
     void Start ()
     {
@@ -19,6 +20,7 @@ public class Events : MonoBehaviour {
         gm.EventCheck += UserLimitExcess;
         gm.EventCheck += RivalGameRelease;
         gm.EventCheck += MacroEvent;
+        gm.EventCheck += TreeOfSavior;
     }
 
     void UnlockUpBasic()
@@ -76,5 +78,14 @@ public class Events : MonoBehaviour {
     {
         if (gm.UserAllCount() >= 3000 && Random.value < 0.0005)   // 나중에 10000으로 변경
             Instantiate(MacroEvent_Box);
+    }
+
+    void TreeOfSavior()
+    {
+        if (gm.time >= 200)
+        {
+            Instantiate(TreeOfSavior_Box);
+            gm.EventCheck -= TreeOfSavior;
+        }
     }
 }
