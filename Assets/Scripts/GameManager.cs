@@ -70,10 +70,6 @@ public class GameManager : MonoBehaviour {
             DaramFunction[i] = new Quadric();
 
 
-
-        //테스트용이고 나중에 삭제바람
-        //DaramDeath += DaramDeath_test;
-
         DaramDeath += DaramDeath1;
         DaramDeath += DaramDeath2;
         FameChange += FameDaram1;
@@ -138,11 +134,13 @@ public class GameManager : MonoBehaviour {
                 RoundEndCheck();
         }
 
-
+        // 개발용 함수
         if (Input.GetKeyDown("f2")) //디버그용
             DebugFunc();
         if (Input.GetKeyDown("f3")) //각종 변수 상태 출력
             DebugStatFunc();
+        if (Input.GetKeyDown("f4")) //InterRound로 즉시 이동
+            TimeLeft = 0;
 
     }
 
@@ -366,7 +364,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetRoundTime() {
-        int BasicTime = 40;
+        int BasicTime = 70;
         TimeLeft = BasicTime; //+ RoundCount * 10;
         RoundCount++;
     }
@@ -422,7 +420,7 @@ public class GameManager : MonoBehaviour {
     {
         get
         {
-            if (TimeLeft >= 30) return true;
+            if (TimeLeft >= 60) return true;
             return SceneManager.GetActiveScene().name == CurrentStageScene ? false : true;
         }
     }
