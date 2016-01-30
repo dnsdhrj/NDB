@@ -4,7 +4,7 @@ using System.Collections;
 
 public class EventBox : MonoBehaviour {
 
-    void Start()
+    protected void Start()
     {
         transform.SetParent(GameObject.Find("Canvas").transform);
         GetComponent<RectTransform>().localPosition = Vector3.zero;

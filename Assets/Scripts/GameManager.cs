@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager gm;
 
-    private GameObject resultScene; 
+    public GameObject resultScene; 
 
     public int Money = 0;
     public int UserLimit;
@@ -102,8 +102,6 @@ public class GameManager : MonoBehaviour {
         {
             gm.time = Time.time;
             SetRoundTime();
-
-            resultScene = GameObject.Find("ResultScene");
 
             StartCoroutine("UserChangeCall");
             StartCoroutine("MoneyGainByFame");
@@ -375,14 +373,12 @@ public class GameManager : MonoBehaviour {
         if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             //print("stageEnded");
             TimeLeft = 0;
-            resultScene.SetActive(true);
-            resultScene.GetComponent<ResultScene>().isEnabled = true;
-            Pause(true);    // 결과창이 뜰 때 일시정지 실행
+            Instantiate(resultScene); // 결과창을 Instantiate하는 방법으로 변경
         }
     }
 
 
-    // Pause();를 한 번 사용하면 게임 일시정지, 두 번 사용하면 일시정지 해제 -> 간혹 충돌하는 경우가 있어서 인자 넘겨주는 것으로 변경
+    // Pause(true);를 사용하면 게임 일시정지, Pause(false); 사용하면 일시정지 해제 (간혹 충돌하는 경우가 있어서 인자 넘겨주는 것으로 변경)
     // 일시정지 효과를 받아야 하는 void 함수의 맨 위에 "if (IsPaused) return;"을 추가하면 됨.
     // 시간을 멈추는 방법 대신 함수를 멈추는 방법으로 구현
     // 현재 인기도, 유저, 돈 관련 함수와 유저 채팅, 다람쥐 생성 버튼에 일시정지 효과 적용

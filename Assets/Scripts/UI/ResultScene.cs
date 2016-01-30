@@ -3,22 +3,19 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 
-public class ResultScene : MonoBehaviour {
+public class ResultScene : EventBox {
 
     private Text resultText;
     private int Events = 0; //실제로는 GameManager에 값이 있고 가져와야 할 듯
-    public bool isEnabled = false;
 
 	void Awake () {
         resultText = GetComponentInChildren<Text>();
 	}
 
-    void Update() {
-        if (isEnabled)
-        {
-            StartCoroutine("ShowResult");
-            isEnabled = false;
-        }
+    void Start()
+    {
+        base.Start();   // 생성된 창 위치 맞추고 일시정지
+        StartCoroutine("ShowResult");
     }
 
     IEnumerator ShowResult() {
