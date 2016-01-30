@@ -53,12 +53,12 @@ public class DaramBar : MonoBehaviour {
         v.y = DaramFunc.solution / MaxDiff;
         rect.localScale = v;
 
-        if (DaramFunc.diff > 0)
+        if (DaramFunc.diff >= 0) // 다람쥐 수가 적정 수준 이상이면 화살표가 아래를 향함
         {
             slider.value = DaramFunc.solution / MaxDiff + 0.1f * Mathf.Sin(3.0f * GameManager.gm.time);
             arrowrect.localScale = new Vector3(1, -1, 1);
         }
-        else
+        else // 다람쥐 수가 적정 수준보다 적으면 화살표가 위를 향함
         {
             slider.value = (-1) * DaramFunc.solution / MaxDiff - 0.1f * Mathf.Sin(3.0f * GameManager.gm.time);
             arrowrect.localScale = new Vector3(1, 1, 1);

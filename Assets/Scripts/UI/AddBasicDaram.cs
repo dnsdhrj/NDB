@@ -15,14 +15,16 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private bool pointerOn;
     private int DaramCost;
+    private int DaramHP;
     private float DeveloperTime = 0;
 
     void Start() {
         button = GetComponent<Button>();
         DaramCost = daram.GetComponent<Daram>().Cost;
+        DaramHP = daram.GetComponent<Daram>().InitialHP;
         daramInfo = transform.GetChild(0).gameObject;
         daramInfoText = daramInfo.GetComponentInChildren<Text>();
-        daramInfoText.text = daram.name + "\n\n가격 : " + DaramCost + "\n특성 : " + daram.GetComponent<Daram>().feature;
+        daramInfoText.text = daram.name + "\n\n가격 : " + DaramCost + "\n체력 : " + DaramHP + "\n특성 : " + daram.GetComponent<Daram>().feature;
         pointerOn = false;
     }
 

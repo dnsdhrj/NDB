@@ -20,7 +20,7 @@ public class Developer : MonoBehaviour {
     void CalculateCost() {
         //누군가 적절한 함수를 생각해주길
         hireCost = GameManager.gm.Developers * 1000 + 1000;
-        fireCost = GameManager.gm.Developers * 300 + 300;
+        fireCost = GameManager.gm.Developers * 300;
         hireButtonText.text = "고용\n(" + hireCost + ")";
         fireButtonText.text = "해고\n(" + fireCost + ")";
     }
