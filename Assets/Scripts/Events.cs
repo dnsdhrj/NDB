@@ -11,6 +11,7 @@ public class Events : MonoBehaviour {
     public GameObject RivalGameRelease_Box;
     public GameObject MacroEvent_Box;
     public GameObject TreeOfSavior_Box;
+    public GameObject GettingFamous_Box;
 
     void Start ()
     {
@@ -21,6 +22,7 @@ public class Events : MonoBehaviour {
         gm.EventCheck += RivalGameRelease;
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
+        gm.EventCheck += GettingFamous;
     }
 
     void UnlockUpBasic()
@@ -86,6 +88,17 @@ public class Events : MonoBehaviour {
         {
             Instantiate(TreeOfSavior_Box);
             gm.EventCheck -= TreeOfSavior;
+        }
+    }
+
+    void GettingFamous()
+    {
+        if (gm.Fame >= 10000)
+        {
+            Instantiate(GettingFamous_Box);
+            gm.UserCount[User.level1] += 1000;
+            gm.UserCount[User.level2] += 100;
+            gm.EventCheck -= GettingFamous;
         }
     }
 }
