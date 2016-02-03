@@ -4,12 +4,9 @@ using UnityEngine.UI;
 
 public class TimeBar : MonoBehaviour {
 
-    private int TimeLeft;
     private Text Timetext;
 
 	void Start () {
-        GameManager.gm.SetStageTime();
-        TimeLeft = GameManager.gm.TimeLeft;
         Timetext = GetComponent<Text>();
         StartCoroutine(ShowTime());
     }
@@ -20,10 +17,13 @@ public class TimeBar : MonoBehaviour {
     }
 
     private IEnumerator ShowTime() {
+
+        int TimeLeft = GameManager.gm.TimeLeft;
         int min = TimeLeft / 60;
         int sec = Mathf.Max(0, (int)(TimeLeft % 60));
         Timetext.text = min + " : " + sec;
-        GameManager.gm.TimeLeft = --TimeLeft;
+        if(!(GameManager.gm.IsPaused))
+            GameManager.gm.TimeLeft = --TimeLeft;
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(ShowTime());
     }

@@ -15,6 +15,8 @@ public class Daram : MonoBehaviour {
     public int InitialHP;
     public int Speed;
     public int Cost;
+    public GameObject Carcass;
+    public string feature;
 
     public int HP {
         get { return _HP; }
@@ -25,6 +27,9 @@ public class Daram : MonoBehaviour {
 
     private int _HP = 0;
     private Vector2 dir;
+    private bool DieFlag = false;
+
+    protected Animator Anim;
 
     protected Animator Anim;
 
@@ -55,14 +60,23 @@ public class Daram : MonoBehaviour {
 
     public void Die()
     {
+        Vector2 pos = transform.position;
+        Instantiate(Carcass, pos, Quaternion.identity);
         All.Remove(this);
+        DieFlag = true;
         Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        if(!DieFlag)
+            All.Remove(this);
     }
 
     private float NextMove = 0;
     void Move()
     {
-        if (NextMove <= Time.time)
+        if (NextMove <= GameManager.gm.time)
         {
             switch (move_stat=Random.Range(0, 4))
             {
@@ -80,7 +94,7 @@ public class Daram : MonoBehaviour {
                     break;
             }
 
-            NextMove = Time.time + Random.Range(1.0f, 3.0f);    //방향전환 시간
+            NextMove = GameManager.gm.time + Random.Range(1.0f, 3.0f);    //방향전환 시간
         }
 
         CheckIfCantMove();
@@ -112,7 +126,7 @@ public class Daram : MonoBehaviour {
     public override bool Equals(object obj)
     {
         if (obj == null)
-            return true;
+            return false;
         else if (((Daram)obj).GetInstanceID() == GetInstanceID())
             return true;
         else

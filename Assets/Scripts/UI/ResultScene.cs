@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 
-public class ResultScene : MonoBehaviour {
+public class ResultScene : EventBox {
 
     private Text resultText;
     private int Events = 0; //실제로는 GameManager에 값이 있고 가져와야 할 듯
@@ -11,13 +12,14 @@ public class ResultScene : MonoBehaviour {
         resultText = GetComponentInChildren<Text>();
 	}
 
-    void OnEnable() {
+    void Start()
+    {
+        base.Start();   // 생성된 창 위치 맞추고 일시정지
         StartCoroutine("ShowResult");
     }
 
     IEnumerator ShowResult() {
-
-        GetComponent<Image>().enabled = true;
+        GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
@@ -29,6 +31,8 @@ public class ResultScene : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n이벤트";
 
+        MoneyUpdate();
+
         for (int i = 0; i < Events; i++) {
             StageEndEvent();
             yield return new WaitForSeconds(0.5f);
@@ -37,7 +41,22 @@ public class ResultScene : MonoBehaviour {
 
     }
 
+    public void OnButtonClick()
+    {
+        GameManager.gm.Pause(true);
+        GameManager.gm.CurrentStageScene = SceneManager.GetActiveScene().name;
+        StopAllCoroutines();
+        SceneManager.LoadScene("InterRound");
+    }
+
     void StageEndEvent() {
             //뭔가 스테이지가 끝날 때 발생하는 이벤트
+    }
+
+    //스테이지가 끝날 때 GameManager에 결과 저장
+    void MoneyUpdate()
+    {
+        GameManager.gm.Money = (GameManager.gm.Money + GameManager.gm.EarnedMoney);
+        GameManager.gm.EarnedMoney = 0;
     }
 }
