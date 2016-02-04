@@ -8,6 +8,7 @@ public class Inventory : MonoBehaviour {
     public int slotY;
     public List<Item> inventory = new List<Item>();
     public List<Item> slots = new List<Item>();
+    public GUISkin skin;
 
     private ItemDatabase database;
     private int inventorySize;
@@ -31,6 +32,7 @@ public class Inventory : MonoBehaviour {
     }
 
     void OnGUI() {
+        GUI.skin = skin;
         if (showInventory) {
             DrawInventory();
         }
@@ -39,7 +41,7 @@ public class Inventory : MonoBehaviour {
     void DrawInventory() {
         for (int x = 0; x < slotX; x++) {
             for (int y = 0; y < slotY; y++) {
-                GUI.Box(new Rect(x * 20, y * 20, 20, 20), y.ToString());
+                GUI.Box(new Rect(x * 60, y * 60, 50, 50), "", skin.GetStyle("Slots"));
             }
         }
     }
