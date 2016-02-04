@@ -8,4 +8,15 @@ public class Item{
     public int itemID;
     public string itemDescription;
     public Texture2D itemImage;
+
+    public Item(string name, int ID, string desc) {
+        itemName = name;
+        itemID = ID;
+        itemDescription = desc;
+        itemImage = Resources.Load<Texture2D>("Item Icons/" + name);
+    }
+
+    public Item() {
+
+    }
 }

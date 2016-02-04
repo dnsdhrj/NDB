@@ -16,13 +16,13 @@ public class Explanation : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetMouseButtonDown(1) && pointerOn)
+        if (pointerOn)
         {
             //Debug.Log("RightClicked");
             explanation.SetActive(true);
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (!pointerOn)
         {
             explanation.SetActive(false);
         }
