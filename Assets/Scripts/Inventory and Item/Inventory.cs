@@ -35,10 +35,6 @@ public class Inventory : MonoBehaviour {
         }
 
         database = GameObject.FindGameObjectWithTag("Item Database").GetComponent<ItemDatabase>();
-
-        // 테스트용, 나중에 삭제
-        AddItem(0);
-        AddItem(0);
 	}
 
     void Update()
@@ -165,7 +161,7 @@ public class Inventory : MonoBehaviour {
         }
     }
 
-    string CreateTooltip(Item item)
+    public string CreateTooltip(Item item)
     {
         string tooltip = "<color=#ffffff>" + item.itemName + "</color>\n\n";
         tooltip += "<color=#029919>" + item.itemDescription + "</color>\n\n";
@@ -173,16 +169,25 @@ public class Inventory : MonoBehaviour {
         return tooltip;
     }
 
-    void AddItem(int id) {
+    public void AddItem(Item item)
+    {
+        if (GameManager.gm.Money < item.itemPrice)
+        {
+            //나중에 창으로 나오도록 고치자
+            Debug.Log("돈이 부족합니다.");
+            return;
+        }
+
         for (int i = 0; i < inventorySize; i++)
         {
             if (inventory[i].itemName == null)
             {
                 for (int j = 0; j < database.itemDatabase.Count; j++)
                 {
-                    if (database.itemDatabase[j].itemID == id)
+                    if (database.itemDatabase[j].itemID == item.itemID)
                     {
                         inventory[i] = database.itemDatabase[j];
+                        GameManager.gm.Money -= item.itemPrice;
                         break;
                     }
                 }

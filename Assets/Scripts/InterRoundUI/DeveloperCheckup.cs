@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Developer : MonoBehaviour {
+public class DeveloperCheckup : MonoBehaviour {
 
     private Text hireButtonText;
     private Text fireButtonText;

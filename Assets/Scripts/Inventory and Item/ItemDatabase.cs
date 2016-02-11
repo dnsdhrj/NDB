@@ -9,6 +9,7 @@ public class ItemDatabase : MonoBehaviour {
     void Start()
     {
         itemDatabase.Add(new Item("Dotory", 0, 100, "맛있는 도토리"));
+        itemDatabase.Add(new Item("Nokyong", 1, 200, "맛있는 녹용"));
     }
 
 
@@ -18,6 +19,10 @@ public class ItemDatabase : MonoBehaviour {
         {
             case 0 :
                 Debug.Log("도토리 마시쪙");
+                break;
+
+            case 1:
+                Debug.Log("녹용 맛업쪙");
                 break;
 
             default:
