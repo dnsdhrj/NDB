@@ -46,7 +46,9 @@ public class GameManager : MonoBehaviour {
     //public void pause(bool pause);
     //public int UserAllCount();
 
+    int BasicTime = 60;
     private static bool GMCreated = false;
+
     void Awake()
     {
         if (GMCreated == true)  // GM 중복생성 방지
@@ -366,7 +368,6 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetRoundTime() {
-        int BasicTime = 60;
         TimeLeft = BasicTime; //+ RoundCount * 10;
         RoundCount++;
     }
@@ -421,7 +422,7 @@ public class GameManager : MonoBehaviour {
     {
         get
         {
-            if (TimeLeft >= 60) return true;
+            if (TimeLeft >= BasicTime - 10) return true;
             return SceneManager.GetActiveScene().name == CurrentStageScene ? false : true;
         }
     }

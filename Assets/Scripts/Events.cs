@@ -62,7 +62,7 @@ public class Events : MonoBehaviour {
     }
 
     void RivalGameRelease() {
-        if (Random.Range(0, 1000) == Random.Range(0, 1000)) {
+        if (Random.value < 1f/5401f) {
             Instantiate(RivalGameRelease_Box);
             LogText.WriteLog("경쟁작 '전설의 어둠'이 베타 테스트를 시작했다!");
             LogText.WriteLog("(유저 수가 감소합니다.)");
@@ -70,7 +70,8 @@ public class Events : MonoBehaviour {
             UserChat.CreateChat("ㄱㄱㄱ", 5);
             UserChat.CreateChat("이 게임 접으려는데 아이디 사실 분?", 5);
 
-            GameManager.gm.UserCount[User.level1] -= 500 + (int)(GameManager.gm.UserCount[User.level1] * 0.1f);
+            GameManager.gm.UserCount[User.level1] -= 1500 + (int)(GameManager.gm.UserCount[User.level1] * 0.1f);
+            GameManager.gm.UserCount[User.level2] -= (int)(GameManager.gm.UserCount[User.level2] * 0.1f);
 
             gm.EventCheck -= RivalGameRelease;
         }
@@ -78,7 +79,7 @@ public class Events : MonoBehaviour {
 
     void MacroEvent()
     {
-        if (gm.UserAllCount() >= 3000 && Random.value < 0.0005)   // 나중에 10000으로 변경
+        if (gm.UserAllCount() >= 3000 && Random.value < 1f/3601f)   // 나중에 10000으로 변경
             Instantiate(MacroEvent_Box);
     }
 
