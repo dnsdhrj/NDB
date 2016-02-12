@@ -11,9 +11,6 @@ public class ItemCheckup : MonoBehaviour {
     private Inventory inventory;
     private ItemDatabase database;
 
-    private Text itemDesc;
-    private Button itemPerchaseButton;
-
     private int imageIconSize = 256; 
     
 
