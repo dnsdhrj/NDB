@@ -366,7 +366,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetRoundTime() {
-        int BasicTime = 70;
+        int BasicTime = 60;
         TimeLeft = BasicTime; //+ RoundCount * 10;
         RoundCount++;
     }
