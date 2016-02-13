@@ -60,6 +60,11 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnClick()
     {
         if (GameManager.gm.IsPaused) return;
+        else if (GameManager.gm.Money < DaramCost)
+        {
+            LogText.WriteLog("돈이 부족합니다.");
+            return;
+        }
         Vector2 pos = GameManager.gm.RandomPosition();
         Instantiate(daram, pos, Quaternion.identity);
         GameManager.gm.Money -= DaramCost;
