@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public string CurrentStageScene;
     [HideInInspector] public bool IsPaused = false;
     [HideInInspector] public int Developers = 0;
+    [HideInInspector] public bool isRoundEventOn = false;
     //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
 
 
@@ -376,6 +377,12 @@ public class GameManager : MonoBehaviour {
         if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             //print("stageEnded");
             TimeLeft = 0;
+
+            //라운드 이벤트 제거를 위해 한번 더 확인
+            isRoundEventOn = false;
+            if (EventCheck != null)
+                EventCheck();
+
             Instantiate(resultScene); // 결과창을 Instantiate하는 방법으로 변경
             // 방법을 변경한 이유는 결과창이 맨 위에 뜨도록 하기 위해서임.
         }

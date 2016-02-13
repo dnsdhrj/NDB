@@ -4,11 +4,11 @@ using System.Collections;
 public class RoundEventBuyButton : MonoBehaviour {
 
     private RoundEvent buyingEvent;
-    //private Inventory inventory;
+    private RoundEventDatabase database;
 
     void Start()
     {
-        //inventory = GameManager.gm.GetComponentInChildren<Inventory>();
+        database = GameManager.gm.GetComponentInChildren<RoundEventDatabase>();
     }
 
     public void SetEvent(RoundEvent roundEvent)
@@ -18,6 +18,6 @@ public class RoundEventBuyButton : MonoBehaviour {
 
     public void OnClick()
     {
-        //inventory.AddItem(buyingitem);
+        database.AddRoundEvent(buyingEvent);
     }
 }

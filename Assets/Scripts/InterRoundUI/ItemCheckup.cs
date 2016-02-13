@@ -9,6 +9,7 @@ public class ItemCheckup : MonoBehaviour {
 
     private GameObject itemPanel;
     private GameObject itemScrollPanel;
+    private RectTransform itemscrollPanelrect;
 
     private Inventory inventory;
     private ItemDatabase database;
@@ -23,19 +24,22 @@ public class ItemCheckup : MonoBehaviour {
         database = GameManager.gm.GetComponentInChildren<ItemDatabase>();
         itemPanel = GameObject.Find("ItemPanel");
         itemScrollPanel = GameObject.Find("ItemScrollPanel");
+        itemscrollPanelrect = itemScrollPanel.GetComponent<RectTransform>();
         itemPanel.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
         itemPanel.SetActive(false);
+        MakeItemList();
 	}
 
-    public void ShowItems() {
+    void MakeItemList()
+    {
 
-        itemPanel.SetActive(true);
+        SetListSize(itemscrollPanelrect);
 
         foreach (Item item in database.itemDatabase)
         {
-            List<GameObject> itemList  = new List<GameObject>();
+            List<GameObject> itemList = new List<GameObject>();
 
-            GameObject newItem = Instantiate(itemListTemplate, new Vector3(0f, -120f * item.itemID, 0f), Quaternion.identity) as GameObject;
+            GameObject newItem = Instantiate(itemListTemplate, new Vector3(0f, (itemscrollPanelrect.rect.height / 2) - 120f * item.itemID, 0f), Quaternion.identity) as GameObject;
             newItem.name = item.itemName;
 
             /* 다른 children이 추가되면 아래 코드에서 에러가 발생할 수도? */
@@ -45,14 +49,19 @@ public class ItemCheckup : MonoBehaviour {
             newItem.GetComponentInChildren<Text>().text = inventory.CreateTooltip(item);
             newItem.GetComponentInChildren<ItemBuyButton>().SetItem(item);
 
-            itemList.Add(newItem);           
+            itemList.Add(newItem);
         }
-        ModifyListSize(itemScrollPanel.GetComponent<RectTransform>(), database.itemDatabase.Count);
     }
 
-    void ModifyListSize(RectTransform rect, int itemNum) {
-        //rect.offsetMin = new Vector2(rect.offsetMin.x, rect.offsetMin.y + Mathf.Max(0, (imageIconSize - 4)) * itemNum);
-        //rect.offsetMax = new Vector2(rect.offsetMax.x, 0);
-        //rect.sizeDelta = new Vector2(rect.rect.width, rect.rect.yMax + imageIconSize);
+    public void ShowItems()
+    {
+        //이유는 모르겠지만 처음에 위치 조정을 안해주면 스크롤바랑 이미지 표시가 이상해짐
+        itemPanel.GetComponent<ScrollRect>().verticalScrollbar.value = 0;
+        itemscrollPanelrect.localPosition = new Vector2(itemscrollPanelrect.localPosition.x, -itemscrollPanelrect.rect.height / 2);
+        itemPanel.SetActive(true);
+    }
+
+    void SetListSize(RectTransform rect) {
+        rect.sizeDelta = new Vector2(rect.rect.width, database.itemDatabase.Count * 120f);
     }
 }
