@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 
+    private GameManager gm;
+    
     public GameObject daram;
 
 
@@ -19,6 +21,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private float DeveloperTime = 0;
 
     void Start() {
+        gm = GameManager.gm;
         button = GetComponent<Button>();
         DaramCost = daram.GetComponent<Daram>().Cost;
         DaramHP = daram.GetComponent<Daram>().InitialHP;
@@ -48,26 +51,38 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         // 개발자 한명당 3초에 한마리씩 뿌림
-        if(GameManager.gm.IsInterRound == false && daram.GetComponent<Daram>().Level == 1)
-            if (GameManager.gm.Developers != 0 && GameManager.gm.time >= DeveloperTime)
-            {
-                OnClick();
-                DeveloperTime = GameManager.gm.time + 3.0f / GameManager.gm.Developers;
-            }
+        if(GameManager.gm.IsInterRound == false && daram.GetComponent<Daram>().Level == 1 
+            && gm.DeveloperCount[Developer.DaramLv1] != 0 && gm.time >= DeveloperTime)
+        {
+            Create(); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
+            DeveloperTime = gm.time + 3.0f / gm.DeveloperCount[Developer.DaramLv1];
+        }
 
+        if (GameManager.gm.IsInterRound == false && daram.GetComponent<Daram>().Level == 2
+            && gm.DeveloperCount[Developer.DaramLv2] != 0 && gm.time >= DeveloperTime)
+        {
+            Create(); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
+            DeveloperTime = gm.time + 3.0f / gm.DeveloperCount[Developer.DaramLv2];
+        }
     }
 
     public void OnClick()
     {
-        if (GameManager.gm.IsPaused) return;
-        else if (GameManager.gm.Money < DaramCost)
+        if (gm.IsPaused) return;
+        else if (gm.Money < DaramCost)
         {
             LogText.WriteLog("돈이 부족합니다.");
             return;
         }
+        GameManager.gm.Money -= DaramCost;
+        Create();
+    }
+
+    private void Create()
+    {
+        if (gm.IsPaused) return;
         Vector2 pos = GameManager.gm.RandomPosition();
         Instantiate(daram, pos, Quaternion.identity);
-        GameManager.gm.Money -= DaramCost;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

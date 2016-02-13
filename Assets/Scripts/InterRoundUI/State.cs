@@ -18,7 +18,7 @@ public class State : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         moneyText.text = "" + GameManager.gm.Money;
-        developerText.text = "" + GameManager.gm.Developers;
+        developerText.text = "" + Developer.dev.DeveloperAllCount();
         //itemText = 아이템 구현하고 나서 추가합시당
 	}
 }

@@ -18,10 +18,11 @@ public class Macro : MonoBehaviour {
 
     public void KeepMacro()
     {
-        GameManager.gm.Fame -= 1000;
-        ActivityEnd = GameManager.gm.time + 100;
+        GameManager.gm.Fame -= 1000 - 100 * Mathf.Min(10, GameManager.gm.DeveloperCount[Developer.Customer]);
+        // 디버깅 팀의 개발자 한 명당 매크로 지속시간이 10초씩 줄어듭니다.
+        ActivityEnd = GameManager.gm.time + 100f - 10f * (float)Mathf.Min(10, GameManager.gm.DeveloperCount[Developer.Debugging]);
         GameManager.gm.DaramDeath += MacroActivity;
-        LogText.WriteLog("매크로가 게임에 판을 치고 있다.");
+        LogText.WriteLog("매크로가 게임에 판을 치고 있다. 개발자들이 매크로를 잡을 때까지 기다리자.");
     }
 
     private float ActivityEnd;
@@ -30,6 +31,7 @@ public class Macro : MonoBehaviour {
     {
         if (GameManager.gm.time >= ActivityEnd)
             GameManager.gm.DaramDeath -= MacroActivity;
+            LogText.WriteLog("개발자들이 매크로를 잡았다.");
 
         if (GameManager.gm.time >= NextActivity)
         {

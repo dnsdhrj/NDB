@@ -15,19 +15,22 @@ public class ResultScene : EventBox {
     void Start()
     {
         base.Start();   // 생성된 창 위치 맞추고 일시정지
+        Developer.dev.CalculateCost();
         StartCoroutine("ShowResult");
     }
 
     IEnumerator ShowResult() {
         GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-
+        
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
         resultText.text = "남은 돈 : " + GameManager.gm.Money;
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n번 돈 :  " + GameManager.gm.EarnedMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.EarnedMoney + GameManager.gm.Money);
+        resultText.text = resultText.text + "\n지급할 월급 : " + Developer.dev.salaryCost;
+        yield return new WaitForSeconds(0.5f);
+        resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.EarnedMoney + GameManager.gm.Money - Developer.dev.salaryCost);
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n이벤트";
 
@@ -56,7 +59,7 @@ public class ResultScene : EventBox {
     //스테이지가 끝날 때 GameManager에 결과 저장
     void MoneyUpdate()
     {
-        GameManager.gm.Money = (GameManager.gm.Money + GameManager.gm.EarnedMoney);
+        GameManager.gm.Money = (GameManager.gm.Money + GameManager.gm.EarnedMoney - Developer.dev.salaryCost);
         GameManager.gm.EarnedMoney = 0;
     }
 }
