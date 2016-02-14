@@ -9,5 +9,7 @@ public class Stage1 : MonoBehaviour {
     void Start()
     {
         Unlockables.SetBool("UnlockDaram1", true);
+
+        Unlockables.SetInt("UserLimit", 5000);
     }
 }

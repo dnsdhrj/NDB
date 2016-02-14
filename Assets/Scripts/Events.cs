@@ -44,7 +44,7 @@ public class Events : MonoBehaviour {
     }
 
     void UserLimitExcess() {
-        if (GameManager.gm.UserAllCount() > GameManager.gm.UserLimit) {
+        if (GameManager.gm.UserAllCount() > Unlockables.GetInt("UserLimit")) {
 
             Instantiate(UserLimitExcess_Box);
             LogText.WriteLog("서버가 충당 가능한 유저 수를 초과했습니다.");
@@ -79,7 +79,7 @@ public class Events : MonoBehaviour {
 
     void MacroEvent()
     {
-        if (gm.UserAllCount() >= 3000 && Random.value < 1f/3601f)   // 나중에 10000으로 변경
+        if (gm.UserAllCount() >= 10000 && Random.value < 1f/3601f)
             Instantiate(MacroEvent_Box);
     }
 
