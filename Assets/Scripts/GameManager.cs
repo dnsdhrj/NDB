@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
     //public void pause(bool pause);
     //public int UserAllCount();
 
-    private int BasicTime = 15;
+    private int BasicTime = 60;
     private static bool GMCreated = false;
 
     void Awake()
