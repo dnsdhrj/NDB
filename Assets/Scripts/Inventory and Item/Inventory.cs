@@ -171,7 +171,7 @@ public class Inventory : MonoBehaviour {
 
     public void AddItem(Item item)
     {
-        if (GameManager.gm.Money < item.itemPrice)
+        if (GameManager.gm.money < item.itemPrice)
         {
             //나중에 창으로 나오도록 고치자
             Debug.Log("돈이 부족합니다.");
@@ -187,7 +187,7 @@ public class Inventory : MonoBehaviour {
                     if (database.itemDatabase[j].itemID == item.itemID)
                     {
                         inventory[i] = database.itemDatabase[j];
-                        GameManager.gm.Money -= item.itemPrice;
+                        GameManager.gm.money -= item.itemPrice;
                         break;
                     }
                 }

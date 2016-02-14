@@ -33,7 +33,7 @@ public class RoundEventDatabase : MonoBehaviour {
 
         else
         {
-            if (GameManager.gm.Money < roundEvent.eventPrice)
+            if (GameManager.gm.money < roundEvent.eventPrice)
             {
                 //나중에 창으로 나오게 고치자
                 Debug.Log("돈이 부족합니다.");
@@ -42,7 +42,7 @@ public class RoundEventDatabase : MonoBehaviour {
 
             else
             {
-                GameManager.gm.Money -= roundEvent.eventPrice;
+                GameManager.gm.money -= roundEvent.eventPrice;
                 GameManager.gm.isRoundEventOn = true;
                 FindRoundEvent(roundEvent.eventID);
             }
@@ -76,9 +76,9 @@ public class RoundEventDatabase : MonoBehaviour {
             GameManager.gm.FameChange -= ExpEvent;
 
         //인기도 30% 증가
-        gm.Fame += (int) (gm.DaramFunction[User.level1].value / 3.0f);
+        gm.fame += (int) (gm.DaramFunction[User.level1].value / 3.0f);
         if(Unlockables.GetBool("UnlockDaram1") == true)
-            gm.Fame += (int)(gm.DaramFunction[User.level2].value / 3.0f);
+            gm.fame += (int)(gm.DaramFunction[User.level2].value / 3.0f);
     }
 
     void ExpEvent2()
@@ -99,14 +99,14 @@ public class RoundEventDatabase : MonoBehaviour {
 
         //일단 중급 유저 증가량만 감소
         if (PrevUser == 0)
-            PrevUser = gm.UserCount[User.level2];
+            PrevUser = gm.userCount[User.level2];
         else
         {
-            int DeltaUser = gm.UserCount[User.level2] - PrevUser;
+            int DeltaUser = gm.userCount[User.level2] - PrevUser;
             if(DeltaUser > 0)
-                gm.UserCount[User.level2] -= DeltaUser / 2;
+                gm.userCount[User.level2] -= DeltaUser / 2;
 
-            PrevUser = gm.UserCount[User.level2];
+            PrevUser = gm.userCount[User.level2];
         }
     }
 }

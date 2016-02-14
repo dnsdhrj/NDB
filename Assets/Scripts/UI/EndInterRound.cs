@@ -6,6 +6,6 @@ public class EndInterRound : MonoBehaviour {
 
     public void OnClick()
     {
-        SceneManager.LoadScene(GameManager.gm.CurrentStageScene);
+        SceneManager.LoadScene(GameManager.gm.currentStageScene);
     }
 }

@@ -7,31 +7,31 @@ using System.Linq;
 public class GameManager : MonoBehaviour {
 
     public static GameManager gm;
+    private Developer dev;
 
     public GameObject resultScene; 
 
-    public int Money = 0;
+    public int money = 0;
 
-    public int BasicUserLimit;
-    [HideInInspector] public int UserLimit;
+    public int basicUserLimit;
+    [HideInInspector] public int userLimit;
     [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
-    [HideInInspector] public int EarnedMoney = 0;
-    [HideInInspector] public int Fame = 0;
-    [HideInInspector] public int[] UserCount;
+    [HideInInspector] public int earnedMoney = 0;
+    [HideInInspector] public int fame = 0;
+    [HideInInspector] public int[] userCount;
     [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
-    [HideInInspector] public int RoundCount = 0;
-    [HideInInspector] public int TimeLeft = 1;
-    [HideInInspector] public string CurrentStageScene;
-    [HideInInspector] public bool IsPaused = false;
+    [HideInInspector] public int roundCount = 0;
+    [HideInInspector] public int timeLeft = 1;
+    [HideInInspector] public string currentStageScene;
+    [HideInInspector] public bool isPaused = false;
     [HideInInspector] public bool isRoundEventOn = false;
-    [HideInInspector] public int[] DeveloperCount;
-    //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
+    //                public bool isInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
 
 
-    public float FieldCenterX;
-    public float FieldCenterY;
-    public float FieldWidth;
-    public float FieldHeight;
+    public float fieldCenterX;
+    public float fieldCenterY;
+    public float fieldWidth;
+    public float fieldHeight;
 
     public GameObject StartScene;
 
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour {
     //public void pause(bool pause);
     //public int UserAllCount();
 
-    private int BasicTime = 60;
+    private int basicTime = 1;
     private static bool GMCreated = false;
 
     void Awake()
@@ -64,18 +64,12 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(this);    // 씬이 넘어가도 파괴되지 않음
 
         gm = this;
-        CurrentStageScene = SceneManager.GetActiveScene().name;
+        dev = Developer.dev;
+        currentStageScene = SceneManager.GetActiveScene().name;
 
         //UserCount 초기화
-        UserCount = Enumerable.Repeat(0, User.Count).ToArray();
-        UserCount[User.level1] = 1000;
-
-        //DeveloperCount 초기화
-        DeveloperCount = Enumerable.Repeat(0, Developer.PostCount).ToArray();
-        for (int i = 0; i < Developer.PostCount; i++)
-        {
-            DeveloperCount[i] = 0;
-        }
+        userCount = Enumerable.Repeat(0, User.Count).ToArray();
+        userCount[User.level1] = 1000;
 
         DaramFunction = new Quadric[User.Count];
         for (int i = 0; i < User.Count; i++)
@@ -106,7 +100,7 @@ public class GameManager : MonoBehaviour {
     void OnLevelWasLoaded(int level)
     {
         // 라운드 시작시마다 실행
-        if (IsInterRound == false)
+        if (isInterRound == false)
         {
             gm.time = Time.time;
             SetRoundTime();
@@ -117,10 +111,10 @@ public class GameManager : MonoBehaviour {
             if (StartScene != null)
                 Instantiate(StartScene);
 
-            if (RoundCount != 1)    // 시작시에는 점기점검이 없습니다
+            if (roundCount != 1)    // 시작시에는 점기점검이 없습니다
             {
                 LogText.WriteLog("");
-                LogText.WriteLog( (RoundCount-1) + "번째 정기점검 끝.");
+                LogText.WriteLog( (roundCount-1) + "번째 정기점검 끝.");
             }
             LogText.WriteLog("10초 후 유저 로그인이 활성화됩니다.");
         }
@@ -130,11 +124,11 @@ public class GameManager : MonoBehaviour {
     {
         UpdateGameTime();
 
-        if (!IsPaused)
+        if (!isPaused)
         {
             if (FameChange != null)
                 FameChange();
-            if (!IsInterRound)
+            if (!isInterRound)
             {
                 if (EventCheck != null)
                     EventCheck();
@@ -152,7 +146,7 @@ public class GameManager : MonoBehaviour {
         if (Input.GetKeyDown("f3")) //각종 변수 상태 출력
             DebugStatFunc();
         if (Input.GetKeyDown("f4")) //InterRound로 즉시 이동
-            TimeLeft = 0;
+            timeLeft = 0;
 
     }
 
@@ -163,8 +157,8 @@ public class GameManager : MonoBehaviour {
 
     void DebugStatFunc()
     {
-        print("Level 1 : " + UserCount[User.level1]);
-        print("Level 2 : " + UserCount[User.level2]);
+        print("Level 1 : " + userCount[User.level1]);
+        print("Level 2 : " + userCount[User.level2]);
         print("다람쥐 개수 : " + Daram.All.Count);
     }
 
@@ -174,7 +168,7 @@ public class GameManager : MonoBehaviour {
     public int UserAllCount()
     {
         int sum = 0;
-        foreach (int user in UserCount)
+        foreach (int user in userCount)
             sum += user;
         return sum;
     }
@@ -184,7 +178,7 @@ public class GameManager : MonoBehaviour {
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
-            while (IsPaused || IsInterRound)
+            while (isPaused || isInterRound)
                 yield return null;
             if(UserChange != null)
                 UserChange();
@@ -210,7 +204,7 @@ public class GameManager : MonoBehaviour {
 
     void DaramDeath1()  // 초보에 의한 데미지
     {
-        int TotalDamage = (int)(UserCount[User.level1] / 1000.0f);
+        int TotalDamage = (int)(userCount[User.level1] / 1000.0f);
 
         while (Daram.All.Count != 0 && TotalDamage > 0)
         {
@@ -235,7 +229,7 @@ public class GameManager : MonoBehaviour {
 
     void DaramDeath2()  // 중수에 의한 데미지
     {
-        int TotalDamage = (int)(UserCount[User.level2] / 100.0f);
+        int TotalDamage = (int)(userCount[User.level2] / 100.0f);
 
         while (Daram.All.Count != 0 && TotalDamage > 0)
         {
@@ -268,11 +262,11 @@ public class GameManager : MonoBehaviour {
         Quadric q = DaramFunction[User.level1];
         q.k = 0.2f;
         q.x = Daram.All.Count;
-        q.a = 10 + Fame / 1000;
+        q.a = 10 + fame / 1000;
         q.max = 5;
         q.min = -5;
 
-        if(!IsInterRound) Fame += (int) q.value;
+        if(!isInterRound) fame += (int) q.value;
     }
 
     //lv2 다람쥐가 해금되면 실행됨
@@ -282,11 +276,11 @@ public class GameManager : MonoBehaviour {
         Quadric q = DaramFunction[User.level2];
         q.k = 0.2f;
         q.x = Daram.FindByType("Basic", 2);
-        q.a = 5 + UserCount[User.level2] / 100 + UserCount[User.level1] / 2000;
+        q.a = 5 + userCount[User.level2] / 100 + userCount[User.level1] / 2000;
         q.max = 2;
         q.min = -3;
 
-        if(!IsInterRound) Fame += (int) q.value;
+        if(!isInterRound) fame += (int) q.value;
     }
 
     //                      //
@@ -296,22 +290,22 @@ public class GameManager : MonoBehaviour {
     private int PrevFame = 0;
     void UserLevel1()
     {
-        int FameDelta = Fame - PrevFame;
+        int FameDelta = fame - PrevFame;
 
         if(FameDelta > 0)
-            UserCount[User.level1] += (int) ((10 + 2 * DeveloperCount[Developer.Publicity]) * Mathf.Log(Fame + 1));     // y = k * log(x + 1)
+            userCount[User.level1] += (int)((10 + 2 * dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]) * Mathf.Log(fame + 1));     // y = k * log(x + 1)
         else
-            UserCount[User.level1] -= (int) (10 * Mathf.Log((-1)*FameDelta + 1));   // 인기도가 감소중이면 적당히 줄어들게 함
+            userCount[User.level1] -= (int) (10 * Mathf.Log((-1)*FameDelta + 1));   // 인기도가 감소중이면 적당히 줄어들게 함
 
-        PrevFame = Fame;
+        PrevFame = fame;
     }
 
     //lv2 다람쥐가 해금되면 실행됨
     public void UserLevel2()
     {
-        int LevelUp = 10 + UserCount[User.level1] / 1000;
-        UserCount[User.level1] -= LevelUp;
-        UserCount[User.level2] += LevelUp;  // 일단 level2유저는 감소하지 않는걸로
+        int LevelUp = 10 + userCount[User.level1] / 1000;
+        userCount[User.level1] -= LevelUp;
+        userCount[User.level2] += LevelUp;  // 일단 level2유저는 감소하지 않는걸로
     }
 
     //                      //
@@ -320,20 +314,20 @@ public class GameManager : MonoBehaviour {
 
     void CheckFameZero()
     {
-        if (Fame <= 0)
+        if (fame <= 0)
         {
 
             // 뭔가를 한다
 
-            Fame = 0;
+            fame = 0;
         }
     }
 
     void CheckUserZero()
     {
         for(int i = 0; i < User.Count; i++)
-            if (UserCount[i] < 0)
-                UserCount[i] = 0;      
+            if (userCount[i] < 0)
+                userCount[i] = 0;      
     }
 
 
@@ -346,9 +340,9 @@ public class GameManager : MonoBehaviour {
     IEnumerator MoneyGainByFame()
     {
         while (true) {
-            if (!IsPaused && !IsInterRound)
+            if (!isPaused && !isInterRound)
             {
-                EarnedMoney += 2 * Mathf.Max(0, (int)Mathf.Log(Fame, 2f));
+                earnedMoney += 2 * Mathf.Max(0, (int)Mathf.Log(fame, 2f));
             }
             yield return new WaitForSeconds(1f);
         }
@@ -361,8 +355,8 @@ public class GameManager : MonoBehaviour {
     //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
     void MoneyGainByEvent(int EventGain, int EventCost)
     {
-        EarnedMoney += EventGain;
-        Money += EventCost;
+        earnedMoney += EventGain;
+        money += EventCost;
     }
 
     
@@ -372,20 +366,20 @@ public class GameManager : MonoBehaviour {
     public Vector2 RandomPosition()
     {
         Vector2 randompos;
-        randompos.x = Random.Range(FieldCenterX - FieldWidth / 2f, FieldCenterX + FieldWidth / 2f);
-        randompos.y = Random.Range(FieldCenterY - FieldHeight / 2f, FieldCenterY + FieldHeight / 2f);
+        randompos.x = Random.Range(fieldCenterX - fieldWidth / 2f, fieldCenterX + fieldWidth / 2f);
+        randompos.y = Random.Range(fieldCenterY - fieldHeight / 2f, fieldCenterY + fieldHeight / 2f);
         return randompos;
     }
 
     public void SetRoundTime() {
-        TimeLeft = BasicTime; //+ RoundCount * 10;
-        RoundCount++;
+        timeLeft = basicTime; //+ RoundCount * 10;
+        roundCount++;
     }
 
     private void RoundEndCheck() {
-        if (TimeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
+        if (timeLeft <= -1) {   // 0으로 하면 마지막 1초가 보여지지 않아서 -1로 수정
             //print("stageEnded");
-            TimeLeft = 0;
+            timeLeft = 0;
 
             //라운드 이벤트 제거를 위해 한번 더 확인
             isRoundEventOn = false;
@@ -405,7 +399,7 @@ public class GameManager : MonoBehaviour {
     public void Pause(bool pause)
     {
         //Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-        IsPaused = pause;
+        isPaused = pause;
     }
 
 
@@ -415,7 +409,7 @@ public class GameManager : MonoBehaviour {
     private float PausedTime = 0;
     void UpdateGameTime()
     {
-        if (gm.IsPaused)
+        if (gm.isPaused)
         {
             if (!lasting)
             {
@@ -434,12 +428,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public bool IsInterRound
+    public bool isInterRound
     {
         get
         {
-            if (TimeLeft >= BasicTime - 10) return true;
-            return SceneManager.GetActiveScene().name == CurrentStageScene ? false : true;
+            if (timeLeft >= basicTime - 10) return true;
+            return SceneManager.GetActiveScene().name == currentStageScene ? false : true;
         }
     }
 }

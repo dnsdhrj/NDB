@@ -18,12 +18,12 @@ public class TimeBar : MonoBehaviour {
 
     private IEnumerator ShowTime() {
 
-        int TimeLeft = GameManager.gm.TimeLeft;
+        int TimeLeft = GameManager.gm.timeLeft;
         int min = TimeLeft / 60;
         int sec = Mathf.Max(0, (int)(TimeLeft % 60));
         Timetext.text = min + " : " + sec;
-        if(!(GameManager.gm.IsPaused))
-            GameManager.gm.TimeLeft = --TimeLeft;
+        if(!(GameManager.gm.isPaused))
+            GameManager.gm.timeLeft = --TimeLeft;
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(ShowTime());
     }

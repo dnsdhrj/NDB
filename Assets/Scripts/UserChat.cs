@@ -171,7 +171,7 @@ public class UserChat : MonoBehaviour {
     {
         if (ULECool == 0)
         {
-            if (!(gm.IsPaused))
+            if (!(gm.isPaused))
             {
                 ULECool = gm.time + 3.0f;
                 CreateChat("헐 뭐임?", 5);

@@ -24,13 +24,13 @@ public class ResultScene : EventBox {
         
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
-        resultText.text = "남은 돈 : " + GameManager.gm.Money;
+        resultText.text = "남은 돈 : " + GameManager.gm.money;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n번 돈 :  " + GameManager.gm.EarnedMoney;
+        resultText.text = resultText.text + "\n번 돈 :  " + GameManager.gm.earnedMoney;
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n지급할 월급 : " + Developer.dev.salaryCost;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.EarnedMoney + GameManager.gm.Money - Developer.dev.salaryCost);
+        resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.earnedMoney + GameManager.gm.money - Developer.dev.salaryCost);
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n이벤트";
 
@@ -47,7 +47,7 @@ public class ResultScene : EventBox {
     public void OnButtonClick()
     {
         GameManager.gm.Pause(true);
-        GameManager.gm.CurrentStageScene = SceneManager.GetActiveScene().name;
+        GameManager.gm.currentStageScene = SceneManager.GetActiveScene().name;
         StopAllCoroutines();
         SceneManager.LoadScene("InterRound");
     }
@@ -59,7 +59,7 @@ public class ResultScene : EventBox {
     //스테이지가 끝날 때 GameManager에 결과 저장
     void MoneyUpdate()
     {
-        GameManager.gm.Money = (GameManager.gm.Money + GameManager.gm.EarnedMoney - Developer.dev.salaryCost);
-        GameManager.gm.EarnedMoney = 0;
+        GameManager.gm.money = (GameManager.gm.money + GameManager.gm.earnedMoney - Developer.dev.salaryCost);
+        GameManager.gm.earnedMoney = 0;
     }
 }

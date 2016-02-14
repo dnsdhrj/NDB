@@ -37,7 +37,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         string key = "UnlockDaram" + daram.GetComponent<Daram>().Level;
         button.interactable = Unlockables.GetBool(key);
 
-        if (GameManager.gm.IsPaused || !button.interactable) return;
+        if (GameManager.gm.isPaused || !button.interactable) return;
 
         if (Input.GetMouseButtonDown(1) && pointerOn)
         {
@@ -51,36 +51,36 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         // 개발자 한명당 3초에 한마리씩 뿌림
-        if(GameManager.gm.IsInterRound == false && daram.GetComponent<Daram>().Level == 1 
-            && gm.DeveloperCount[Developer.DaramLv1] != 0 && gm.time >= DeveloperTime)
+        if(GameManager.gm.isInterRound == false && daram.GetComponent<Daram>().Level == 1
+            && Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")] != 0 && gm.time >= DeveloperTime)
         {
             Create(); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
-            DeveloperTime = gm.time + 3.0f / gm.DeveloperCount[Developer.DaramLv1];
+            DeveloperTime = gm.time + 3.0f / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")];
         }
 
-        if (GameManager.gm.IsInterRound == false && daram.GetComponent<Daram>().Level == 2
-            && gm.DeveloperCount[Developer.DaramLv2] != 0 && gm.time >= DeveloperTime)
+        if (GameManager.gm.isInterRound == false && daram.GetComponent<Daram>().Level == 2
+            && Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")] != 0 && gm.time >= DeveloperTime)
         {
             Create(); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
-            DeveloperTime = gm.time + 3.0f / gm.DeveloperCount[Developer.DaramLv2];
+            DeveloperTime = gm.time + 3.0f / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")];
         }
     }
 
     public void OnClick()
     {
-        if (gm.IsPaused) return;
-        else if (gm.Money < DaramCost)
+        if (gm.isPaused) return;
+        else if (gm.money < DaramCost)
         {
             LogText.WriteLog("돈이 부족합니다.");
             return;
         }
-        GameManager.gm.Money -= DaramCost;
+        GameManager.gm.money -= DaramCost;
         Create();
     }
 
     private void Create()
     {
-        if (gm.IsPaused) return;
+        if (gm.isPaused) return;
         Vector2 pos = GameManager.gm.RandomPosition();
         Instantiate(daram, pos, Quaternion.identity);
     }

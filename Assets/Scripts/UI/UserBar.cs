@@ -24,7 +24,7 @@ public class UserBar : MonoBehaviour {
         int sum = 0;
         for (int i = 0; i < User.Count; i++)
         {
-            sum += GameManager.gm.UserCount[i];
+            sum += GameManager.gm.userCount[i];
             sliders[i].value = sum / (float)all;
         }
     }

@@ -15,8 +15,8 @@ public class Money : MonoBehaviour {
 	
 	void Update () {
         ShowMeTheMoney();
-        InitialMoney = GameManager.gm.Money;
-        EarnedMoney = GameManager.gm.EarnedMoney;
+        InitialMoney = GameManager.gm.money;
+        EarnedMoney = GameManager.gm.earnedMoney;
     }
 
     private void ShowMeTheMoney()

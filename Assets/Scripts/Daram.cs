@@ -46,7 +46,7 @@ public class Daram : MonoBehaviour {
     // Update()도 위와 동일
     protected void Update()
     {
-        if (GameManager.gm.IsPaused)
+        if (GameManager.gm.isPaused)
             Anim.speed = 0;
         else
         {
@@ -103,10 +103,10 @@ public class Daram : MonoBehaviour {
     void CheckIfCantMove() {
         float xPos = gameObject.transform.position.x;
         float yPos = gameObject.transform.position.y;
-        if (Mathf.Abs(xPos-GameManager.gm.FieldCenterX) >= GameManager.gm.FieldWidth/2f && dir.x != 0)
+        if (Mathf.Abs(xPos-GameManager.gm.fieldCenterX) >= GameManager.gm.fieldWidth/2f && dir.x != 0)
             dir.x = (dir.x == xPos / Mathf.Abs(xPos)) ? 0 : dir.x;
 
-        if (Mathf.Abs(yPos-GameManager.gm.FieldCenterY) >= GameManager.gm.FieldHeight/2f && dir.y != 0)
+        if (Mathf.Abs(yPos-GameManager.gm.fieldCenterY) >= GameManager.gm.fieldHeight/2f && dir.y != 0)
             dir.y = (dir.y == yPos / Mathf.Abs(yPos)) ? 0 : dir.y;
     }
 
