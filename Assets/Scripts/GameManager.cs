@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour {
     public GameObject resultScene; 
 
     public int Money = 0;
+
+    public int BasicUserLimit;
+    [HideInInspector] public int UserLimit;
     [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
     [HideInInspector] public int EarnedMoney = 0;
     [HideInInspector] public int Fame = 0;
@@ -20,8 +23,8 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int TimeLeft = 1;
     [HideInInspector] public string CurrentStageScene;
     [HideInInspector] public bool IsPaused = false;
-    [HideInInspector] public int Developers = 0;
     [HideInInspector] public bool isRoundEventOn = false;
+    [HideInInspector] public int[] DeveloperCount;
     //                public bool IsInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
 
 
@@ -46,7 +49,7 @@ public class GameManager : MonoBehaviour {
     //public void pause(bool pause);
     //public int UserAllCount();
 
-    int BasicTime = 60;
+    private int BasicTime = 60;
     private static bool GMCreated = false;
 
     void Awake()
@@ -66,6 +69,13 @@ public class GameManager : MonoBehaviour {
         //UserCount 초기화
         UserCount = Enumerable.Repeat(0, User.Count).ToArray();
         UserCount[User.level1] = 1000;
+
+        //DeveloperCount 초기화
+        DeveloperCount = Enumerable.Repeat(0, Developer.PostCount).ToArray();
+        for (int i = 0; i < Developer.PostCount; i++)
+        {
+            DeveloperCount[i] = 0;
+        }
 
         DaramFunction = new Quadric[User.Count];
         for (int i = 0; i < User.Count; i++)
@@ -289,9 +299,9 @@ public class GameManager : MonoBehaviour {
         int FameDelta = Fame - PrevFame;
 
         if(FameDelta > 0)
-            UserCount[User.level1] += (int) (10 * Mathf.Log(Fame + 1));     // y = k * log(x + 1)
+            UserCount[User.level1] += (int) ((10 + 2 * DeveloperCount[Developer.Publicity]) * Mathf.Log(Fame + 1));     // y = k * log(x + 1)
         else
-            UserCount[User.level1] -= (int) (10 * Mathf.Log((-1)*FameDelta + 1));   //인기도가 감소중이면 적당히 줄어들게 함
+            UserCount[User.level1] -= (int) (10 * Mathf.Log((-1)*FameDelta + 1));   // 인기도가 감소중이면 적당히 줄어들게 함
 
         PrevFame = Fame;
     }
