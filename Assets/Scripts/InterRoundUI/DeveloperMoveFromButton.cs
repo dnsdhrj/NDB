@@ -4,12 +4,13 @@ using System.Collections;
 public class DeveloperMoveFromButton : MonoBehaviour {
 
     private Post modifyingDeveloper;
-    private Developer database;
+    private Developer dev;
     private DeveloperCheckup devChkup;
 
     void Start()
     {
-        database = GameManager.gm.GetComponent<Developer>();
+        devChkup = DeveloperCheckup.devChkup;
+        dev = Developer.dev;
     }
 
     public void SetPost(Post post)
@@ -19,6 +20,10 @@ public class DeveloperMoveFromButton : MonoBehaviour {
 
     public void MoveFrom()
     {
-        database.temp = modifyingDeveloper;
+        if (modifyingDeveloper.DeveloperInPost() > 0)
+        {
+            dev.temp = modifyingDeveloper;
+            devChkup.RefreshPostButtons1();
+        }
     }
 }

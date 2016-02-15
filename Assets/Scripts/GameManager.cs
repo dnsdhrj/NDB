@@ -7,14 +7,11 @@ using System.Linq;
 public class GameManager : MonoBehaviour {
 
     public static GameManager gm;
-    private Developer dev;
 
     public GameObject resultScene; 
 
     public int money = 0;
 
-    public int basicUserLimit;
-    [HideInInspector] public int userLimit;
     [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
     [HideInInspector] public int earnedMoney = 0;
     [HideInInspector] public int fame = 0;
@@ -49,7 +46,7 @@ public class GameManager : MonoBehaviour {
     //public void pause(bool pause);
     //public int UserAllCount();
 
-    private int basicTime = 1;
+    private int basicTime = 60;
     private static bool GMCreated = false;
 
     void Awake()
@@ -64,7 +61,6 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(this);    // 씬이 넘어가도 파괴되지 않음
 
         gm = this;
-        dev = Developer.dev;
         currentStageScene = SceneManager.GetActiveScene().name;
 
         //UserCount 초기화
@@ -292,10 +288,12 @@ public class GameManager : MonoBehaviour {
     {
         int FameDelta = fame - PrevFame;
 
-        if(FameDelta > 0)
-            userCount[User.level1] += (int)((10 + 2 * dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]) * Mathf.Log(fame + 1));     // y = k * log(x + 1)
+        if (FameDelta > 0)
+        {
+            userCount[User.level1] += (int)((10 + 2 * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]) * Mathf.Log(fame + 1));     // y = k * log(x + 1)
+        }
         else
-            userCount[User.level1] -= (int) (10 * Mathf.Log((-1)*FameDelta + 1));   // 인기도가 감소중이면 적당히 줄어들게 함
+            userCount[User.level1] -= (int)(10 * Mathf.Log((-1) * FameDelta + 1));   // 인기도가 감소중이면 적당히 줄어들게 함
 
         PrevFame = fame;
     }

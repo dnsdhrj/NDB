@@ -41,14 +41,19 @@ public class Developer : MonoBehaviour {
         }
 
         CalculateCost();
-        ExpandUserLimit();
 
 	}
 
     void ExpandUserLimit()
     {
         // 서버 관리팀의 개발자 한 명당 유저수 제한을 2500명씩 늘려줍니다.
-        gm.userLimit = gm.basicUserLimit + 2500 * developerCount[FindPostIDByName("Server")]; 
+        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") + 2500);
+    }
+
+    void ReduceUserLimit()
+    {
+        // 서버 관리팀에서 개발자가 빠지면 유저수 제한이 2500명 감소합니다.
+        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") - 2500);
     }
 
     public void CalculateCost()
@@ -102,14 +107,14 @@ public class Developer : MonoBehaviour {
 
     // 개발자 고용하는 함수. 인자로 부서를 넘겨주면 해당 부서에 개발자가 1명 투입됩니다.
     public void HireDeveloper(Post post) {
-        //if (post.postFuncName == "Debugging" && gm.DeveloperCount[post.postID] >= 10) return; // 나중에 개발자 인원 제한이 필요하면 사용
+        if (developerCount[post.postID] >= 9) return; // 개발자 인원 제한
         if (gm.money >= hireCost) {
             gm.money -= hireCost;
             developerCount[post.postID]++;
             CalculateCost();
             if (post.postFuncName == "Server") ExpandUserLimit();
         }
-        // 나중에 돈 부족 시 경고 메시지 띄우기
+        // 나중에 돈이 부족하거나 개발자가 제한보다 많으면 경고 메시지 띄우기
     }
 
     // 개발자 해고하는 함수. 인자로 부서를 넘겨주면 해당 부서에서 개발자가 1명 빠집니다.
@@ -118,20 +123,25 @@ public class Developer : MonoBehaviour {
             gm.money -= fireCost;
             developerCount[post.postID]--;
             CalculateCost();
-            if (post.postFuncName == "Server") ExpandUserLimit();
+            if (post.postFuncName == "Server") ReduceUserLimit();
         }
-        // 나중에 개발자 부족 시 경고 메시지 띄우기
+        // 나중에 개발자가 부족하면 경고 메시지 띄우기
     }
 
-    // 개발자의 부서를 이전하는 함수. from은 원래 있던 부서, to는 새로 이동할 부서입니다.
+    // 개발자의 부서를 이동하는 함수. from은 원래 있던 부서, to는 새로 이동할 부서입니다.
     public void MoveDeveloper(Post from, Post to)
     {
-        //if (to.postFuncName == "Debugging" && gm.DeveloperCount[to.postID] >= 10) return; // 나중에 개발자 인원 제한이 필요하면 사용
-        developerCount[from.postID]--;
-        developerCount[to.postID]++;
-        temp = null;
-        CalculateCost();
-        if (from.postFuncName == "Server" || to.postFuncName == "Server") ExpandUserLimit();
+        if (developerCount[to.postID] >= 9) return; // 개발자 인원 제한
+        if (from.DeveloperInPost() > 0)
+        {
+            developerCount[from.postID]--;
+            developerCount[to.postID]++;
+            temp = null;
+            CalculateCost();
+            if (from.postFuncName == "Server") ReduceUserLimit();
+            if (to.postFuncName == "Server") ExpandUserLimit();
+        }
+        // 나중에 from의 개발자가 부족하거나 to의 개발자가 제한보다 많으면 경고 메시지 띄우기
     }
 }
 

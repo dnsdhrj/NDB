@@ -39,7 +39,7 @@ public class ItemCheckup : MonoBehaviour {
         {
             List<GameObject> itemList = new List<GameObject>();
 
-            GameObject newItem = Instantiate(itemListTemplate, new Vector3(0f, (itemscrollPanelrect.rect.height / 2) - 120f * item.itemID + 20f, 0f), Quaternion.identity) as GameObject;
+            GameObject newItem = Instantiate(itemListTemplate, new Vector3(0f, (itemscrollPanelrect.rect.height / 2) - 120f * item.itemID - 20f, 0f), Quaternion.identity) as GameObject;
             newItem.name = item.itemName;
 
             /* 다른 children이 추가되면 아래 코드에서 에러가 발생할 수도? */

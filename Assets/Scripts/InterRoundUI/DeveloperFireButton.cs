@@ -4,7 +4,6 @@ using System.Collections;
 public class DeveloperFireButton : MonoBehaviour {
 
     private Post modifyingDeveloper;
-    private DeveloperCheckup devChkup;
 
     public void SetPost(Post post)
     {
