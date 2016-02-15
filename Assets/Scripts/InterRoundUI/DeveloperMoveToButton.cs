@@ -17,12 +17,13 @@ public class DeveloperMoveToButton : MonoBehaviour {
         modifyingDeveloper = post;
     }
 
-    // MoveFrom()에서 선택한 부서로 개발자를 옮겨주는 함수. 인자로 선택한 부서의 ID를 넘겨주세요. 
-    public void MoveTo(int destPostID)
+    // MoveFrom()에서 선택한 부서로 개발자를 옮겨주는 함수.
+    public void MoveTo()
     {
-        Post destination = Developer.dev.FindPostByPostID(destPostID);
-        if (destination == null) return;
-        Developer.dev.MoveDeveloper(modifyingDeveloper, destination);
+        Post moveFrom = database.temp;
+        Post destination = modifyingDeveloper;
+        if (moveFrom == null || destination == null) return;
+        Developer.dev.MoveDeveloper(moveFrom, destination);
         DeveloperCheckup.devChkup.RefreshPostTooltip();
     }
 }

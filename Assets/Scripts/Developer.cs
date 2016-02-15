@@ -11,6 +11,7 @@ public class Developer : MonoBehaviour {
     public List<Post> postDatabase = new List<Post>();  // 부서에 대한 정보를 담고 있음;
 
     [HideInInspector] public int[] developerCount;      // 각 부서에 몇 명의 개발자가 투입되었는지에 대한 정보를 담고 있음
+    [HideInInspector] public Post temp;                 // 부서 이전 시 개발자가 원래 있던 부서를 기억
 
     [HideInInspector] public int hireCost = 1000;
     [HideInInspector] public int fireCost = -700;
@@ -128,6 +129,7 @@ public class Developer : MonoBehaviour {
         //if (to.postFuncName == "Debugging" && gm.DeveloperCount[to.postID] >= 10) return; // 나중에 개발자 인원 제한이 필요하면 사용
         developerCount[from.postID]--;
         developerCount[to.postID]++;
+        temp = null;
         CalculateCost();
         if (from.postFuncName == "Server" || to.postFuncName == "Server") ExpandUserLimit();
     }

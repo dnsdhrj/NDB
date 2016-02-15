@@ -33,7 +33,7 @@ public class UpgradeCheckup : MonoBehaviour {
         SetListSize(upgradeScrollPanelrect);
         foreach (Upgrade Upgrade in database.upgradeDatabase)
         {
-            GameObject newupgrade = Instantiate(UpgradeListTemplate, new Vector3(0f, (upgradeScrollPanelrect.rect.height / 2) - 120f * Upgrade.upgradeID, 0f), Quaternion.identity) as GameObject;
+            GameObject newupgrade = Instantiate(UpgradeListTemplate, new Vector3(0f, (upgradeScrollPanelrect.rect.height / 2) - 120f * Upgrade.upgradeID + 20f, 0f), Quaternion.identity) as GameObject;
             newupgrade.name = Upgrade.upgradeName;
 
             /* 다른 children이 추가되면 아래 코드에서 에러가 발생할 수도? */
@@ -59,7 +59,7 @@ public class UpgradeCheckup : MonoBehaviour {
 
     void SetListSize(RectTransform rect)
     {
-        rect.sizeDelta = new Vector2(rect.rect.width, database.upgradeDatabase.Count * 120f);
+        rect.sizeDelta = new Vector2(rect.rect.width, database.upgradeDatabase.Count * 120f + 20f);
     }
 
     // 새로고침 할 수 있게 변경함

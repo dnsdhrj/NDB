@@ -19,6 +19,6 @@ public class DeveloperMoveFromButton : MonoBehaviour {
 
     public void MoveFrom()
     {
-        // 현재 부서의 개발자 1명을 다른 어느 부서로 옮길 것인지 선택하는 UI를 띄워주는 함수
+        database.temp = modifyingDeveloper;
     }
 }

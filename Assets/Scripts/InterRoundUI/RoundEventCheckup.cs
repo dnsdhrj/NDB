@@ -32,7 +32,7 @@ public class RoundEventCheckup : MonoBehaviour {
         {
             List<GameObject> eventList = new List<GameObject>();
 
-            GameObject newEvent = Instantiate(roundEventListTemplate, new Vector3(0f, (eventScrollPanelrect.rect.height / 2) -120f * roundEvent.eventID, 0f), Quaternion.identity) as GameObject;
+            GameObject newEvent = Instantiate(roundEventListTemplate, new Vector3(0f, (eventScrollPanelrect.rect.height / 2) -120f * roundEvent.eventID - 20f, 0f), Quaternion.identity) as GameObject;
             newEvent.name = roundEvent.eventName;
 
             /* 다른 children이 추가되면 아래 코드에서 에러가 발생할 수도? */
@@ -58,7 +58,7 @@ public class RoundEventCheckup : MonoBehaviour {
 
     void SetListSize(RectTransform rect)
     {
-        rect.sizeDelta = new Vector2(rect.rect.width, database.roundEventDatabase.Count * 120f);
+        rect.sizeDelta = new Vector2(rect.rect.width, database.roundEventDatabase.Count * 120f + 20f);
     }
 
     public string CreateEventTooltip(RoundEvent roundEvent)

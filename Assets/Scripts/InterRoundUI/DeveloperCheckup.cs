@@ -40,7 +40,7 @@ public class DeveloperCheckup : MonoBehaviour {
         SetListSize(developerScrollPanelrect);
         foreach (Post post in database.postDatabase)
         {
-            GameObject newPost = Instantiate(postListTemplate, new Vector3(0f, (developerScrollPanelrect.rect.height / 2) - 120f * post.postID, 0f), Quaternion.identity) as GameObject;
+            GameObject newPost = Instantiate(postListTemplate, new Vector3(0f, (developerScrollPanelrect.rect.height / 2) - 120f * post.postID - 20f, 0f), Quaternion.identity) as GameObject;
             newPost.name = post.postFuncName;
 
             /* 다른 children이 추가되면 아래 코드에서 에러가 발생할 수도? */
@@ -69,7 +69,7 @@ public class DeveloperCheckup : MonoBehaviour {
 
     void SetListSize(RectTransform rect)
     {
-        rect.sizeDelta = new Vector2(rect.rect.width, database.postDatabase.Count * 120f);
+        rect.sizeDelta = new Vector2(rect.rect.width, database.postDatabase.Count * 120f + 20f);
     }
 
     public void RefreshPostTooltip()
@@ -88,5 +88,8 @@ public class DeveloperCheckup : MonoBehaviour {
         }
     }
 
-
+    public void CancelMove()
+    {
+        database.temp = null;
+    }
 }
