@@ -14,6 +14,9 @@ public class Inventory : MonoBehaviour {
     private int inventorySize;
     private bool showInventory = false;
 
+    private float slotPosX = 15f;
+    private float slotPosY = 15f;
+
     private bool showTooltip = false;
     private string tooltip;
 
@@ -71,12 +74,13 @@ public class Inventory : MonoBehaviour {
     void DrawInventory()
     {
         int i = 0;
-
+        GUI.Box(new Rect(slotPosX/2 + 0f, slotPosY/2 + 0f, ((50+8) * slotX) + slotPosX, ((50+8) * slotY) + slotPosY), "", skin.GetStyle("InventoryBackground"));
         for (int y = 0; y < slotY; y++)
         {
             for (int x = 0; x < slotX; x++)
             {
-                Rect slotRect = new Rect(x * 60, y * 60, 50, 50);
+
+                Rect slotRect = new Rect(slotPosX + x * 60, slotPosY + y * 60, 50, 50);
                 GUI.Box(slotRect, "", skin.GetStyle("Slots"));
 
                 slots[i] = inventory[i];
@@ -114,7 +118,7 @@ public class Inventory : MonoBehaviour {
                             }
 
                             //더블클릭(아이템 사용)
-                            if (Input.GetMouseButtonDown(0) && isOneClicked)
+                            if (Input.GetMouseButtonDown(0) && isOneClicked && !GameManager.gm.isInterRound)
                             {
                                 clickedItem = slots[i];
                                 clickedItemIndex = i;

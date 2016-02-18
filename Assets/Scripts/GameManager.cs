@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public int earnedMoney = 0;
     [HideInInspector] public int fame = 0;
     [HideInInspector] public int[] userCount;
+    [HideInInspector] public float[] userDamagePerLevel; // 각 레벨(초보, 중수)의 유저의 수에 비례한 데미지 곱(나눗셈) 값
     [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
     [HideInInspector] public int roundCount = 0;
     [HideInInspector] public int timeLeft = 1;
@@ -23,7 +24,6 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool isPaused = false;
     [HideInInspector] public bool isRoundEventOn = false;
     //                public bool isInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
-
 
     public float fieldCenterX;
     public float fieldCenterY;
@@ -63,9 +63,14 @@ public class GameManager : MonoBehaviour {
         gm = this;
         currentStageScene = SceneManager.GetActiveScene().name;
 
-        //UserCount 초기화
+        //UserCount, UserDamagePerLevel 초기화
         userCount = Enumerable.Repeat(0, User.Count).ToArray();
         userCount[User.level1] = 1000;
+        userDamagePerLevel = Enumerable.Repeat(0f, User.Count).ToArray();
+        userDamagePerLevel[User.level1] = 0.001f;
+        userDamagePerLevel[User.level2] = 0.01f;
+
+
 
         DaramFunction = new Quadric[User.Count];
         for (int i = 0; i < User.Count; i++)
@@ -200,7 +205,7 @@ public class GameManager : MonoBehaviour {
 
     void DaramDeath1()  // 초보에 의한 데미지
     {
-        int TotalDamage = (int)(userCount[User.level1] / 1000.0f);
+        int TotalDamage = (int)(userCount[User.level1] * userDamagePerLevel[User.level1]);
 
         while (Daram.All.Count != 0 && TotalDamage > 0)
         {
@@ -225,7 +230,7 @@ public class GameManager : MonoBehaviour {
 
     void DaramDeath2()  // 중수에 의한 데미지
     {
-        int TotalDamage = (int)(userCount[User.level2] / 100.0f);
+        int TotalDamage = (int)(userCount[User.level2] * userDamagePerLevel[User.level2]);
 
         while (Daram.All.Count != 0 && TotalDamage > 0)
         {
