@@ -10,7 +10,7 @@ public class ButtonEvents : MonoBehaviour {
 
     public void GameStart()
     {
-        Application.LoadLevel("Game");
+        Application.LoadLevel("Test");
     }
 
     public void GameCredit()
