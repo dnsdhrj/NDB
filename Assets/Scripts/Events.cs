@@ -13,6 +13,8 @@ public class Events : MonoBehaviour {
     public GameObject TreeOfSavior_Box;
     public GameObject GettingFamous_Box;
 
+    public GameObject NormalMessage_Box;
+
     void Start ()
     {
         gm = GameManager.gm;

@@ -14,7 +14,9 @@ public class GameManager : MonoBehaviour {
 
     [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
     [HideInInspector] public int earnedMoney = 0;
+    [HideInInspector] public float timePerEarnedMoney = 1f; //돈이 벌리는 시간 간격
     [HideInInspector] public int fame = 0;
+    [HideInInspector]public int userLevel1Increase;
     [HideInInspector] public int[] userCount;
     [HideInInspector] public float[] userDamagePerLevel; // 각 레벨(초보, 중수)의 유저의 수에 비례한 데미지 곱(나눗셈) 값
     [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
@@ -107,7 +109,7 @@ public class GameManager : MonoBehaviour {
             SetRoundTime();
 
             StartCoroutine("UserChangeCall");
-            StartCoroutine("MoneyGainByFame");
+            StartCoroutine(MoneyGainByFame());
 
             if (StartScene != null)
                 Instantiate(StartScene);
@@ -257,7 +259,7 @@ public class GameManager : MonoBehaviour {
     //        인기도        //
     //                      //
 
-    void FameDaram1()
+    public void FameDaram1()
     {
         // IsInterRound가 true이면 인기도는 변하지 않아도 함수는 작동함
         Quadric q = DaramFunction[User.level1];
@@ -289,13 +291,15 @@ public class GameManager : MonoBehaviour {
     //                      //
 
     private int PrevFame = 0;
-    void UserLevel1()
+    public void UserLevel1()
     {
         int FameDelta = fame - PrevFame;
 
         if (FameDelta > 0)
         {
-            userCount[User.level1] += (int)((10 + 2 * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]) * Mathf.Log(fame + 1));     // y = k * log(x + 1)
+            userLevel1Increase = (int)(10 * Mathf.Log(fame + 1));     // y = k * log(x + 1)
+            userLevel1Increase += (int)(userLevel1Increase * Developer.dev.userIncreasePerDeveloper * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]);
+            userCount[User.level1] += userLevel1Increase;
         }
         else
             userCount[User.level1] -= (int)(10 * Mathf.Log((-1) * FameDelta + 1));   // 인기도가 감소중이면 적당히 줄어들게 함
@@ -345,18 +349,24 @@ public class GameManager : MonoBehaviour {
         while (true) {
             if (!isPaused && !isInterRound)
             {
-                earnedMoney += 2 * Mathf.Max(0, (int)Mathf.Log(fame, 2f));
+                earnedMoney += CalculateMoney(1.0f);
+               
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(timePerEarnedMoney);
         }
     }
 
-    //현재 남은 돈
+    public int CalculateMoney(float multiConstant)
+    {
+        return (int)(multiConstant * 2 * Mathf.Max(0, (int)Mathf.Log(fame, 2f)));
+    }
+
+        //현재 남은 돈
 
 
-    //이벤트(홍보, 긴급점검 등)에 의해 발생하는 돈의 증감
-    //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
-    void MoneyGainByEvent(int EventGain, int EventCost)
+        //이벤트(홍보, 긴급점검 등)에 의해 발생하는 돈의 증감
+        //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
+        void MoneyGainByEvent(int EventGain, int EventCost)
     {
         earnedMoney += EventGain;
         money += EventCost;
@@ -439,7 +449,14 @@ public class GameManager : MonoBehaviour {
             return SceneManager.GetActiveScene().name == currentStageScene ? false : true;
         }
     }
+
+    public void ShowMessageBox(string boxText)
+    {
+        GameObject messageBox = Instantiate(GetComponentInChildren<Events>().NormalMessage_Box) as GameObject;
+        messageBox.GetComponentInChildren<Text>().text = boxText;
+    }
 }
+
 
 
 

@@ -16,7 +16,12 @@ public class Developer : MonoBehaviour {
     [HideInInspector] public int hireCost = 1000;
     [HideInInspector] public int fireCost = -700;
     [HideInInspector] public int salaryCost = 0;
-    
+
+    [HideInInspector]
+    public int serverLimitIncreasePerDeveloper = 2500;
+    public float macroDecreasePerDeveloper = 0.1f;
+    public float userIncreasePerDeveloper = 0.2f;
+    public int developerMonsterGenerationTime = 3;
 
 	void Start () {
         dev = this;
@@ -24,14 +29,14 @@ public class Developer : MonoBehaviour {
 
         // Post(부서명, 영어 부서명, 부서ID, 부서에 속한 개발자 1명당 월급, 설명)
         // 부서ID는 postDatabase, developerCount의 index값과 일치합니다.
-        postDatabase.Add(new Post("서버 관리팀", "Server", 0, 300, "개발자 1명당 최대 유저수 제한이 2500씩 증가합니다."));
-        postDatabase.Add(new Post("디버깅 팀", "Debugging", 1, 250, "개발자 1명당 매크로, 버그의 지속시간이 10%p씩 줄어듭니다."));
-        postDatabase.Add(new Post("홍보 팀", "Publicity", 2, 220, "개발자 1명당 초보 유저수의 증가 속도가 20%p씩 빨라집니다."));
+        postDatabase.Add(new Post("서버 관리팀", "Server", 0, 300, "개발자 1명당 최대 유저수 제한이 " + serverLimitIncreasePerDeveloper +"씩 증가합니다."));
+        postDatabase.Add(new Post("디버깅 팀", "Debugging", 1, 250, "개발자 1명당 매크로, 버그의 지속시간이 " + macroDecreasePerDeveloper * 100 + "%p씩 줄어듭니다."));
+        postDatabase.Add(new Post("홍보 팀", "Publicity", 2, 220, "개발자 1명당 초보 유저수의 증가 속도가 " + userIncreasePerDeveloper * 100 + "%p씩 빨라집니다.\n이벤트를 시행하기 위해 특정 수 이상을 만족해야 합니다."));
         postDatabase.Add(new Post("고객 지원팀", "Customer", 3, 200, "인기도 하락 속도가 줄어듭니다."));
-        postDatabase.Add(new Post("Lv.1 다람쥐 개발팀", "DaramLv1", 4, 180, "개발자 1명당 Lv.1 다람쥐를 3초에 1마리씩 자동으로 뿌립니다."));
-        postDatabase.Add(new Post("Lv.2 다람쥐 개발팀", "DaramLv2", 5, 360, "개발자 1명당 Lv.2 다람쥐를 3초에 1마리씩 자동으로 뿌립니다."));
-        postDatabase.Add(new Post("토끼 개발팀", "Rabbit", 6, 500, "개발자 1명당 토끼를 3초에 1마리씩 자동으로 뿌립니다."));
-        postDatabase.Add(new Post("슬라임 개발팀", "Slime", 7, 600, "개발자 1명당 슬라임을 3초에 1마리씩 자동으로 뿌립니다."));
+        postDatabase.Add(new Post("Lv.1 다람쥐 개발팀", "DaramLv1", 4, 180, "개발자 1명당 Lv.1 다람쥐를 " + developerMonsterGenerationTime +"초에 1마리씩 자동으로 뿌립니다."));
+        postDatabase.Add(new Post("Lv.2 다람쥐 개발팀", "DaramLv2", 5, 360, "개발자 1명당 Lv.2 다람쥐를 " + developerMonsterGenerationTime +"초에 1마리씩 자동으로 뿌립니다."));
+        postDatabase.Add(new Post("토끼 개발팀", "Rabbit", 6, 500, "개발자 1명당 토끼를 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다."));
+        postDatabase.Add(new Post("슬라임 개발팀", "Slime", 7, 600, "개발자 1명당 슬라임을 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다."));
 
         //developerCount 초기화
         developerCount = Enumerable.Repeat(0, dev.postDatabase.Count).ToArray();
@@ -46,14 +51,14 @@ public class Developer : MonoBehaviour {
 
     void ExpandUserLimit()
     {
-        // 서버 관리팀의 개발자 한 명당 유저수 제한을 2500명씩 늘려줍니다.
-        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") + 2500);
+        // 서버 관리팀의 개발자 한 명당 유저수 제한을 serverLimitIncreasePerDeveloper명씩 늘려줍니다.
+        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") + serverLimitIncreasePerDeveloper);
     }
 
     void ReduceUserLimit()
     {
-        // 서버 관리팀에서 개발자가 빠지면 유저수 제한이 2500명 감소합니다.
-        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") - 2500);
+        // 서버 관리팀에서 개발자가 빠지면 유저수 제한이 serverLimitIncreasePerDeveloper명 감소합니다.
+        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") - serverLimitIncreasePerDeveloper);
     }
 
     public void CalculateCost()

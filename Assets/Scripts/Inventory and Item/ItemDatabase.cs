@@ -28,7 +28,7 @@ public class ItemDatabase : MonoBehaviour {
     public void useItem(Item item) {
         if (isItemUsing[item.itemID] == true)
         {
-            Debug.Log("이미 해당 아이템이 사용중입니다.");
+            GameManager.gm.ShowMessageBox("이미 해당 아이템이 사용중입니다.");
             return;
         }
         isItemUsing[item.itemID] = true;
