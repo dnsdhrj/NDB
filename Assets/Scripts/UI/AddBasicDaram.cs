@@ -46,7 +46,9 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (GameManager.gm.isPaused || !button.interactable) return;
 
-        if (Input.GetMouseButton(0) && pointerOn && !QuantityControlOn && gm.time - LatestClick > 0.2f )
+        if (Input.GetMouseButtonDown(0))
+            LatestClick = gm.time;
+        else if (Input.GetMouseButton(0) && pointerOn && !QuantityControlOn && gm.time - LatestClick > 0.2f )
         {
             QuantityControlStart();
         }
@@ -71,14 +73,14 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if(GameManager.gm.isInterRound == false && daram.GetComponent<Daram>().Level == 1
             && Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")] != 0 && gm.time >= DeveloperTime)
         {
-            Create(); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
+            Create(1); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
             DeveloperTime = gm.time + 3.0f / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")];
         }
 
         if (GameManager.gm.isInterRound == false && daram.GetComponent<Daram>().Level == 2
             && Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")] != 0 && gm.time >= DeveloperTime)
         {
-            Create(); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
+            Create(1); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
             DeveloperTime = gm.time + 3.0f / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")];
         }
     }
@@ -87,21 +89,23 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (gm.isPaused) return;
 
-        LatestClick = gm.time;
-        if (gm.money < DaramCost)
+        if (gm.money < DaramCost * DaramAmount)
         {
             LogText.WriteLog("돈이 부족합니다.");
             return;
         }
-        GameManager.gm.money -= DaramCost;
-        Create();
+        GameManager.gm.money -= DaramCost * DaramAmount;
+        Create(DaramAmount);
     }
 
-    private void Create()
+    private void Create(int amount)
     {
         if (gm.isPaused) return;
-        Vector2 pos = GameManager.gm.RandomPosition();
-        Instantiate(daram, pos, Quaternion.identity);
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 pos = GameManager.gm.RandomPosition();
+            Instantiate(daram, pos, Quaternion.identity);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -135,7 +139,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 n_down = 10;
                 break;
         }
-        if (n_up != 0 )//&& Unlockables.GetBool("UnlockDaram" + daram.GetComponent<Daram>().Level + "_Amount" + n_up) == true)
+        if (n_up != 0 && Unlockables.GetBool("UnlockDaram" + daram.GetComponent<Daram>().Level + "_Amount" + n_up) == true)
         {
             up.SetActive(true);
             up.GetComponentInChildren<Text>().text = n_up.ToString();

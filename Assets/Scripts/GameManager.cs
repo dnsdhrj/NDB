@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour {
     //public void pause(bool pause);
     //public int UserAllCount();
 
+    private Developer dev;
     private int basicTime = 60;
     private static bool GMCreated = false;
 
@@ -91,6 +92,8 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
+        dev = Developer.dev;
+
         if (GMCreated == true)  // GM 중복생성 방지
             return;
         GMCreated = true;
@@ -120,6 +123,8 @@ public class GameManager : MonoBehaviour {
                 LogText.WriteLog( (roundCount-1) + "번째 정기점검 끝.");
             }
             LogText.WriteLog("10초 후 유저 로그인이 활성화됩니다.");
+
+            CheckDaramDeveloper();
         }
     }
 
@@ -454,6 +459,18 @@ public class GameManager : MonoBehaviour {
     {
         GameObject messageBox = Instantiate(GetComponentInChildren<Events>().NormalMessage_Box) as GameObject;
         messageBox.GetComponentInChildren<Text>().text = boxText;
+    }
+
+    // 매 라운드 시작시마다 호출됨
+    void CheckDaramDeveloper()
+    {
+        Unlockables.SetBool("UnlockDaram1_Amount1", true);
+        Unlockables.SetBool("UnlockDaram1_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 3);
+        Unlockables.SetBool("UnlockDaram1_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 10);
+
+        Unlockables.SetBool("UnlockDaram2_Amount1", true);
+        Unlockables.SetBool("UnlockDaram2_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 3);
+        Unlockables.SetBool("UnlockDaram2_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 10);
     }
 }
 
