@@ -371,7 +371,7 @@ public class GameManager : MonoBehaviour {
 
     public int CalculateMoney(float multiConstant)
     {
-        return (int)(multiConstant * 2 * Mathf.Pow( Mathf.Log(fame + 1, 2f), 3));
+        return (int)(multiConstant * 2 * Mathf.Pow( Mathf.Log(fame + 1, 2f), 1.3f));
     }
 
         //현재 남은 돈
