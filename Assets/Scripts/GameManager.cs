@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool isPaused = false;
     [HideInInspector] public bool isRoundEventOn = false;
     //                public bool isInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
+    [HideInInspector] public string GameName = "";      // 우리가 운영하는 게임의 이름
 
     public float fieldCenterX;
     public float fieldCenterY;
@@ -65,7 +66,8 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(this);    // 씬이 넘어가도 파괴되지 않음
 
         gm = this;
-        currentStageScene = SceneManager.GetActiveScene().name;
+        if (SceneManager.GetActiveScene().name == "Test")
+            currentStageScene = "Test";
 
         //UserCount, UserDamagePerLevel 초기화
         userCount = Enumerable.Repeat(0, User.Count).ToArray();
@@ -101,7 +103,8 @@ public class GameManager : MonoBehaviour {
             return;
         GMCreated = true;
 
-        OnLevelWasLoaded(0);    // Start 대신 저 안에 써주세요
+        if(SceneManager.GetActiveScene().name == "Test")
+            OnLevelWasLoaded(0);    // Start 대신 저 안에 써주세요
 
         Random.seed = (int)Time.time;
     }
