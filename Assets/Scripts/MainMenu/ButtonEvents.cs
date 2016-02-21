@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ButtonEvents : MonoBehaviour {
 
@@ -10,11 +11,11 @@ public class ButtonEvents : MonoBehaviour {
 
     public void GameStart()
     {
-        Application.LoadLevel("Test");
+        SceneManager.LoadScene("Test");
     }
 
     public void GameCredit()
     {
-        Application.LoadLevel("Credit");
+        SceneManager.LoadScene("Credit");
     }
 }

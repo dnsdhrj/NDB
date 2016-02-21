@@ -5,9 +5,9 @@ public class Macro : MonoBehaviour {
 
     public void KillMacro()
     {
-        if (GameManager.gm.money >= 3000)
+        if (GameManager.gm.Money() >= 3000)
         {
-            GameManager.gm.money -= 3000;
+            GameManager.gm.ChangeMoneyInRound(-3000);
             GameManager.gm.fame += 1000;
             GetComponentInParent<EventBox>().OnClick();
             LogText.WriteLog("GM을 시켜 열심히 매크로를 잡았다.");

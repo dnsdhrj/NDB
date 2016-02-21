@@ -11,6 +11,11 @@ public class EventBox : MonoBehaviour {
         GameManager.gm.Pause(true);
     }
 
+    void Update()
+    {
+        if (!GameManager.gm.isPaused) GameManager.gm.Pause(true);
+    }
+
     public void OnClick()
     {
         GameManager.gm.Pause(false);
