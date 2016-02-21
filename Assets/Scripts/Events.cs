@@ -13,6 +13,8 @@ public class Events : MonoBehaviour {
     public GameObject TreeOfSavior_Box;
     public GameObject GettingFamous_Box;
     public GameObject DaramUpDownTutorial_Box;
+    public GameObject SlimeParty_Box;
+    public GameObject SlimeParty_Slime;
 
     public GameObject NormalMessage_Box;
 
@@ -26,7 +28,8 @@ public class Events : MonoBehaviour {
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
         gm.EventCheck += GettingFamous;
-        gm.EventCheck += DaramUpDownTutorial;
+        gm.RoundStartEvent += DaramUpDownTutorial;
+        gm.RoundStartEvent += SlimeParty;
     }
 
     void UnlockUpBasic()
@@ -112,7 +115,30 @@ public class Events : MonoBehaviour {
         if (Unlockables.GetBool("UnlockDaram1_Amount10") || Unlockables.GetBool("UnlockDaram2_Amount10"))
         {
             Instantiate(DaramUpDownTutorial_Box);
-            gm.EventCheck -= DaramUpDownTutorial;
+            gm.RoundStartEvent -= DaramUpDownTutorial;
         }
+    }
+
+    void SlimeParty()
+    {
+        if (gm.roundCount == 2)  // 일단은 2라운드때 무조건
+        {
+            // 다람쥐와 슬라임을 스왑함
+            GameObject temp = GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram;
+            GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram = SlimeParty_Slime;
+            SlimeParty_Slime = temp;
+
+            Instantiate(SlimeParty_Box);
+        }
+        if (gm.roundCount == 3)  // 3라운드에 해제
+        {
+            // 다람쥐와 슬라임을 스왑함
+            GameObject temp = GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram;
+            GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram = SlimeParty_Slime;
+            SlimeParty_Slime = temp;
+
+            gm.RoundStartEvent -= SlimeParty;
+        }
+            
     }
 }

@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
     public event Simulation EventCheck;     // 매 프레임마다 호출
     public event Simulation UserChat;       // 매 프레임마다 호출
     public event Simulation UserChange;     // 1초에 한번 호출
+    public event Simulation RoundStartEvent;// 라운드가 시작될 때 한번 호출
 
     // public 함수들
     //public Vector2 RandomPosition();
@@ -85,7 +86,9 @@ public class GameManager : MonoBehaviour {
         FameChange += FameDaram1;
         UserChange += UserLevel1;
         FameChange += CheckFameZero;
-        
+        RoundStartEvent += CheckDaramDeveloper;
+
+
 
         Random.seed = (int)Time.time;
     }
@@ -124,8 +127,13 @@ public class GameManager : MonoBehaviour {
             }
             LogText.WriteLog("10초 후 유저 로그인이 활성화됩니다.");
 
-            CheckDaramDeveloper();
         }
+    }
+
+    public void DoRoundStartEvent()
+    {
+        if (RoundStartEvent != null)
+            RoundStartEvent();
     }
 
     void Update()
@@ -363,7 +371,7 @@ public class GameManager : MonoBehaviour {
 
     public int CalculateMoney(float multiConstant)
     {
-        return (int)(multiConstant * 2 * Mathf.Max(0, (int)Mathf.Log(fame, 2f)));
+        return (int)(multiConstant * 2 * Mathf.Pow( Mathf.Log(fame + 1, 2f), 3));
     }
 
         //현재 남은 돈

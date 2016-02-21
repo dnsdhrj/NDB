@@ -12,7 +12,6 @@ public class UserCountText : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        userCountText.text = "접속한 유저 수\n초보: "+GameManager.gm.userCount[User.level1]
-            + "\n중수: " + GameManager.gm.userCount[User.level2];
+        userCountText.text = "전체 유저 수 : " + GameManager.gm.UserAllCount();
 	}
 }
