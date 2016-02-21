@@ -12,6 +12,7 @@ public class Events : MonoBehaviour {
     public GameObject MacroEvent_Box;
     public GameObject TreeOfSavior_Box;
     public GameObject GettingFamous_Box;
+    public GameObject DaramUpDownTutorial_Box;
 
     public GameObject NormalMessage_Box;
 
@@ -25,6 +26,7 @@ public class Events : MonoBehaviour {
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
         gm.EventCheck += GettingFamous;
+        gm.EventCheck += DaramUpDownTutorial;
     }
 
     void UnlockUpBasic()
@@ -102,6 +104,15 @@ public class Events : MonoBehaviour {
             gm.userCount[User.level1] += 1000 + 100 * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")];
             gm.userCount[User.level2] += 100;
             gm.EventCheck -= GettingFamous;
+        }
+    }
+
+    void DaramUpDownTutorial()
+    {
+        if (Unlockables.GetBool("UnlockDaram1_Amount10") || Unlockables.GetBool("UnlockDaram2_Amount10"))
+        {
+            Instantiate(DaramUpDownTutorial_Box);
+            gm.EventCheck -= DaramUpDownTutorial;
         }
     }
 }

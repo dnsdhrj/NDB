@@ -23,20 +23,20 @@ public class Developer : MonoBehaviour {
     public float userIncreasePerDeveloper = 0.2f;
     public int developerMonsterGenerationTime = 3;
 
-	void Start () {
+    void Awake()
+    {
         dev = this;
-        gm = GameManager.gm;
 
         // Post(부서명, 영어 부서명, 부서ID, 부서에 속한 개발자 1명당 월급, 설명)
         // 부서ID는 postDatabase, developerCount의 index값과 일치합니다.
-        postDatabase.Add(new Post("서버 관리팀", "Server", 0, 300, "개발자 1명당 최대 유저수 제한이 " + serverLimitIncreasePerDeveloper +"씩 증가합니다."));
+        postDatabase.Add(new Post("서버 관리팀", "Server", 0, 300, "개발자 1명당 최대 유저수 제한이 " + serverLimitIncreasePerDeveloper + "씩 증가합니다."));
         postDatabase.Add(new Post("디버깅 팀", "Debugging", 1, 250, "개발자 1명당 매크로, 버그의 지속시간이 " + macroDecreasePerDeveloper * 100 + "%p씩 줄어듭니다."));
         postDatabase.Add(new Post("홍보 팀", "Publicity", 2, 220, "개발자 1명당 초보 유저수의 증가 속도가 " + userIncreasePerDeveloper * 100 + "%p씩 빨라집니다.\n이벤트를 시행하기 위해 특정 수 이상을 만족해야 합니다."));
         postDatabase.Add(new Post("고객 지원팀", "Customer", 3, 200, "인기도 하락 속도가 줄어듭니다."));
-        postDatabase.Add(new Post("Lv.1 다람쥐 개발팀", "DaramLv1", 4, 180, "개발자 1명당 Lv.1 다람쥐를 " + developerMonsterGenerationTime +"초에 1마리씩 자동으로 뿌립니다."));
-        postDatabase.Add(new Post("Lv.2 다람쥐 개발팀", "DaramLv2", 5, 360, "개발자 1명당 Lv.2 다람쥐를 " + developerMonsterGenerationTime +"초에 1마리씩 자동으로 뿌립니다."));
-        postDatabase.Add(new Post("토끼 개발팀", "Rabbit", 6, 500, "개발자 1명당 토끼를 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다."));
-        postDatabase.Add(new Post("슬라임 개발팀", "Slime", 7, 600, "개발자 1명당 슬라임을 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다."));
+        postDatabase.Add(new Post("Lv.1 다람쥐 개발팀", "DaramLv1", 4, 180, "개발자 1명당 Lv.1 다람쥐를 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다.\n3/10명을 배치시키면 수동으로 뿌리는 능력이 상승합니다."));
+        postDatabase.Add(new Post("Lv.2 다람쥐 개발팀", "DaramLv2", 5, 360, "개발자 1명당 Lv.2 다람쥐를 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다.\n3/10명을 배치시키면 수동으로 뿌리는 능력이 상승합니다."));
+        postDatabase.Add(new Post("토끼 개발팀", "Rabbit", 6, 500, "개발자 1명당 토끼를 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다.\n3/10명을 배치시키면 수동으로 뿌리는 능력이 상승합니다."));
+        postDatabase.Add(new Post("슬라임 개발팀", "Slime", 7, 600, "개발자 1명당 슬라임을 " + developerMonsterGenerationTime + "초에 1마리씩 자동으로 뿌립니다.\n3/10명을 배치시키면 수동으로 뿌리는 능력이 상승합니다."));
 
         //developerCount 초기화
         developerCount = Enumerable.Repeat(0, dev.postDatabase.Count).ToArray();
@@ -44,9 +44,11 @@ public class Developer : MonoBehaviour {
         {
             developerCount[i] = 0;
         }
-
         CalculateCost();
+    }
 
+    void Start () {
+        gm = GameManager.gm;
 	}
 
     void ExpandUserLimit()
