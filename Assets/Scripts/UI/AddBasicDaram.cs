@@ -48,7 +48,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (Input.GetMouseButtonDown(0))
             LatestClick = gm.time;
-        else if (Input.GetMouseButton(0) && pointerOn && !QuantityControlOn && gm.time - LatestClick > 0.2f )
+        else if (Input.GetMouseButton(0) && pointerOn && !QuantityControlOn && gm.time - LatestClick > 0.15f )
         {
             QuantityControlStart();
         }
@@ -88,6 +88,12 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnClick()
     {
         if (gm.isPaused) return;
+
+        bool exception = false;
+        if(QuantityControlOn)
+            exception = QuantityControlEnd();
+        if (exception == true)
+            return;
 
         if (gm.money < DaramCost * DaramAmount)
         {
@@ -153,8 +159,9 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         QuantityControlOn = true;
     }
 
-    void QuantityControlEnd()
+    bool QuantityControlEnd()
     {
+        bool ret = false;
         GameObject up = transform.GetChild(1).GetChild(0).gameObject;
         GameObject down = transform.GetChild(1).GetChild(1).gameObject;
 
@@ -162,13 +169,21 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             float y = Input.mousePosition.y;
             if (y >= transform.position.y + 20)
+            {
                 DaramAmount *= 10;
+                ret = true;
+            }
             else if (y <= transform.position.y - 30)
+            {
                 DaramAmount /= 10;
+                ret = true;
+            }
         }
 
         up.SetActive(false);
         down.SetActive(false);
         QuantityControlOn = false;
+
+        return ret;
     }
 }

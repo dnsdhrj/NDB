@@ -464,6 +464,12 @@ public class GameManager : MonoBehaviour {
     // 매 라운드 시작시마다 호출됨
     void CheckDaramDeveloper()
     {
+        if (roundCount == 1)    // 시작할때 developerCount 초기화가 안되어 있어서 예외처리함
+        {
+            Unlockables.SetBool("UnlockDaram1_Amount1", true);
+            Unlockables.SetBool("UnlockDaram2_Amount1", true);
+            return;
+        }
         Unlockables.SetBool("UnlockDaram1_Amount1", true);
         Unlockables.SetBool("UnlockDaram1_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 3);
         Unlockables.SetBool("UnlockDaram1_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 10);
