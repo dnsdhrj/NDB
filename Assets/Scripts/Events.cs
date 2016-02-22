@@ -12,10 +12,21 @@ public class Events : MonoBehaviour {
     public GameObject MacroEvent_Box;
     public GameObject TreeOfSavior_Box;
     public GameObject GettingFamous_Box;
+    public GameObject DaramUpDownTutorial_Box;
+    public GameObject SlimeParty_Box;
+    public GameObject SlimeParty_Slime;
+    public GameObject FirstTutorial_Box;
+    public GameObject InterRoundTutorial_Box;
+    public GameObject EmergencyTutorial_Box;
+
+    public GameObject NormalMessage_Box;
+
+    public static GameObject InterRoundTutorialBox;
 
     void Start ()
     {
         gm = GameManager.gm;
+        InterRoundTutorialBox = InterRoundTutorial_Box;
 
         gm.EventCheck += UnlockUpBasic;
         gm.EventCheck += UserLimitExcess;
@@ -23,11 +34,16 @@ public class Events : MonoBehaviour {
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
         gm.EventCheck += GettingFamous;
+        gm.EventCheck += EmergencyTutorial;
+
+    gm.RoundStartEvent += DaramUpDownTutorial;
+        gm.RoundStartEvent += SlimeParty;
+        gm.RoundStartEvent += FirstTutorial;
     }
 
     void UnlockUpBasic()
     {
-        if (GameManager.gm.Fame >= 5000)
+        if (GameManager.gm.fame >= 10000)
         {
             GameManager.gm.EventCheck -= UnlockUpBasic;
  
@@ -44,7 +60,7 @@ public class Events : MonoBehaviour {
     }
 
     void UserLimitExcess() {
-        if (GameManager.gm.UserAllCount() > GameManager.gm.UserLimit) {
+        if (GameManager.gm.UserAllCount() > Unlockables.GetInt("UserLimit")) {
 
             Instantiate(UserLimitExcess_Box);
             LogText.WriteLog("서버가 충당 가능한 유저 수를 초과했습니다.");
@@ -54,15 +70,15 @@ public class Events : MonoBehaviour {
             //유저채팅 추가
             gm.UserChat += UserChat.uc.UserLimitExcess;
 
-            GameManager.gm.UserCount[User.level1] -= (int)( GameManager.gm.UserCount[User.level1] * Random.Range(0.1f, 0.2f) );
-            GameManager.gm.UserCount[User.level2] -= (int)(GameManager.gm.UserCount[User.level2] * Random.Range(0.1f, 0.2f));
-            GameManager.gm.Fame -= (int)(GameManager.gm.Fame * 0.1);
+            GameManager.gm.userCount[User.level1] -= (int)( GameManager.gm.userCount[User.level1] * Random.Range(0.3f, 0.5f));
+            GameManager.gm.userCount[User.level2] -= (int)(GameManager.gm.userCount[User.level2] * Random.Range(0.3f, 0.5f));
+            GameManager.gm.fame -= (int)(GameManager.gm.fame * (0.2 - 0.015 * Mathf.Min(10, Developer.dev.developerCount[Developer.dev.FindPostIDByName("Customer")])));
 
         }
     }
 
     void RivalGameRelease() {
-        if (Random.Range(0, 1000) == Random.Range(0, 1000)) {
+        if (Random.value < 1f/14401f) {
             Instantiate(RivalGameRelease_Box);
             LogText.WriteLog("경쟁작 '전설의 어둠'이 베타 테스트를 시작했다!");
             LogText.WriteLog("(유저 수가 감소합니다.)");
@@ -70,7 +86,8 @@ public class Events : MonoBehaviour {
             UserChat.CreateChat("ㄱㄱㄱ", 5);
             UserChat.CreateChat("이 게임 접으려는데 아이디 사실 분?", 5);
 
-            GameManager.gm.UserCount[User.level1] -= 500 + (int)(GameManager.gm.UserCount[User.level1] * 0.1f);
+            GameManager.gm.userCount[User.level1] -= 1500 + (int)(GameManager.gm.userCount[User.level1] * 0.1f) - 150 * Mathf.Min(10, Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]);
+            GameManager.gm.userCount[User.level2] -= (int)(GameManager.gm.userCount[User.level2] * 0.1f);
 
             gm.EventCheck -= RivalGameRelease;
         }
@@ -78,7 +95,7 @@ public class Events : MonoBehaviour {
 
     void MacroEvent()
     {
-        if (gm.UserAllCount() >= 3000 && Random.value < 0.0005)   // 나중에 10000으로 변경
+        if (gm.UserAllCount() >= 20000 && Random.value < 1f/7201f)
             Instantiate(MacroEvent_Box);
     }
 
@@ -93,12 +110,81 @@ public class Events : MonoBehaviour {
 
     void GettingFamous()
     {
-        if (gm.Fame >= 10000)
+        if (gm.fame >= 30000)
         {
             Instantiate(GettingFamous_Box);
-            gm.UserCount[User.level1] += 1000;
-            gm.UserCount[User.level2] += 100;
+            gm.userCount[User.level1] += 1000 + 100 * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")];
+            gm.userCount[User.level2] += 100;
             gm.EventCheck -= GettingFamous;
         }
     }
+
+    void DaramUpDownTutorial()
+    {
+        if (Unlockables.GetBool("UnlockDaram1_Amount10") || Unlockables.GetBool("UnlockDaram2_Amount10"))
+        {
+            Instantiate(DaramUpDownTutorial_Box);
+            gm.RoundStartEvent -= DaramUpDownTutorial;
+        }
+    }
+
+    void SlimeParty()
+    {
+        if (gm.roundCount == 2)  // 일단은 2라운드때 무조건
+        {
+            // 다람쥐와 슬라임을 스왑함
+            GameObject temp = GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram;
+            GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram = SlimeParty_Slime;
+            SlimeParty_Slime = temp;
+
+            Instantiate(SlimeParty_Box);
+        }
+        if (gm.roundCount == 3)  // 3라운드에 해제
+        {
+            // 다람쥐와 슬라임을 스왑함
+            GameObject temp = GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram;
+            GameObject.Find("AddBasicDaram").GetComponent<AddBasicDaram>().daram = SlimeParty_Slime;
+            SlimeParty_Slime = temp;
+
+            gm.RoundStartEvent -= SlimeParty;
+        }
+            
+    }
+
+    void FirstTutorial()
+    {
+        Instantiate(FirstTutorial_Box);
+        gm.RoundStartEvent -= FirstTutorial;
+    }
+
+    void EmergencyTutorial()
+    {
+        if (gm.fame >= 20000 && 15 <= gm.timeLeft && gm.timeLeft <= 25)
+        {
+            gm.DaramDeath += EmergencyDeath;
+            StartCoroutine("ET");
+            gm.EventCheck -= EmergencyTutorial;
+        }
+    }
+
+    private static bool alternative = false;
+    public static void EmergencyDeath()
+    {
+        if (alternative)
+        {
+            if (Daram.All.Count != 0)
+                Daram.All[Random.Range(0, Daram.All.Count)].HP -= 99999999;
+            alternative = false;
+        }
+        else
+            alternative = true;
+    }
+
+    IEnumerator ET()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Unlockables.SetBool("Emergency", true);
+        Instantiate(EmergencyTutorial_Box);
+    }
+
 }

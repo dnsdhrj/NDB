@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Basic : Daram {
 
-    private int past_move_stat = -1; // 현재 움직임 상태
+    private int past_move_stat = 0; // 현재 움직임 상태
     private int now_move_stat; //이전 움직임 상태
 
     
@@ -38,6 +38,4 @@ public class Basic : Daram {
             past_move_stat = now_move_stat;
         }
     }
-
-
 }

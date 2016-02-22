@@ -15,23 +15,31 @@ public class ResultScene : EventBox {
     void Start()
     {
         base.Start();   // 생성된 창 위치 맞추고 일시정지
+        Developer.dev.CalculateCost();
         StartCoroutine("ShowResult");
     }
 
     IEnumerator ShowResult() {
         GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-
+        
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
-        resultText.text = "남은 돈 : " + GameManager.gm.Money;
+        resultText.text = "라운드 시작 시 돈 : " + GameManager.gm.initialMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n번 돈 :  " + GameManager.gm.EarnedMoney;
+        resultText.text = resultText.text + "\n이번 라운드에 번 돈 :  " + GameManager.gm.earnedMoney * GameManager.gm.earnedMoneyModifier;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.EarnedMoney + GameManager.gm.Money);
+        resultText.text = resultText.text + "\n이번 라운드에 쓴 돈 :  " + GameManager.gm.usedMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n이벤트";
+        resultText.text = resultText.text + "\n지급한 개발자 월급 : " + GameManager.gm.salaryMoney;
+        yield return new WaitForSeconds(0.5f);
 
-        MoneyUpdate();
+        GameManager.gm.InitiateMoney();
+        resultText.text = resultText.text + "\n합계 : " + GameManager.gm.Money();
+        yield return new WaitForSeconds(0.5f);
+        if (GameManager.gm.roundEventName == "") GameManager.gm.roundEventName = "없음";
+        resultText.text = resultText.text + "\n이번 라운드에 적용된 행사 < " + GameManager.gm.roundEventName + " >";
+
+        
 
         for (int i = 0; i < Events; i++) {
             StageEndEvent();
@@ -44,7 +52,8 @@ public class ResultScene : EventBox {
     public void OnButtonClick()
     {
         GameManager.gm.Pause(true);
-        GameManager.gm.CurrentStageScene = SceneManager.GetActiveScene().name;
+        GameManager.gm.currentStageScene = SceneManager.GetActiveScene().name;
+        GameManager.gm.roundEventName = "";
         StopAllCoroutines();
         SceneManager.LoadScene("InterRound");
     }
@@ -53,10 +62,4 @@ public class ResultScene : EventBox {
             //뭔가 스테이지가 끝날 때 발생하는 이벤트
     }
 
-    //스테이지가 끝날 때 GameManager에 결과 저장
-    void MoneyUpdate()
-    {
-        GameManager.gm.Money = (GameManager.gm.Money + GameManager.gm.EarnedMoney);
-        GameManager.gm.EarnedMoney = 0;
-    }
 }

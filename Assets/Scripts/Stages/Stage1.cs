@@ -9,5 +9,10 @@ public class Stage1 : MonoBehaviour {
     void Start()
     {
         Unlockables.SetBool("UnlockDaram1", true);
+        Unlockables.SetBool("UnlockDaram1_Amount1", true);
+        Unlockables.SetBool("UnlockDaram2_Amount1", true);
+
+        Unlockables.SetInt("Server", 1);
+        Unlockables.SetInt("ServerEff", 5000);
     }
 }
