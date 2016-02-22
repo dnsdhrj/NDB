@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,13 @@ using System.Linq;
 public class RoundEventDatabase : MonoBehaviour {
     public List<RoundEvent> roundEventDatabase = new List<RoundEvent>();
 
+
     private GameManager gm;
 
     //라운드행사 데이터베이스는 여기에 추가
     void Start()
     {
         gm = GameManager.gm;
-        
         //행사 명칭, 함수 명, ID, 가격, 필요 개발자 수, 설명
         roundEventDatabase.Add(new RoundEvent("경험치 두배 이벤트", "ExpEvent", 0, 2000, 3, "인기도 상승율이 증가합니다.\n 중수, 고수 유저가 빠르게 증가합니다.", ExpEvent));
         roundEventDatabase.Add(new RoundEvent("캐시아이템 할인 이벤트", "CashItemDiscount", 1, 1000, 3, "수익이 감소합니다.\n 초보 유저 유입이 증가합니다.", CashItemDiscount));

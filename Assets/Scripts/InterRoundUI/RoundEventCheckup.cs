@@ -6,13 +6,17 @@ using System.Collections.Generic;
 public class RoundEventCheckup : MonoBehaviour {
 
     public GameObject roundEventListTemplate;
-
+    public int numOfShowingRoundEvent = 3;
 
     private GameObject eventPanel;
     private GameObject eventScrollPanel;
     private RoundEventDatabase database;
     private RectTransform eventScrollPanelrect;
+
+
     private int imageIconSize = 256;
+
+    private List<int> RandomRoundEventID;
 
     void Start ()
     {
@@ -23,16 +27,21 @@ public class RoundEventCheckup : MonoBehaviour {
         eventPanel.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
         eventPanel.SetActive(false);
         MakeRoundEventList();
+
     }
 
     void MakeRoundEventList()
     {
+        SetRandomRoundEventID();
         SetListSize(eventScrollPanelrect);
-        foreach (RoundEvent roundEvent in database.roundEventDatabase)
+        List<GameObject> eventList = new List<GameObject>();
+        for(int i = 0; i< numOfShowingRoundEvent; i++)
         {
-            List<GameObject> eventList = new List<GameObject>();
+            int randomID = Random.Range(0, RandomRoundEventID.Count);
+            RoundEvent roundEvent = database.roundEventDatabase[RandomRoundEventID[randomID]];
+            RandomRoundEventID.RemoveAt(randomID);
 
-            GameObject newEvent = Instantiate(roundEventListTemplate, new Vector3(0f, (eventScrollPanelrect.rect.height / 2) -120f * roundEvent.eventID - 20f, 0f), Quaternion.identity) as GameObject;
+            GameObject newEvent = Instantiate(roundEventListTemplate, new Vector3(0f, (eventScrollPanelrect.rect.height / 2) -120f * i - 20f, 0f), Quaternion.identity) as GameObject;
             newEvent.name = roundEvent.eventName;
 
             /* 다른 children이 추가되면 아래 코드에서 에러가 발생할 수도? */
@@ -58,7 +67,7 @@ public class RoundEventCheckup : MonoBehaviour {
 
     void SetListSize(RectTransform rect)
     {
-        rect.sizeDelta = new Vector2(rect.rect.width, database.roundEventDatabase.Count * 120f + 20f);
+        rect.sizeDelta = new Vector2(rect.rect.width, numOfShowingRoundEvent * 120f + 20f);
     }
 
     public string CreateEventTooltip(RoundEvent roundEvent)
@@ -68,5 +77,15 @@ public class RoundEventCheckup : MonoBehaviour {
         tooltip += "<color=#990282>" + "가격 : " + roundEvent.eventPrice + "</color>\t\t";
         tooltip += "<color=#990282>" + "필요 개발자 수 : " + roundEvent.eventRequiredDev + "</color>";
         return tooltip;
+    }
+
+    void SetRandomRoundEventID()
+    {
+        RandomRoundEventID = new List<int>();
+
+        for (int i = 0; i < database.roundEventDatabase.Count; i++)
+        {
+            RandomRoundEventID.Add(i);
+        }
     }
 }

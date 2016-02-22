@@ -64,7 +64,7 @@ public class DeveloperCheckup : MonoBehaviour {
     public void ShowDevelopers()
     {
         //이유는 모르겠지만 처음에 위치 조정을 안해주면 스크롤바랑 이미지 표시가 이상해짐
-        developerPanel.GetComponent<ScrollRect>().verticalScrollbar.value = 0;
+        developerPanel.GetComponentInChildren<ScrollRect>().verticalScrollbar.value = 0;
         developerScrollPanelrect.localPosition = new Vector2(developerScrollPanelrect.localPosition.x, -developerScrollPanelrect.rect.height / 2);
         developerPanel.SetActive(true);
         RefreshPostTooltip();
