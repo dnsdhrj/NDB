@@ -15,12 +15,18 @@ public class Events : MonoBehaviour {
     public GameObject DaramUpDownTutorial_Box;
     public GameObject SlimeParty_Box;
     public GameObject SlimeParty_Slime;
+    public GameObject FirstTutorial_Box;
+    public GameObject InterRoundTutorial_Box;
+    public GameObject EmergencyTutorial_Box;
 
     public GameObject NormalMessage_Box;
+
+    public static GameObject InterRoundTutorialBox;
 
     void Start ()
     {
         gm = GameManager.gm;
+        InterRoundTutorialBox = InterRoundTutorial_Box;
 
         gm.EventCheck += UnlockUpBasic;
         gm.EventCheck += UserLimitExcess;
@@ -28,13 +34,16 @@ public class Events : MonoBehaviour {
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
         gm.EventCheck += GettingFamous;
-        gm.RoundStartEvent += DaramUpDownTutorial;
+        gm.EventCheck += EmergencyTutorial;
+
+    gm.RoundStartEvent += DaramUpDownTutorial;
         gm.RoundStartEvent += SlimeParty;
+        gm.RoundStartEvent += FirstTutorial;
     }
 
     void UnlockUpBasic()
     {
-        if (GameManager.gm.fame >= 15000)
+        if (GameManager.gm.fame >= 10000)
         {
             GameManager.gm.EventCheck -= UnlockUpBasic;
  
@@ -141,4 +150,41 @@ public class Events : MonoBehaviour {
         }
             
     }
+
+    void FirstTutorial()
+    {
+        Instantiate(FirstTutorial_Box);
+        gm.RoundStartEvent -= FirstTutorial;
+    }
+
+    void EmergencyTutorial()
+    {
+        if (gm.fame >= 20000 && 15 <= gm.timeLeft && gm.timeLeft <= 25)
+        {
+            gm.DaramDeath += EmergencyDeath;
+            StartCoroutine("ET");
+            gm.EventCheck -= EmergencyTutorial;
+        }
+    }
+
+    private static bool alternative = false;
+    public static void EmergencyDeath()
+    {
+        if (alternative)
+        {
+            if (Daram.All.Count != 0)
+                Daram.All[Random.Range(0, Daram.All.Count)].HP -= 99999999;
+            alternative = false;
+        }
+        else
+            alternative = true;
+    }
+
+    IEnumerator ET()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Unlockables.SetBool("Emergency", true);
+        Instantiate(EmergencyTutorial_Box);
+    }
+
 }

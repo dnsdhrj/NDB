@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 
     private int money = 10000;         // initialMoney, earnedMoney, usedMoney가 실시간으로 반영된 돈
     [HideInInspector] public int earnedMoney = 0;   // 라운드 중에 번 돈(해고로 받은 돈 포함)
+    [HideInInspector] public float earnedMoneyModifier = 1.0f;  // 번돈 의 계수 (긴급점검 등으로 낮아짐)
     [HideInInspector] public int initialMoney = 0;  // 라운드 시작 시의 돈
     [HideInInspector] public int usedMoney = 0;     // GM이 라운드 중에 사용한 돈
     [HideInInspector] public int salaryMoney = 0;   // 라운드 중 나가는 개발자 월급
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool isPaused = false;
     [HideInInspector] public bool isRoundEventOn = false;
     //                public bool isInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
+    [HideInInspector] public bool isEmergency = false;  // 긴급점검일때 true
     [HideInInspector] public string GameName = "";      // 우리가 운영하는 게임의 이름
 
     [HideInInspector] public float fieldCenterX;
@@ -101,6 +103,7 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         dev = Developer.dev;
+        gm.time = Time.time;
 
         if (GMCreated == true)  // GM 중복생성 방지
             return;
@@ -117,8 +120,8 @@ public class GameManager : MonoBehaviour {
         // 라운드 시작시마다 실행
         if (isInterRound == false)
         {
-            gm.time = Time.time;
-            SetRoundTime();
+            if(!isEmergency)
+                SetRoundTime();
             InitiateMoney();
 
             StartCoroutine("UserChangeCall");
@@ -131,10 +134,29 @@ public class GameManager : MonoBehaviour {
             if (roundCount != 1)    // 시작시에는 정기점검이 없습니다
             {
                 LogText.WriteLog("");
-                LogText.WriteLog( (roundCount-1) + "번째 정기점검 끝.");
+                if (!isEmergency)
+                    LogText.WriteLog((roundCount - 1) + "번째 정기점검 끝.");
+                else
+                    LogText.WriteLog("긴급점검이 끝났습니다.");
+            }
+            else
+            {
+                LogText.WriteLog("드디어 새 게임을 출시했다! 다람쥐를 뿌려 유저 수를 늘려보자.");
             }
             LogText.WriteLog("10초 후 유저 로그인이 활성화됩니다.");
 
+            if (isEmergency)
+            {
+                DaramDeath -= Events.EmergencyDeath;    // 튜토리얼용 함수
+                basicTime = timeLeft += 10;
+                isEmergency = false;
+            }
+
+        }
+        else
+        {
+            if (roundCount == 1)
+               Instantiate(Events.InterRoundTutorialBox);
         }
     }
 
@@ -345,9 +367,9 @@ public class GameManager : MonoBehaviour {
     {
         if (fame <= 0)
         {
-
-            // 뭔가를 한다
-
+            if(isInterRound == false)
+                for (int i = 0; i < User.Count; i++)
+                    userCount[i] = (int) (userCount[i] * 0.999832f);   // 전체 유저가 초당 1% 감소
             fame = 0;
         }
     }
@@ -385,10 +407,12 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void InitiateMoney()
     {
+        money += (int)(earnedMoney * earnedMoneyModifier);
         earnedMoney = 0;
         initialMoney = Money();
         usedMoney = 0;
         salaryMoney = 0;
+        earnedMoneyModifier = 1.0f;
     }
 
     /// <summary>
@@ -398,13 +422,14 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void ChangeMoneyInRound(int delta)
     {
-        money += delta;
+        //money += delta;
         if (delta > 0)
         {
             earnedMoney += delta;
         }
         else if (delta < 0)
         {
+            money += delta;
             usedMoney += Mathf.Abs(delta);
         }
     }

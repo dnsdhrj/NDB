@@ -35,7 +35,8 @@ public class Macro : MonoBehaviour {
 
         if (GameManager.gm.time >= NextActivity)
         {
-            Daram.All[Random.Range(0, Daram.All.Count)].HP -= 1000;
+            if(Daram.All.Count != 0)
+                Daram.All[Random.Range(0, Daram.All.Count)].HP -= 1000;
             NextActivity = GameManager.gm.time + 10.0f / (float)Daram.All.Count;    // 다람쥐가 초당 10% 감소
         }
     }
