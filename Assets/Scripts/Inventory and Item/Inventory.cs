@@ -10,14 +10,16 @@ public class Inventory : MonoBehaviour {
     public List<Item> slots = new List<Item>();
     public GUISkin skin;
 
+    public Sprite inventorySprite;
+
     [HideInInspector] public bool inventoryButtonClicked = false;
 
     private ItemDatabase database;
     private int inventorySize;
     private bool showInventory = false;
 
-    private float slotPosX = 15f;
-    private float slotPosY = 15f;
+    private float slotPosX = 40f;
+    private float slotPosY = 40f;
 
     private bool showTooltip = false;
     private string tooltip;
@@ -81,7 +83,10 @@ public class Inventory : MonoBehaviour {
     void DrawInventory()
     {
         int i = 0;
-        GUI.Box(new Rect(slotPosX/2 + 0f, slotPosY/2 + 0f, ((50+8) * slotX) + slotPosX, ((50+8) * slotY) + slotPosY), "", skin.GetStyle("InventoryBackground"));
+        GUI.DrawTexture(new Rect(slotPosX / 2 + 0f, slotPosY / 2 + 0f, ((50 + 8) * slotX) + slotPosX, ((50 + 8) * slotY) + slotPosY), inventorySprite.texture);
+
+
+        //GUI.Box(new Rect(slotPosX/2 + 0f, slotPosY/2 + 0f, ((50+8) * slotX) + slotPosX, ((50+8) * slotY) + slotPosY), "", skin.GetStyle("InventoryBackground"));
         for (int y = 0; y < slotY; y++)
         {
             for (int x = 0; x < slotX; x++)
@@ -175,7 +180,7 @@ public class Inventory : MonoBehaviour {
     public string CreateTooltip(Item item)
     {
         string tooltip = "<color=#ffffff>" + item.itemName + "</color>\n\n";
-        tooltip += "<color=#029919>" + item.itemDescription + "</color>\n\n";
+        tooltip += "<color=#000000>" + item.itemDescription + "</color>\n\n";
         tooltip += "<color=#990282>" + "가격 : " + item.itemPrice + "</color>";
         return tooltip;
     }

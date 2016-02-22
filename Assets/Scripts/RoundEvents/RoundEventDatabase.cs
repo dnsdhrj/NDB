@@ -53,6 +53,7 @@ public class RoundEventDatabase : MonoBehaviour {
                 GameManager.gm.isRoundEventOn = true;
 
                 GameManager.gm.ShowMessageBox("행사가 적용되었습니다.");
+                GameManager.gm.roundEventName = roundEvent.eventName;
                 StartCoroutine(roundEvent.eventStart());
             }
         }

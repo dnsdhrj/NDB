@@ -73,7 +73,7 @@ public class RoundEventCheckup : MonoBehaviour {
     public string CreateEventTooltip(RoundEvent roundEvent)
     {
         string tooltip = "<color=#ffffff>" + roundEvent.eventName + "</color>\n\n";
-        tooltip += "<color=#029919>" + roundEvent.eventDescription + "</color>\n\n";
+        tooltip += "<color=#000000>" + roundEvent.eventDescription + "</color>\n\n";
         tooltip += "<color=#990282>" + "가격 : " + roundEvent.eventPrice + "</color>\t\t";
         tooltip += "<color=#990282>" + "필요 개발자 수 : " + roundEvent.eventRequiredDev + "</color>";
         return tooltip;

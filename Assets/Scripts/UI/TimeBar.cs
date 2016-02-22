@@ -21,7 +21,7 @@ public class TimeBar : MonoBehaviour {
         int TimeLeft = GameManager.gm.timeLeft;
         int min = TimeLeft / 60;
         int sec = Mathf.Max(0, (int)(TimeLeft % 60));
-        Timetext.text = "남은 시간\n\t"+min + " : " + sec;
+        Timetext.text = "남은 시간\n"+min + " : " + sec;
         if(!(GameManager.gm.isPaused))
             GameManager.gm.timeLeft = --TimeLeft;
         yield return new WaitForSeconds(1.0f);

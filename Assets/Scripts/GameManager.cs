@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool isRoundEventOn = false;
     //                public bool isInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
     [HideInInspector] public string GameName = "";      // 우리가 운영하는 게임의 이름
+    [HideInInspector] public string roundEventName = ""; // 그 라운드에 적용된 행사
 
     [HideInInspector] public float fieldCenterX;
     [HideInInspector] public float fieldCenterY;

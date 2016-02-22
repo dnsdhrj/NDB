@@ -84,7 +84,7 @@ public class DeveloperCheckup : MonoBehaviour {
             if (post != null)
             {
                 string tooltip = "<color=#ffffff>" + post.postName + "</color>\n\n";
-                tooltip += "<color=#029919>" + post.postDescription + "</color>\n\n";
+                tooltip += "<color=#000000>" + post.postDescription + "</color>\n\n";
                 tooltip += "<color=#990282>" + "투입된 개발자 수 : " + post.DeveloperInPost() + "</color>\t\t";
                 tooltip += "<color=#990282>" + "개발자 1명당 월급 : " + (post.postSalary * (GameManager.gm.basicTime - 10)) + "</color>";
                 p.GetComponentInChildren<Text>().text = tooltip;
