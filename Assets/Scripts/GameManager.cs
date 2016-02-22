@@ -10,27 +10,31 @@ public class GameManager : MonoBehaviour {
 
     public GameObject resultScene; 
 
-    public int money = 0;
-
-    [HideInInspector] public float time = 0;    // 일시정지를 보정한 시간
-    [HideInInspector] public int earnedMoney = 0;
+    private int money = 10000;         // initialMoney, earnedMoney, usedMoney가 실시간으로 반영된 돈
+    [HideInInspector] public int earnedMoney = 0;   // 라운드 중에 번 돈(해고로 받은 돈 포함)
+    [HideInInspector] public int initialMoney = 0;  // 라운드 시작 시의 돈
+    [HideInInspector] public int usedMoney = 0;     // GM이 라운드 중에 사용한 돈
+    [HideInInspector] public int salaryMoney = 0;   // 라운드 중 나가는 개발자 월급
     [HideInInspector] public float timePerEarnedMoney = 1f; //돈이 벌리는 시간 간격
+    [HideInInspector] public float time = 0;        // 일시정지를 보정한 시간
+    [HideInInspector] public int basicTime = 40;
     [HideInInspector] public int fame = 0;
-    [HideInInspector]public int userLevel1Increase;
+    [HideInInspector] public int userLevel1Increase;
     [HideInInspector] public int[] userCount;
     [HideInInspector] public float[] userDamagePerLevel; // 각 레벨(초보, 중수)의 유저의 수에 비례한 데미지 곱(나눗셈) 값
-    [HideInInspector] public Quadric[] DaramFunction;   // 적정 다람쥐 계산하는 함수
+    [HideInInspector] public Quadric[] DaramFunction;    // 적정 다람쥐 계산하는 함수
     [HideInInspector] public int roundCount = 0;
     [HideInInspector] public int timeLeft = 1;
     [HideInInspector] public string currentStageScene;
     [HideInInspector] public bool isPaused = false;
     [HideInInspector] public bool isRoundEventOn = false;
     //                public bool isInterRound;         // InterRound때 일시정지는 되어 있음, 대기시간 10초도 InterRound 취급
+    [HideInInspector] public string GameName = "";      // 우리가 운영하는 게임의 이름
 
-    public float fieldCenterX;
-    public float fieldCenterY;
-    public float fieldWidth;
-    public float fieldHeight;
+    [HideInInspector] public float fieldCenterX;
+    [HideInInspector] public float fieldCenterY;
+    [HideInInspector] public float fieldWidth;
+    [HideInInspector] public float fieldHeight;
 
     public GameObject StartScene;
 
@@ -50,7 +54,7 @@ public class GameManager : MonoBehaviour {
     //public int UserAllCount();
 
     private Developer dev;
-    private int basicTime = 60;
+    
     private static bool GMCreated = false;
 
     void Awake()
@@ -65,7 +69,8 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(this);    // 씬이 넘어가도 파괴되지 않음
 
         gm = this;
-        currentStageScene = SceneManager.GetActiveScene().name;
+        if (SceneManager.GetActiveScene().name == "Test")
+            currentStageScene = "Test";
 
         //UserCount, UserDamagePerLevel 초기화
         userCount = Enumerable.Repeat(0, User.Count).ToArray();
@@ -101,7 +106,8 @@ public class GameManager : MonoBehaviour {
             return;
         GMCreated = true;
 
-        OnLevelWasLoaded(0);    // Start 대신 저 안에 써주세요
+        if(SceneManager.GetActiveScene().name == "Test")
+            OnLevelWasLoaded(0);    // Start 대신 저 안에 써주세요
 
         Random.seed = (int)Time.time;
     }
@@ -113,14 +119,16 @@ public class GameManager : MonoBehaviour {
         {
             gm.time = Time.time;
             SetRoundTime();
+            InitiateMoney();
 
             StartCoroutine("UserChangeCall");
             StartCoroutine(MoneyGainByFame());
+            StartCoroutine(MoneyLoseBySalary());
 
             if (StartScene != null)
                 Instantiate(StartScene);
 
-            if (roundCount != 1)    // 시작시에는 점기점검이 없습니다
+            if (roundCount != 1)    // 시작시에는 정기점검이 없습니다
             {
                 LogText.WriteLog("");
                 LogText.WriteLog( (roundCount-1) + "번째 정기점검 끝.");
@@ -201,6 +209,7 @@ public class GameManager : MonoBehaviour {
             CheckUserZero();    //항상 마지막에 호출되게 함
         }
     }
+
 
 #region 게임 시뮬레이션 관련 함수입니다
 
@@ -310,7 +319,7 @@ public class GameManager : MonoBehaviour {
 
         if (FameDelta > 0)
         {
-            userLevel1Increase = (int)(10 * Mathf.Log(fame + 1));     // y = k * log(x + 1)
+            userLevel1Increase = (int)(12 * Mathf.Log(fame + 1));     // y = k * log(x + 1)
             userLevel1Increase += (int)(userLevel1Increase * Developer.dev.userIncreasePerDeveloper * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]);
             userCount[User.level1] += userLevel1Increase;
         }
@@ -354,7 +363,72 @@ public class GameManager : MonoBehaviour {
 #endregion
 
 
+#region 돈 관련 함수입니다
     /* Functions about Money */
+
+    /// <summary>
+    /// 현재 보유한 돈(gm.money)을 반환합니다.
+    /// </summary>
+    public int Money()
+    {
+        return money;
+    }
+
+    // 쓸 일이 있을지는 모르겠지만 만들어놓음.
+    public void SetMoney(int n)
+    {
+        money = n;
+    }
+
+    /// <summary>
+    /// 라운드 시작 전에 돈 관련 변수를 초기화하는 데 사용됩니다.
+    /// </summary>
+    public void InitiateMoney()
+    {
+        earnedMoney = 0;
+        initialMoney = Money();
+        usedMoney = 0;
+        salaryMoney = 0;
+    }
+
+    /// <summary>
+    /// 현재 돈(gm.money)에 인자 delta만큼의 값을 더합니다.
+    /// delta가 양수이면 번 돈이 증가하고, delta가 음수이면 사용한 돈이 증가합니다.
+    /// 이 함수는 라운드 중에 돈을 변화시킬 때만 사용합니다.
+    /// </summary>
+    public void ChangeMoneyInRound(int delta)
+    {
+        money += delta;
+        if (delta > 0)
+        {
+            earnedMoney += delta;
+        }
+        else if (delta < 0)
+        {
+            usedMoney += Mathf.Abs(delta);
+        }
+    }
+
+    /// <summary>
+    /// 현재 돈(gm.money)에 인자 delta만큼의 값을 더합니다.
+    /// 월급은 돈의 감소이므로 delta에 음수를 넣어주세요.
+    /// 이 함수는 개발자 월급으로 인해 돈이 변할 때 사용합니다.
+    /// </summary>
+    public void ChangeMoneyBySalary(int delta)
+    {
+        money += delta;
+        salaryMoney += Mathf.Abs(delta);
+    }
+
+    /// <summary>
+    /// 현재 돈(gm.money)에 인자 delta만큼의 값을 더합니다.
+    /// 돈이 감소할 때는 delta에 음수를 넣어주세요.
+    /// 이 함수는 인터라운드에 돈을 변화시킬 때만 사용합니다.
+    /// </summary>
+    public void ChangeMoneyInterRound(int delta)
+    {
+        money += delta;
+    }
 
     //인기도에 의해 정기적으로 버는 소득
     IEnumerator MoneyGainByFame()
@@ -362,10 +436,24 @@ public class GameManager : MonoBehaviour {
         while (true) {
             if (!isPaused && !isInterRound)
             {
-                earnedMoney += CalculateMoney(1.0f);
+                ChangeMoneyInRound(CalculateMoney(1.0f));
                
             }
             yield return new WaitForSeconds(timePerEarnedMoney);
+        }
+    }
+
+    // 초당(per second) 지급되는 개발자 월급
+    IEnumerator MoneyLoseBySalary()
+    {
+        while (true)
+        {
+            if (!isPaused && !isInterRound)
+            {
+                Developer.dev.CalculateCost();
+                ChangeMoneyBySalary((-Developer.dev.salaryCost));
+            }
+            yield return new WaitForSeconds(1f);
         }
     }
 
@@ -376,7 +464,7 @@ public class GameManager : MonoBehaviour {
 
         //현재 남은 돈
 
-
+    /*
         //이벤트(홍보, 긴급점검 등)에 의해 발생하는 돈의 증감
         //둘 다 + 이므로 parameter에 양수/음수를 잘 선정해서 넣어줘야 함
         void MoneyGainByEvent(int EventGain, int EventCost)
@@ -384,12 +472,12 @@ public class GameManager : MonoBehaviour {
         earnedMoney += EventGain;
         money += EventCost;
     }
+    */
 
-    
+#endregion
 
 
-
-    public Vector2 RandomPosition()
+        public Vector2 RandomPosition()
     {
         Vector2 randompos;
         randompos.x = Random.Range(fieldCenterX - fieldWidth / 2f, fieldCenterX + fieldWidth / 2f);
@@ -398,8 +486,11 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetRoundTime() {
-        timeLeft = basicTime; //+ RoundCount * 10;
+        timeLeft = basicTime;
         roundCount++;
+        // 실제 라운드가 진행되는 시간은 (basicTime - 10) 초입니다.
+        // 라운드 또는 스테이지별로 진행 시간을 바꾸고 싶으면 라운드가 끝난 직후에 다음 라운드의 basicTime 값을 직접 설정해주세요.
+        // (개발자 월급 시스템과 연관되어 있습니다.)
     }
 
     private void RoundEndCheck() {
@@ -407,7 +498,7 @@ public class GameManager : MonoBehaviour {
             //print("stageEnded");
             timeLeft = 0;
 
-            //라운드 이벤트 제거를 위해 한번 더 확인
+            //라운드 행사 제거를 위해 한번 더 확인
             isRoundEventOn = false;
             if (EventCheck != null)
                 EventCheck();
@@ -472,20 +563,16 @@ public class GameManager : MonoBehaviour {
     // 매 라운드 시작시마다 호출됨
     void CheckDaramDeveloper()
     {
-        if (roundCount == 1)    // 시작할때 developerCount 초기화가 안되어 있어서 예외처리함
-        {
-            Unlockables.SetBool("UnlockDaram1_Amount1", true);
-            Unlockables.SetBool("UnlockDaram2_Amount1", true);
+        if (roundCount == 1)    // 시작할때 developerCount 초기화가 안되어 있어서 예외처리함 
             return;
-        }
-        Unlockables.SetBool("UnlockDaram1_Amount1", true);
+        
         Unlockables.SetBool("UnlockDaram1_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 3);
-        Unlockables.SetBool("UnlockDaram1_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 10);
+        Unlockables.SetBool("UnlockDaram1_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 9);
 
-        Unlockables.SetBool("UnlockDaram2_Amount1", true);
         Unlockables.SetBool("UnlockDaram2_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 3);
-        Unlockables.SetBool("UnlockDaram2_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 10);
+        Unlockables.SetBool("UnlockDaram2_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 9);
     }
+
 }
 
 

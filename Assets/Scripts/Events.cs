@@ -34,7 +34,7 @@ public class Events : MonoBehaviour {
 
     void UnlockUpBasic()
     {
-        if (GameManager.gm.fame >= 5000)
+        if (GameManager.gm.fame >= 15000)
         {
             GameManager.gm.EventCheck -= UnlockUpBasic;
  
@@ -69,7 +69,7 @@ public class Events : MonoBehaviour {
     }
 
     void RivalGameRelease() {
-        if (Random.value < 1f/5401f) {
+        if (Random.value < 1f/14401f) {
             Instantiate(RivalGameRelease_Box);
             LogText.WriteLog("경쟁작 '전설의 어둠'이 베타 테스트를 시작했다!");
             LogText.WriteLog("(유저 수가 감소합니다.)");
@@ -86,7 +86,7 @@ public class Events : MonoBehaviour {
 
     void MacroEvent()
     {
-        if (gm.UserAllCount() >= 10000 && Random.value < 1f/3601f)
+        if (gm.UserAllCount() >= 20000 && Random.value < 1f/7201f)
             Instantiate(MacroEvent_Box);
     }
 
@@ -101,7 +101,7 @@ public class Events : MonoBehaviour {
 
     void GettingFamous()
     {
-        if (gm.fame >= 10000)
+        if (gm.fame >= 30000)
         {
             Instantiate(GettingFamous_Box);
             gm.userCount[User.level1] += 1000 + 100 * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")];

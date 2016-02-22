@@ -74,14 +74,14 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             && Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")] != 0 && gm.time >= DeveloperTime)
         {
             Create(1); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
-            DeveloperTime = gm.time + 3.0f / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")];
+            DeveloperTime = gm.time + Developer.dev.developerMonsterGenerationTime / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv1")];
         }
 
         if (GameManager.gm.isInterRound == false && daram.GetComponent<Daram>().Level == 2
             && Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")] != 0 && gm.time >= DeveloperTime)
         {
             Create(1); // 개발자가 뿌리는 다람쥐는 돈이 들지 않음 (대신 개발자에게 따로 월급을 줌)
-            DeveloperTime = gm.time + 3.0f / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")];
+            DeveloperTime = gm.time + Developer.dev.developerMonsterGenerationTime / Developer.dev.developerCount[Developer.dev.FindPostIDByName("DaramLv2")];
         }
     }
 
@@ -95,12 +95,12 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (exception == true)
             return;
 
-        if (gm.money < DaramCost * DaramAmount)
+        if (gm.Money() < DaramCost * DaramAmount)
         {
             LogText.WriteLog("돈이 부족합니다.");
             return;
         }
-        GameManager.gm.money -= DaramCost * DaramAmount;
+        GameManager.gm.ChangeMoneyInRound(-DaramCost * DaramAmount);
         Create(DaramAmount);
     }
 

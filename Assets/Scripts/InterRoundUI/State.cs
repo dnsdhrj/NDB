@@ -14,8 +14,9 @@ public class State : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        moneyText.text = "" + GameManager.gm.money;
+	void Update ()
+    {
+        moneyText.text = "" + GameManager.gm.Money();
         developerText.text = "" + Developer.dev.salaryCost;
 	}
 }

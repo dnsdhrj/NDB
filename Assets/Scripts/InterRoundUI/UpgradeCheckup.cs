@@ -71,13 +71,21 @@ public class UpgradeCheckup : MonoBehaviour {
             if (Upgrade != null)
             {
                 string tooltip = "<color=#ffffff>" + Upgrade.upgradeName + "</color>\n\n";
-                tooltip += "<color=#029919>" + Upgrade.upgradeDescription + "</color>\n\n";
+                if (Upgrade.upgradeName == "서버 증설") // 이걸 만들기가 너무 힘들어서 예외처리함
+                    tooltip += "<color=#029919>" + "서버 한 대당 " + Unlockables.GetInt("ServerEff") + "명의 유저를 추가로 수용합니다." + "</color>\n\n";
+                else
+                    tooltip += "<color=#029919>" + Upgrade.upgradeDescription + "</color>\n\n";
                 tooltip += "<color=#990282>" + "가격 : " + Upgrade.upgradePrice + "</color>\t\t";
                 tooltip += "<color=#990282>" + "필요 개발자 수 : " + Upgrade.upgradeRequiredDev + "</color>\t\t";
                 if (Upgrade.upgradeQuantity != 0)
-                    tooltip += "<color=#990282>" + Upgrade.upgradeQuantityName + " : "+ Unlockables.GetInt(Upgrade.upgradeInternalName) + "</color>";
+                    tooltip += "<color=#990282>" + Upgrade.upgradeQuantityName + " : "+ Unlockables.GetInt(Upgrade.upgradeTooltipName) + "</color>";
                 go.GetComponentInChildren<Text>().text = tooltip;
             }
         }
+    }
+
+    void Update()
+    {
+        RefreshTooltip();
     }
 }

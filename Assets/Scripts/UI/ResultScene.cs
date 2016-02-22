@@ -24,17 +24,19 @@ public class ResultScene : EventBox {
         
         resultText.text = " ";
         yield return new WaitForSeconds(0.5f);
-        resultText.text = "남은 돈 : " + GameManager.gm.money;
+        resultText.text = "라운드 시작 시 돈 : " + GameManager.gm.initialMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n번 돈 :  " + GameManager.gm.earnedMoney;
+        resultText.text = resultText.text + "\n이번 라운드에 번 돈 :  " + GameManager.gm.earnedMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n지급할 월급 : " + Developer.dev.salaryCost;
+        resultText.text = resultText.text + "\n이번 라운드에 쓴 돈 :  " + GameManager.gm.usedMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n합계 : " + (GameManager.gm.earnedMoney + GameManager.gm.money - Developer.dev.salaryCost);
+        resultText.text = resultText.text + "\n지급한 개발자 월급 : " + GameManager.gm.salaryMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n이벤트";
+        resultText.text = resultText.text + "\n합계 : " + GameManager.gm.Money();
+        yield return new WaitForSeconds(0.5f);
+        resultText.text = resultText.text + "\n이번 라운드에 적용된 행사";
 
-        MoneyUpdate();
+        GameManager.gm.InitiateMoney();
 
         for (int i = 0; i < Events; i++) {
             StageEndEvent();
@@ -56,10 +58,4 @@ public class ResultScene : EventBox {
             //뭔가 스테이지가 끝날 때 발생하는 이벤트
     }
 
-    //스테이지가 끝날 때 GameManager에 결과 저장
-    void MoneyUpdate()
-    {
-        GameManager.gm.money = (GameManager.gm.money + GameManager.gm.earnedMoney - Developer.dev.salaryCost);
-        GameManager.gm.earnedMoney = 0;
-    }
 }

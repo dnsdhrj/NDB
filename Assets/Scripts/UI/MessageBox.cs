@@ -10,7 +10,6 @@ public class MessageBox : MonoBehaviour
     {
         transform.SetParent(GameObject.Find("Canvas").transform);
         GetComponent<RectTransform>().localPosition = Vector3.zero;
-        GameManager.gm.Pause(true);
         startTime = Time.time;
     }
 

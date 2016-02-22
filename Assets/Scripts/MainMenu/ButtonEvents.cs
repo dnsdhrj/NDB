@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ButtonEvents : MonoBehaviour {
+
+    public GameObject SetGameNameBox;
 
     public void ExitGame()
     {
@@ -10,11 +14,11 @@ public class ButtonEvents : MonoBehaviour {
 
     public void GameStart()
     {
-        Application.LoadLevel("Test");
+        SetGameNameBox.SetActive(true);
     }
 
     public void GameCredit()
     {
-        Application.LoadLevel("Credit");
+        SceneManager.LoadScene("Credit");
     }
 }
