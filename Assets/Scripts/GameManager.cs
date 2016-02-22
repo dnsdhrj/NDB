@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour {
 
         if (FameDelta > 0)
         {
-            userLevel1Increase = (int)(10 * Mathf.Log(fame + 1));     // y = k * log(x + 1)
+            userLevel1Increase = (int)(12 * Mathf.Log(fame + 1));     // y = k * log(x + 1)
             userLevel1Increase += (int)(userLevel1Increase * Developer.dev.userIncreasePerDeveloper * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")]);
             userCount[User.level1] += userLevel1Increase;
         }
@@ -475,20 +475,16 @@ public class GameManager : MonoBehaviour {
     // 매 라운드 시작시마다 호출됨
     void CheckDaramDeveloper()
     {
-        if (roundCount == 1)    // 시작할때 developerCount 초기화가 안되어 있어서 예외처리함
-        {
-            Unlockables.SetBool("UnlockDaram1_Amount1", true);
-            Unlockables.SetBool("UnlockDaram2_Amount1", true);
+        if (roundCount == 1)    // 시작할때 developerCount 초기화가 안되어 있어서 예외처리함 
             return;
-        }
-        Unlockables.SetBool("UnlockDaram1_Amount1", true);
+        
         Unlockables.SetBool("UnlockDaram1_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 3);
         Unlockables.SetBool("UnlockDaram1_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv1")] >= 10);
 
-        Unlockables.SetBool("UnlockDaram2_Amount1", true);
         Unlockables.SetBool("UnlockDaram2_Amount10", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 3);
         Unlockables.SetBool("UnlockDaram2_Amount100", dev.developerCount[dev.FindPostIDByName("DaramLv2")] >= 10);
     }
+
 }
 
 

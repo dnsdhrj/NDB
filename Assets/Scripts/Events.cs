@@ -34,7 +34,7 @@ public class Events : MonoBehaviour {
 
     void UnlockUpBasic()
     {
-        if (GameManager.gm.fame >= 5000)
+        if (GameManager.gm.fame >= 15000)
         {
             GameManager.gm.EventCheck -= UnlockUpBasic;
  
@@ -101,7 +101,7 @@ public class Events : MonoBehaviour {
 
     void GettingFamous()
     {
-        if (gm.fame >= 10000)
+        if (gm.fame >= 30000)
         {
             Instantiate(GettingFamous_Box);
             gm.userCount[User.level1] += 1000 + 100 * Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")];

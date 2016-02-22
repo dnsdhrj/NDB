@@ -13,7 +13,7 @@ public class UpgradeDatabase : MonoBehaviour {
     {
         gm = GameManager.gm;
 
-        upgradeDatabase.Add(new Upgrade("서버 증설", 0, 5000, 1, "전기세가 증가합니다.", "UserLimit", "현재 최대 유저 수", 5000));
+        upgradeDatabase.Add(new Upgrade("서버 증설", 0, 2500, 1, "이 설명은 예외처리함", "Server", "UserLimit", "현재 최대 유저 수", 1, 2.0f));
     }
 
 
@@ -34,6 +34,7 @@ public class UpgradeDatabase : MonoBehaviour {
                 Unlockables.SetBool(upgrade.upgradeInternalName, !Unlockables.GetBool(upgrade.upgradeInternalName));   // bool 값을 반전시킴
             else
                 Unlockables.SetInt(upgrade.upgradeInternalName, Unlockables.GetInt(upgrade.upgradeInternalName) + upgrade.upgradeQuantity);
+            upgrade.upgradePrice = (int) (upgrade.upgradePrice * upgrade.upgradeModifier);
         }
     }
 
@@ -43,5 +44,11 @@ public class UpgradeDatabase : MonoBehaviour {
             if (up.upgradeName == name)
                 return up;
         return null;
+    }
+
+    void Update()
+    {
+        // 딱히 어디 두어야 할지 모르겠음
+        Unlockables.SetInt("UserLimit", Unlockables.GetInt("Server") * Unlockables.GetInt("ServerEff"));
     }
 }

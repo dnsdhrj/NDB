@@ -17,8 +17,7 @@ public class Developer : MonoBehaviour {
     [HideInInspector] public int fireCost = -700;
     [HideInInspector] public int salaryCost = 0;
 
-    [HideInInspector]
-    public int serverLimitIncreasePerDeveloper = 2500;
+    private int serverLimitIncreasePerDeveloper = 1000; // 대체 무슨짓을 한건지 모르겠지만 public으로 하면 값이 2500이 됨
     public float macroDecreasePerDeveloper = 0.1f;
     public float userIncreasePerDeveloper = 0.2f;
     public int developerMonsterGenerationTime = 3;
@@ -29,7 +28,7 @@ public class Developer : MonoBehaviour {
 
         // Post(부서명, 영어 부서명, 부서ID, 부서에 속한 개발자 1명당 월급, 설명)
         // 부서ID는 postDatabase, developerCount의 index값과 일치합니다.
-        postDatabase.Add(new Post("서버 관리팀", "Server", 0, 300, "개발자 1명당 최대 유저수 제한이 " + serverLimitIncreasePerDeveloper + "씩 증가합니다."));
+        postDatabase.Add(new Post("서버 관리팀", "Server", 0, 300, "개발자 1명당 서버 1대가 수용 가능한 유저의 수가 " + serverLimitIncreasePerDeveloper + "씩 증가합니다."));
         postDatabase.Add(new Post("디버깅 팀", "Debugging", 1, 250, "개발자 1명당 매크로, 버그의 지속시간이 " + macroDecreasePerDeveloper * 100 + "%p씩 줄어듭니다."));
         postDatabase.Add(new Post("홍보 팀", "Publicity", 2, 220, "개발자 1명당 초보 유저수의 증가 속도가 " + userIncreasePerDeveloper * 100 + "%p씩 빨라집니다.\n이벤트를 시행하기 위해 특정 수 이상을 만족해야 합니다."));
         postDatabase.Add(new Post("고객 지원팀", "Customer", 3, 200, "인기도 하락 속도가 줄어듭니다."));
@@ -54,13 +53,13 @@ public class Developer : MonoBehaviour {
     void ExpandUserLimit()
     {
         // 서버 관리팀의 개발자 한 명당 유저수 제한을 serverLimitIncreasePerDeveloper명씩 늘려줍니다.
-        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") + serverLimitIncreasePerDeveloper);
+        Unlockables.SetInt("ServerEff", Unlockables.GetInt("ServerEff") + serverLimitIncreasePerDeveloper);
     }
 
     void ReduceUserLimit()
     {
         // 서버 관리팀에서 개발자가 빠지면 유저수 제한이 serverLimitIncreasePerDeveloper명 감소합니다.
-        Unlockables.SetInt("UserLimit", Unlockables.GetInt("UserLimit") - serverLimitIncreasePerDeveloper);
+        Unlockables.SetInt("ServerEff", Unlockables.GetInt("ServerEff") - serverLimitIncreasePerDeveloper);
     }
 
     public void CalculateCost()
