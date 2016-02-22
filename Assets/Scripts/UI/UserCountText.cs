@@ -14,6 +14,6 @@ public class UserCountText : MonoBehaviour {
 	void Update () {
         userCountText.text = "전체 유저 수\n" + "<color=#ffffff>" + GameManager.gm.UserAllCount();
         userCountText.text += " / " + Unlockables.GetInt("UserLimit") + "</color>";
-        userCountText.text += "\n목표 유저 수 : 50000";
+        userCountText.text += "\n<color=#ff0000>목표 유저 수 : 50000</color>";
 	}
 }
