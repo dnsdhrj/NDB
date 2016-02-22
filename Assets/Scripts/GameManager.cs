@@ -131,10 +131,19 @@ public class GameManager : MonoBehaviour {
             if (roundCount != 1)    // 시작시에는 정기점검이 없습니다
             {
                 LogText.WriteLog("");
-                LogText.WriteLog( (roundCount-1) + "번째 정기점검 끝.");
+                LogText.WriteLog((roundCount - 1) + "번째 정기점검 끝.");
+            }
+            else if(roundCount == 0)
+            {
+                LogText.WriteLog("드디어 새 게임을 출시했다! 다람쥐를 뿌려 인기도를 높여보자.");
             }
             LogText.WriteLog("10초 후 유저 로그인이 활성화됩니다.");
 
+        }
+        else
+        {
+            if (roundCount == 1)
+               Instantiate(Events.InterRoundTutorialBox);
         }
     }
 

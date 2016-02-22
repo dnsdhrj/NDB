@@ -1,0 +1,28 @@
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+using UnityEngine.SceneManagement;
+
+public class ButtonEvents : MonoBehaviour {
+
+    public GameObject SetGameNameBox;
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void GameStart()
+    {
+<<<<<<< HEAD
+        SetGameNameBox.SetActive(true);
+=======
+        SceneManager.LoadScene("Test");
+>>>>>>> origin/adt
+    }
+
+    public void GameCredit()
+    {
+        SceneManager.LoadScene("Credit");
+    }
+}

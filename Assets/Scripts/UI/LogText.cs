@@ -9,7 +9,7 @@ public class LogText : MonoBehaviour {
 
     public GameObject scrollbar;
     private Scrollbar logScrollbar;
-    public string initialText = "드디어 새 게임을 출시했다! 다람쥐를 뿌려 인기도를 높여보자.";
+    public string initialText = "";
     private static LogText _this;
 
     // Use this for initialization
@@ -28,5 +28,15 @@ public class LogText : MonoBehaviour {
     {
         _this.logText.text += "\n" + log;
         _this.logScrollbar.value = 0;
+    }
+
+    private bool StartText = false;
+    void Update()
+    {
+        if (GameManager.gm.isInterRound == false && StartText == false)
+        {
+            WriteLog("\n로그인 시작!");
+            StartText = true;
+        }
     }
 }

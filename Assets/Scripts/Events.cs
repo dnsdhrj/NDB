@@ -15,12 +15,17 @@ public class Events : MonoBehaviour {
     public GameObject DaramUpDownTutorial_Box;
     public GameObject SlimeParty_Box;
     public GameObject SlimeParty_Slime;
+    public GameObject FirstTutorial_Box;
+    public GameObject InterRoundTutorial_Box;
 
     public GameObject NormalMessage_Box;
+
+    public static GameObject InterRoundTutorialBox;
 
     void Start ()
     {
         gm = GameManager.gm;
+        InterRoundTutorialBox = InterRoundTutorial_Box;
 
         gm.EventCheck += UnlockUpBasic;
         gm.EventCheck += UserLimitExcess;
@@ -28,13 +33,15 @@ public class Events : MonoBehaviour {
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
         gm.EventCheck += GettingFamous;
+
         gm.RoundStartEvent += DaramUpDownTutorial;
         gm.RoundStartEvent += SlimeParty;
+        gm.RoundStartEvent += FirstTutorial;
     }
 
     void UnlockUpBasic()
     {
-        if (GameManager.gm.fame >= 15000)
+        if (GameManager.gm.fame >= 10000)
         {
             GameManager.gm.EventCheck -= UnlockUpBasic;
  
@@ -141,4 +148,11 @@ public class Events : MonoBehaviour {
         }
             
     }
+
+    void FirstTutorial()
+    {
+        Instantiate(FirstTutorial_Box);
+        gm.RoundStartEvent -= FirstTutorial;
+    }
+
 }
