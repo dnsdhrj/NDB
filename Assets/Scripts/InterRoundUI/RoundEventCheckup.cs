@@ -12,6 +12,8 @@ public class RoundEventCheckup : MonoBehaviour {
     private GameObject eventScrollPanel;
     private RoundEventDatabase database;
     private RectTransform eventScrollPanelrect;
+
+
     private int imageIconSize = 256;
 
     private List<int> RandomRoundEventID;
@@ -25,6 +27,7 @@ public class RoundEventCheckup : MonoBehaviour {
         eventPanel.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
         eventPanel.SetActive(false);
         MakeRoundEventList();
+
     }
 
     void MakeRoundEventList()

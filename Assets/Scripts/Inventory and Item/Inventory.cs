@@ -184,8 +184,7 @@ public class Inventory : MonoBehaviour {
     {
         if (GameManager.gm.Money() < item.itemPrice)
         {
-            //나중에 창으로 나오도록 고치자
-            Debug.Log("돈이 부족합니다.");
+            GameManager.gm.ShowMessageBox("돈이 부족합니다.");
             return;
         }
 
@@ -205,9 +204,7 @@ public class Inventory : MonoBehaviour {
                 return;
             }
         }
-
-        //나중에 창 형태로 나오도록 고치자.
-        Debug.Log("인벤토리가 꽉찼습니다.");
+        GameManager.gm.ShowMessageBox("인벤토리가 꽉 찼습니다.");
     }
 
     bool IsInventoryContains(int id)

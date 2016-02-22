@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DeveloperHireButton : MonoBehaviour {
 
-    /*private*/ public Post modifyingDeveloper;
+    private Post modifyingDeveloper;
 
     public void SetPost(Post post)
     {
