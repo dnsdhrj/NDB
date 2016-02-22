@@ -17,6 +17,7 @@ public class Events : MonoBehaviour {
     public GameObject SlimeParty_Slime;
     public GameObject FirstTutorial_Box;
     public GameObject InterRoundTutorial_Box;
+    public GameObject EmergencyTutorial_Box;
 
     public GameObject NormalMessage_Box;
 
@@ -33,8 +34,9 @@ public class Events : MonoBehaviour {
         gm.EventCheck += MacroEvent;
         gm.EventCheck += TreeOfSavior;
         gm.EventCheck += GettingFamous;
+        gm.EventCheck += EmergencyTutorial;
 
-        gm.RoundStartEvent += DaramUpDownTutorial;
+    gm.RoundStartEvent += DaramUpDownTutorial;
         gm.RoundStartEvent += SlimeParty;
         gm.RoundStartEvent += FirstTutorial;
     }
@@ -153,6 +155,36 @@ public class Events : MonoBehaviour {
     {
         Instantiate(FirstTutorial_Box);
         gm.RoundStartEvent -= FirstTutorial;
+    }
+
+    void EmergencyTutorial()
+    {
+        if (gm.fame >= 20000 && 15 <= gm.timeLeft && gm.timeLeft <= 25)
+        {
+            gm.DaramDeath += EmergencyDeath;
+            StartCoroutine("ET");
+            gm.EventCheck -= EmergencyTutorial;
+        }
+    }
+
+    private static bool alternative = false;
+    public static void EmergencyDeath()
+    {
+        if (alternative)
+        {
+            if (Daram.All.Count != 0)
+                Daram.All[Random.Range(0, Daram.All.Count)].HP -= 99999999;
+            alternative = false;
+        }
+        else
+            alternative = true;
+    }
+
+    IEnumerator ET()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Unlockables.SetBool("Emergency", true);
+        Instantiate(EmergencyTutorial_Box);
     }
 
 }

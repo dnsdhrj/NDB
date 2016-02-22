@@ -10,7 +10,7 @@ public class AddBasicDaram : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     
     public GameObject daram;
 
-    
+
     private GameObject daramInfo;
     private Text daramInfoText;
     private Button button;

@@ -26,17 +26,19 @@ public class ResultScene : EventBox {
         yield return new WaitForSeconds(0.5f);
         resultText.text = "라운드 시작 시 돈 : " + GameManager.gm.initialMoney;
         yield return new WaitForSeconds(0.5f);
-        resultText.text = resultText.text + "\n이번 라운드에 번 돈 :  " + GameManager.gm.earnedMoney;
+        resultText.text = resultText.text + "\n이번 라운드에 번 돈 :  " + GameManager.gm.earnedMoney * GameManager.gm.earnedMoneyModifier;
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n이번 라운드에 쓴 돈 :  " + GameManager.gm.usedMoney;
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n지급한 개발자 월급 : " + GameManager.gm.salaryMoney;
         yield return new WaitForSeconds(0.5f);
+
+        GameManager.gm.InitiateMoney();
         resultText.text = resultText.text + "\n합계 : " + GameManager.gm.Money();
         yield return new WaitForSeconds(0.5f);
         resultText.text = resultText.text + "\n이번 라운드에 적용된 행사";
 
-        GameManager.gm.InitiateMoney();
+        
 
         for (int i = 0; i < Events; i++) {
             StageEndEvent();
