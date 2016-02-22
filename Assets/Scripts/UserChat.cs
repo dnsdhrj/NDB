@@ -44,9 +44,9 @@ public class UserChat : MonoBehaviour {
             if (Daram.All.Count == 0)
             {
                 if (Random.Range(0, 2) == 0)
-                    CreateChat("다람쥐가 하나도 없잖아!!", 4);
+                    CreateChat(BadChat("다람쥐가 하나도 없잖아!!"), 4);
                 else
-                    CreateChat("넥슨은 다람쥐를 뿌려라!", 2);
+                    CreateChat(BadChat("넥슨은 다람쥐를 뿌려라!"), 2);
                 NDCool = gm.time + Random.Range(2, 4);
             }
     }
@@ -64,16 +64,16 @@ public class UserChat : MonoBehaviour {
                 switch(Random.Range(0,4))
                 {
                     case 0:
-                        CreateChat("이 게임 할만하구만.", 3);
+                        CreateChat(GoodChat("이 게임 할만하구만."), 3);
                         break;
                     case 1:
-                        CreateChat("좋아 좋아.", 3);
+                        CreateChat(GoodChat("좋아 좋아."), 3);
                         break;
                     case 2:
-                        CreateChat("열정적인 GM!", 3);
+                        CreateChat(GoodChat("열정적인 GM!"), 3);
                         break;
                     case 3:
-                        CreateChat("이게 요즘 흥한다는 그 게임인가요?", 3);
+                        CreateChat(GoodChat("이게 요즘 흥한다는 그 게임인가요?"), 3);
                         break;
                 }
             else if (q.diff < 0)
@@ -207,4 +207,14 @@ public class UserChat : MonoBehaviour {
         }
 
     }
-}
+
+    public string BadChat(string str)
+    {
+        return "<color=#ff0069>" + str + "</color>";
+    }
+
+    public string GoodChat(string str)
+    {
+        return "<color=#76ff94>" + str + "</color>";
+    }
+    }

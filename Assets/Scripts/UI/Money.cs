@@ -21,6 +21,6 @@ public class Money : MonoBehaviour {
     {
         /*실제*/ //MoneyText.text = "Money : " + InitialMoney;
                /*Debug용*/
-        MoneyText.text = "보유한 돈\n\t" + updatedMoney;
+        MoneyText.text = "보유한 돈\n" + "<color=#ffffff>" + updatedMoney + "</color>";
     }
 }
