@@ -42,9 +42,9 @@ public class RoundEventDatabase : MonoBehaviour {
                 return;
             }
 
-            else if (Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")] < roundEvent.eventRequiredDev) {
-                GameManager.gm.ShowMessageBox("개발자 수가 부족합니다.");
-            }
+//            else if (Developer.dev.developerCount[Developer.dev.FindPostIDByName("Publicity")] < roundEvent.eventRequiredDev) {
+//               GameManager.gm.ShowMessageBox("개발자 수가 부족합니다.");
+//            }
 
             else
             {

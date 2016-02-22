@@ -10,6 +10,8 @@ public class Inventory : MonoBehaviour {
     public List<Item> slots = new List<Item>();
     public GUISkin skin;
 
+    [HideInInspector] public bool inventoryButtonClicked = false;
+
     private ItemDatabase database;
     private int inventorySize;
     private bool showInventory = false;
@@ -42,9 +44,14 @@ public class Inventory : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetButtonDown("Inventory"))
+        if ((Input.GetButtonDown("Inventory") && !GameManager.gm.isInterRound))
         {
             showInventory = !showInventory;
+        }
+
+        else if (GameManager.gm.isInterRound)
+        {
+            showInventory = inventoryButtonClicked;
         }
     }
 
